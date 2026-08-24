@@ -1,0 +1,48 @@
+name: Build Video Editor
+
+on:
+  push:
+    branches: [main, master]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Download and set up FFmpeg (automatic, no manual steps)
+        shell: powershell
+        run: |
+          Invoke-WebRequest -Uri "https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-full-shared.7z" -OutFile ffmpeg.7z
+          7z x ffmpeg.7z -oC:\ffmpeg-extract
+          $inner = Get-ChildItem C:\ffmpeg-extract | Select-Object -First 1
+          Move-Item $inner.FullName C:\ffmpeg
+          echo "FFMPEG_DIR=C:\ffmpeg" >> $env:GITHUB_ENV
+          echo "C:\ffmpeg\bin" >> $env:GITHUB_PATH
+
+      - name: Install npm dependencies
+        run: npm install
+
+      - name: Build the app
+        run: npm run tauri build
+
+      - name: Upload the finished installer
+        uses: actions/upload-artifact@v4
+        with:
+          name: video-editor-installer
+          path: src-tauri/target/release/bundle/msi/*.msi
+
+      - name: Attach installer to a Release (only on success)
+        if: success()
+        uses: softprops/action-gh-release@v2
+        with:
+          files: src-tauri/target/release/bundle/msi/*.msi
