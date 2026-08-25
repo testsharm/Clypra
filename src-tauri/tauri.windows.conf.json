@@ -1,7 +1,9 @@
 {
   "bundle": {
-    "resources": [
-      "bin/*.dll"
-    ]
+    "windows": {
+      "wix": {
+        "component": "ffmpeg-dlls.wxs"
+      }
+    }
   }
 }
