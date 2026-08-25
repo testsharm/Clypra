@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { Film, Image as ImageIcon, Plus, Trash2, Pencil, MoreHorizontal, Clock, ChevronRight, Sparkles, Settings, Video, FolderOpen, LayoutTemplate, FileVideo, Play, Layers } from "lucide-react";
 import { Button } from "@/components/ui/Button";
-import { isMacOSPlatform, WindowControls, WindowDragRegion } from "@/components/ui/WindowControls";
+import { isMacOSPlatform, WindowControls, WindowDragRegion } from "../ui/WindowControls";
 import { Modal } from "@/components/ui/Modal";
 import { useProjectStore } from "@/store/projectStore";
 import { useSettingsStore } from "@/store/settingsStore";
