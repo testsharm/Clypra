@@ -52,7 +52,8 @@
   "bundle": {
     "windows": {
       "wix": {
-        "component": "ffmpeg-dlls.wxs"
+        "fragmentPaths": ["ffmpeg-dlls.wxs"],
+        "componentRefs": ["FFmpegDLLs"]
       }
     },
     "active": true,
