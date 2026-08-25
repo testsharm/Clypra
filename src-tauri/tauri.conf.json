@@ -50,12 +50,6 @@
     }
   },
   "bundle": {
-    "windows": {
-      "wix": {
-        "fragmentPaths": ["ffmpeg-dlls.wxs"],
-        "componentRefs": ["FFmpegDLLs"]
-      }
-    },
     "active": true,
     "targets": "all",
     "publisher": "AIEraDev",
@@ -71,6 +65,7 @@
       "icons/icon.icns",
       "icons/icon.ico"
     ],
+    "resources": ["bin/*.dll"],
     "macOS": {
       "infoPlist": "Info.plist",
       "entitlements": "Entitlements.plist"
