@@ -65,7 +65,12 @@
       "icons/icon.icns",
       "icons/icon.ico"
     ],
-    "resources": ["bin/*.dll"],
+    "windows": {
+      "wix": {
+        "fragmentPaths": ["ffmpeg-dlls.wxs"],
+        "componentRefs": ["FFmpegDLLs"]
+      }
+    },
     "macOS": {
       "infoPlist": "Info.plist",
       "entitlements": "Entitlements.plist"
