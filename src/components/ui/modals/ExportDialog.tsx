@@ -430,6 +430,12 @@ export const ExportDialog: React.FC<ExportDialogProps> = ({
 
   // ─── Export handler ────────────────────────────────────────────────
   const handleExport = useCallback(async () => {
+    // FIX: Empty timeline guard – stops export with an alert if no clips
+    if (!clips.length || sequenceDuration === 0) {
+      alert("No content to export. Add clips to the timeline.");
+      return;
+    }
+
     if (!outputPath || !project) return;
 
     safeSetPhase("exporting");

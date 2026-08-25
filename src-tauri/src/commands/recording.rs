@@ -5,6 +5,8 @@
  * Currently provides lossless video trimming via the bundled FFmpeg binary.
  */
 use std::process::Command;
+#[cfg(target_os = "windows")]
+use std::os::windows::process::CommandExt;
 use crate::commands::export::augmented_path;
 
 /// Trim a video file using FFmpeg stream copy (lossless, near-instant).
@@ -39,7 +41,10 @@ pub async fn trim_video(
         input_path, output_path, start_seconds, end_seconds, duration
     );
 
-    let output = Command::new("ffmpeg")
+    let mut cmd = Command::new("ffmpeg");
+    #[cfg(target_os = "windows")]
+    cmd.creation_flags(0x08000000);
+    let output = cmd
         .env("PATH", augmented_path())
         .args([
             "-y",                          // Overwrite output without asking

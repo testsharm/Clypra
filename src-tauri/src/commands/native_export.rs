@@ -11,6 +11,8 @@ use tokio::process::Command;
 use tokio::sync::{Mutex, Notify};
 use tokio::time::{sleep, Duration};
 use tokio_util::sync::CancellationToken;
+#[cfg(target_os = "windows")]
+use std::os::windows::process::CommandExt;
 
 const MAX_FFMPEG_RSS_BYTES: u64 = 2 * 1024 * 1024 * 1024;
 static EXPORT_ACTIVE: AtomicBool = AtomicBool::new(false);
@@ -112,7 +114,10 @@ pub struct SelectedEncoder {
 
 #[allow(dead_code)]
 fn test_encoder_available(encoder: &str) -> bool {
-    let output = std::process::Command::new("ffmpeg")
+    let mut cmd = std::process::Command::new("ffmpeg");
+    #[cfg(target_os = "windows")]
+    cmd.creation_flags(0x08000000);
+    let output = cmd
         .env("PATH", super::export::augmented_path())
         .args([
             "-hide_banner",
@@ -511,7 +516,10 @@ fn validate_plan(plan: &NativeTimelineExportPlan) -> Result<(), String> {
 }
 
 async fn probe_has_audio(path: &str, cancellation: &CancellationToken) -> bool {
-    let mut child = match Command::new("ffprobe")
+    let mut cmd = Command::new("ffprobe");
+    #[cfg(target_os = "windows")]
+    cmd.creation_flags(0x08000000);
+    let mut child = match cmd
         .env("PATH", super::export::augmented_path())
         .args([
             "-v",
@@ -578,7 +586,10 @@ async fn process_rss_bytes(pid: u32) -> Option<u64> {
 }
 
 async fn run_ffmpeg(args: &[String], cancellation: &CancellationToken) -> Result<u64, String> {
-    let mut child = Command::new("ffmpeg")
+    let mut cmd = Command::new("ffmpeg");
+    #[cfg(target_os = "windows")]
+    cmd.creation_flags(0x08000000);
+    let mut child = cmd
         .env("PATH", super::export::augmented_path())
         .args(args)
         .stdin(Stdio::null())

@@ -22,6 +22,8 @@ use serde::{Deserialize, Serialize};
 use std::collections::{HashMap, VecDeque};
 use std::process::Stdio;
 use std::sync::Arc;
+#[cfg(target_os = "windows")]
+use std::os::windows::process::CommandExt;
 use tauri::ipc::{Channel, Request, InvokeBody};
 use tokio::io::AsyncWriteExt;
 use tokio::process::{Child, Command};
@@ -206,7 +208,10 @@ pub(crate) fn augmented_path() -> String {
 async fn has_audio_stream(path: &str) -> bool {
     let path_env = augmented_path();
 
-    let output = Command::new("ffprobe")
+    let mut cmd = Command::new("ffprobe");
+    #[cfg(target_os = "windows")]
+    cmd.creation_flags(0x08000000);
+    let output = cmd
         .env("PATH", &path_env)
         .args([
             "-v", "error",
@@ -259,6 +264,9 @@ pub async fn start_video_export(
     
     // Build FFmpeg command
     let mut cmd = Command::new("ffmpeg");
+    #[cfg(target_os = "windows")]
+    cmd.creation_flags(0x08000000);
+
     cmd.env("PATH", augmented_path());
     
     // Input 0: raw RGBA frames from stdin
@@ -964,7 +972,10 @@ pub async fn cancel_video_export(session_id: String) -> Result<(), String> {
 /// Check if FFmpeg is available on the system.
 #[tauri::command]
 pub async fn check_ffmpeg_available() -> Result<bool, String> {
-    let output = Command::new("ffmpeg")
+    let mut cmd = Command::new("ffmpeg");
+    #[cfg(target_os = "windows")]
+    cmd.creation_flags(0x08000000);
+    let output = cmd
         .env("PATH", augmented_path())
         .arg("-version")
         .output()
@@ -979,7 +990,10 @@ pub async fn check_ffmpeg_available() -> Result<bool, String> {
 /// Get FFmpeg version information.
 #[tauri::command]
 pub async fn get_ffmpeg_version() -> Result<String, String> {
-    let output = Command::new("ffmpeg")
+    let mut cmd = Command::new("ffmpeg");
+    #[cfg(target_os = "windows")]
+    cmd.creation_flags(0x08000000);
+    let output = cmd
         .env("PATH", augmented_path())
         .arg("-version")
         .output()
@@ -1009,6 +1023,8 @@ pub async fn run_wgpu_smoke_test(output_path: String) -> Result<String, String> 
     let wgpu_renderer = crate::wgpu_compositor::NativeWgpuRenderer::new().await?;
 
     let mut cmd = Command::new("ffmpeg");
+    #[cfg(target_os = "windows")]
+    cmd.creation_flags(0x08000000);
     cmd.env("PATH", augmented_path());
     cmd.arg("-thread_queue_size")
         .arg("8")
@@ -1067,6 +1083,8 @@ pub async fn run_native_document_wgpu_export(doc_json: String, output_path: Stri
     let wgpu_renderer = crate::wgpu_compositor::NativeWgpuRenderer::new().await?;
 
     let mut cmd = Command::new("ffmpeg");
+    #[cfg(target_os = "windows")]
+    cmd.creation_flags(0x08000000);
     cmd.env("PATH", augmented_path());
     cmd.arg("-thread_queue_size")
         .arg("8")
@@ -1091,6 +1109,9 @@ pub async fn run_native_document_wgpu_export(doc_json: String, output_path: Stri
         .stdin(Stdio::piped())
         .stdout(Stdio::null())
         .stderr(Stdio::piped());
+    #[cfg(target_os = "windows")]
+    cmd.creation_flags(0x08000000);
+
 
     let mut child = cmd.spawn().map_err(|e| format!("Failed to spawn FFmpeg process: {}", e))?;
     let mut stdin = child.stdin.take().ok_or_else(|| "Failed to open FFmpeg stdin".to_string())?;

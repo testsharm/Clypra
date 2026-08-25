@@ -242,8 +242,12 @@ fn decode_with_ffmpeg_cli(
     target_channels: u16,
 ) -> Result<DecodedAudioClip, String> {
     use std::process::{Command, Stdio};
+    #[cfg(target_os = "windows")]
+    use std::os::windows::process::CommandExt;
 
     let mut command = Command::new("ffmpeg");
+    #[cfg(target_os = "windows")]
+    command.creation_flags(0x08000000);
     command
         .env("PATH", crate::commands::export::augmented_path())
         .arg("-v")

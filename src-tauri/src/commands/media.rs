@@ -5,6 +5,8 @@ use base64::Engine;
 use image::ImageEncoder;
 use std::fs;
 use serde::{Serialize, Deserialize};
+#[cfg(target_os = "windows")]
+use std::os::windows::process::CommandExt;
 
 /// Unified media metadata extraction for images, videos, and audio.
 /// Professional NLE approach: single probe pipeline for all media types.
@@ -165,7 +167,10 @@ pub async fn get_video_metadata(path: String) -> Result<VideoMetadata, String> {
 async fn get_audio_duration(path: &str) -> Result<f64, String> {
     eprintln!("[get_audio_duration] Attempting to get duration for: {}", path);
     
-    let output = tokio::process::Command::new("ffprobe")
+    let mut cmd = tokio::process::Command::new("ffprobe");
+    #[cfg(target_os = "windows")]
+    cmd.creation_flags(0x08000000);
+    let output = cmd
         .env("PATH", augmented_path())
         .args([
             "-v", "error",
@@ -225,7 +230,10 @@ pub async fn extract_poster_frame(path: String, time: f64) -> Result<String, Str
 pub async fn extract_audio_artwork(path: String) -> Result<Option<String>, String> {
     eprintln!("[extract_audio_artwork] Extracting artwork from: {}", path);
     
-    let output = tokio::process::Command::new("ffmpeg")
+    let mut cmd = tokio::process::Command::new("ffmpeg");
+    #[cfg(target_os = "windows")]
+    cmd.creation_flags(0x08000000);
+    let output = cmd
         .env("PATH", augmented_path())
         .args([
             "-i", &path,
@@ -273,7 +281,10 @@ pub async fn extract_audio_track(path: String) -> Result<String, String> {
     let output_path_str = output_path.to_str().ok_or("Failed to convert output path to string")?.to_string();
 
     // Call ffmpeg command to extract audio asynchronously
-    let output = tokio::process::Command::new("ffmpeg")
+    let mut cmd = tokio::process::Command::new("ffmpeg");
+    #[cfg(target_os = "windows")]
+    cmd.creation_flags(0x08000000);
+    let output = cmd
         .env("PATH", augmented_path())
         .args([
             "-i", &path,
@@ -498,6 +509,8 @@ pub async fn extract_waveform_data(
     
     // Use ffmpeg to decode audio to raw PCM samples (mono, 16kHz for efficiency)
     let mut cmd = Command::new("ffmpeg");
+    #[cfg(target_os = "windows")]
+    cmd.creation_flags(0x08000000);
     cmd.env("PATH", augmented_path());
     if let Some(start) = start_time.filter(|v| v.is_finite() && *v > 0.0) {
         cmd.arg("-ss").arg(format!("{:.3}", start));

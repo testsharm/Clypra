@@ -6,7 +6,6 @@ import { useSettingsStore, Theme, FontFamily, THEME_META, FONT_META, getThemeCol
 import { useProjectStore } from "@/store/projectStore";
 import { useTimelineStore } from "@/store/timelineStore";
 import { CacheSettings } from "@/components/settings/CacheSettings";
-import { WhisperSettings } from "@/components/settings/WhisperSettings";
 import { KeyboardShortcutsSettings } from "@/components/settings/KeyboardShortcutsSettings";
 import { refitClipsForCanvasChange } from "@/lib/timeline/refitClips";
 import { checkAppUpdate, installAndRelaunchUpdate, isTauriDesktop } from "@/services/updaterService";
@@ -899,9 +898,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
                 <h3 className="text-base font-semibold text-text-primary mb-2">Local Auto-Captions</h3>
                 <p className="text-xs text-text-muted max-w-[320px] leading-relaxed">Local speech-to-text model downloading and transcription are currently desktop-only features due to system resource requirements.</p>
               </div>
-            ) : (
-              <WhisperSettings />
-            ))}
+            ) : null)}
           {activeTab === "cache" && <CacheSettings />}
           {activeTab === "about" && <AboutTab />}
         </main>

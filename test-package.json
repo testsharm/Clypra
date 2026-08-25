@@ -1,0 +1,11 @@
+{
+  "version": "1",
+  "project": "test",
+  "operations": [
+    {
+      "type": "create_file",
+      "path": "src/hello.txt",
+      "content": "Hello from executor!"
+    }
+  ]
+}

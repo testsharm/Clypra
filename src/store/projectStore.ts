@@ -48,6 +48,7 @@ interface ProjectStore {
   recentProjects: Project[];
   toastMessage: string | null;
   toastVariant: "success" | "error" | "warning";
+  lastSavedHash: string; // Added to prevent toast spam
   setToastMessage: (message: string | null, variant?: "success" | "error" | "warning") => void;
   /** Convenience: show toast with variant and auto-dismiss. */
   showToast: (message: string, variant?: "success" | "error" | "warning", durationMs?: number) => void;
@@ -218,6 +219,7 @@ export const useProjectStore = create<ProjectStore>((set, get) => ({
   recentProjects: [],
   toastMessage: null,
   toastVariant: "success" as const,
+  lastSavedHash: "", // Initially empty
 
   setToastMessage: (message, variant) => set({ toastMessage: message, ...(variant ? { toastVariant: variant } : {}) }),
 
@@ -263,7 +265,7 @@ export const useProjectStore = create<ProjectStore>((set, get) => ({
       timelineSchemaVersion: 1,
     };
 
-    set({ project, mediaAssets: [] });
+    set({ project, mediaAssets: [], lastSavedHash: "" });
 
     // Let timelineStore reset its own state
     try {
@@ -357,7 +359,7 @@ export const useProjectStore = create<ProjectStore>((set, get) => ({
         // ═══════════════════════════════════════════════════════════════════════════════
         // PHASE 2: Load Project & Media Assets
         // ═══════════════════════════════════════════════════════════════════════════════
-        set({ project, mediaAssets: payload?.mediaAssets ?? [] });
+        set({ project, mediaAssets: payload?.mediaAssets ?? [], lastSavedHash: "" });
 
         await preloadTextEffectDefinitionsFromClips(payload?.clips);
         if (currentLoadId !== loadId) return;
@@ -638,7 +640,7 @@ export const useProjectStore = create<ProjectStore>((set, get) => ({
     // PHASE 3: Clear ProjectStore State
     // ═══════════════════════════════════════════════════════════════════════════════
     const closedProjectId = get().project?.id;
-    set({ project: null, mediaAssets: [] });
+    set({ project: null, mediaAssets: [], lastSavedHash: "" });
 
     // ═══════════════════════════════════════════════════════════════════════════════
     // PHASE 4: Reset Timeline State
@@ -676,7 +678,7 @@ export const useProjectStore = create<ProjectStore>((set, get) => ({
 
     autoSaveTimer = setTimeout(async () => {
       const state = get();
-      const { project, mediaAssets } = state;
+      const { project, mediaAssets, lastSavedHash } = state;
 
       if (!project) return;
 
@@ -692,9 +694,20 @@ export const useProjectStore = create<ProjectStore>((set, get) => ({
 
         // Convert camelCase to snake_case using centralized serialization
         const rustProject = toRustProject(project, { tracks, clips, transitions, gaps, markers, mediaAssets });
+        const serialized = JSON.stringify(rustProject);
 
-        await platform.saveProject(JSON.stringify(rustProject));
-        get().showToast("Project saved");
+        // Compute hash of the current state
+        const currentHash = `${project.id}:${serialized}`;
+
+        // Only show toast if the state has actually changed since last save
+        const hasChanged = currentHash !== lastSavedHash;
+
+        // Save regardless, but show toast only on change
+        await platform.saveProject(serialized);
+        if (hasChanged) {
+          get().showToast("Project saved");
+          set({ lastSavedHash: currentHash });
+        }
 
         // ── Canonical Project Thumbnail Generation ───────────────────────
         try {
@@ -709,12 +722,9 @@ export const useProjectStore = create<ProjectStore>((set, get) => ({
         }
 
         // ── Crash recovery snapshot ──────────────────────────────────────
-        // Persist a recovery snapshot so the user can restore their work if
-        // the application crashes or the browser refreshes unexpectedly.
         try {
           const { tracks, clips, transitions, gaps } = useTimelineStore.getState();
           lifecycleMonitor.record("AUTO_SAVE_SNAPSHOT_SAVED", { projectId: project.id });
-          // Fire-and-forget — we never want snapshot writes to block the UI
           saveSnapshot({
             savedAt: new Date().toISOString(),
             project,

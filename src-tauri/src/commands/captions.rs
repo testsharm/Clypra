@@ -1,6 +1,8 @@
 use bytemuck::cast_slice;
 use serde::{Deserialize, Serialize};
 use std::process::Stdio;
+#[cfg(target_os = "windows")]
+use std::os::windows::process::CommandExt;
 use tauri::Manager;
 use tokio::process::Command;
 use whisper_rs::{FullParams, SamplingStrategy, WhisperContext, WhisperContextParameters};
@@ -62,7 +64,10 @@ pub async fn generate_auto_captions(
     );
 
     // 2. Extract 16kHz Mono f32 PCM via FFmpeg stdout — no intermediate file
-    let child = Command::new("ffmpeg")
+    let mut cmd = Command::new("ffmpeg");
+    #[cfg(target_os = "windows")]
+    cmd.creation_flags(0x08000000);
+    let child = cmd
         .args([
             "-i", &video_path,
             "-vn",                 // No video

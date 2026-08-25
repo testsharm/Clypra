@@ -26,10 +26,6 @@ export const CaptionsTab: React.FC<TabProps> = ({ onAddToTimeline }) => {
 
   const mediaAssets = project?.mediaAssets || [];
 
-  // Check model status for helpful UI hints
-  const selectedModel = captionSettings.activeModel || "tiny";
-  const isModelDownloaded = captionSettings.models[selectedModel]?.status === "downloaded";
-
   // Find the text track designated for captions
   const captionTrack = tracks.find((t) => t.type === "text" && (t.name.toLowerCase().includes("caption") || t.name.toLowerCase().includes("subtitle"))) || tracks.find((t) => t.type === "text");
 
@@ -37,19 +33,14 @@ export const CaptionsTab: React.FC<TabProps> = ({ onAddToTimeline }) => {
   const captionClips = captionTrack ? (clips.filter((c) => c.trackId === captionTrack.id) as TextClip[]).sort((a, b) => a.startTime - b.startTime) : [];
 
   // Ensure a caption track exists and return its ID.
-  // Delegates to ensureTrackForType("text") for find-or-create;
-  // then renames the track to "Auto Captions" if it was just created.
   const ensureCaptionTrackId = (): string => {
     const previousTrack = captionTrack;
     const trackId = useTimelineStore.getState().ensureTrackForType("text");
-
-    // If the track didn't exist before, name it for captions UX.
     if (!previousTrack) {
       useTimelineStore.setState((state) => ({
         tracks: state.tracks.map((t) => (t.id === trackId ? { ...t, name: "Auto Captions" } : t)),
       }));
     }
-
     return trackId;
   };
 
@@ -152,165 +143,6 @@ export const CaptionsTab: React.FC<TabProps> = ({ onAddToTimeline }) => {
     addClip(textClip);
   };
 
-  // Auto-generate captions using Whisper — ZERO CONFIG
-  const handleAutoGenerate = async () => {
-    // Smart defaults — no pre-flight checks blocking the user
-    const model = captionSettings.activeModel || "tiny"; // Default to tiny if none selected
-    const language = captionSettings.language || "auto"; // Default to auto-detect
-
-    console.log(`[CaptionsTab] Starting auto-generate with model: ${model}, language: ${language}`);
-
-    // Check if the selected model is marked as downloaded in store
-    const modelState = captionSettings.models[model];
-    if (modelState.status !== "downloaded") {
-      console.error(`[CaptionsTab] Model "${model}" status is: ${modelState.status}`);
-      setErrorMsg(`Whisper model "${model}" is not downloaded yet. Please go to Settings → Captions to download the model first.`);
-      // Open settings modal to help user
-      toggleSettingsModal();
-      return;
-    }
-
-    // Verify the model actually exists on disk (double-check)
-    try {
-      console.log(`[CaptionsTab] Verifying model "${model}" exists on disk...`);
-      const exists = await invoke<boolean>("verify_whisper_model_exists", { size: model });
-      console.log(`[CaptionsTab] Model verification result: ${exists}`);
-
-      if (!exists) {
-        console.error(`[CaptionsTab] Model "${model}" marked as downloaded but files not found on disk`);
-        setErrorMsg(`Model files for "${model}" not found on disk. The model may have been deleted or corrupted. Please re-download the model from Settings → Captions.`);
-        toggleSettingsModal();
-        return;
-      }
-    } catch (error) {
-      console.error(`[CaptionsTab] Failed to verify model:`, error);
-      setErrorMsg(`Failed to verify model files: ${error}. Please check Settings → Captions.`);
-      toggleSettingsModal();
-      return;
-    }
-
-    // Find video or audio clips on the timeline
-    const mediaClips = clips.filter((clip) => {
-      const asset = mediaAssets.find((a) => a.id === clip.mediaId);
-      return asset && (asset.type === "video" || asset.type === "audio");
-    });
-
-    if (mediaClips.length === 0) {
-      console.warn(`[CaptionsTab] No media clips found on timeline`);
-      setErrorMsg("No video or audio clips found on the timeline. Add media first.");
-      return;
-    }
-
-    console.log(`[CaptionsTab] Found ${mediaClips.length} media clips to process`);
-
-    if (platform.isCapacitor()) {
-      setErrorMsg("Local auto-captions are only supported on Clypra Desktop.");
-      return;
-    }
-
-    setErrorMsg(null);
-    setIsGenerating(true);
-
-    try {
-      // Auto-download model if needed (Phase 2 — currently model must be pre-downloaded)
-      // TODO: Implement auto-download in Phase 2
-      // const modelState = captionSettings.models[model];
-      // if (modelState.status !== "downloaded") {
-      //   await downloadWhisperModel(model);
-      // }
-
-      const trackId = ensureCaptionTrackId();
-      const canvasWidth = project?.canvasWidth || 1920;
-      const canvasHeight = project?.canvasHeight || 1080;
-      let totalCaptions = 0;
-      const allGeneratedSegments: any[] = [];
-
-      // Process each media clip
-      for (const mediaClip of mediaClips) {
-        const asset = mediaAssets.find((a) => a.id === mediaClip.mediaId);
-        if (!asset || !asset.path) continue;
-
-        try {
-          console.log(`[CaptionsTab] Running native Whisper inference on clip: ${mediaClip.id}, asset: ${asset.path}`);
-
-          // Native Whisper inference with in-memory FFmpeg audio extraction & token timestamps
-          const segments = await invoke<any[]>("generate_auto_captions", {
-            videoPath: asset.path,
-            modelSize: model,
-            language: language === "auto" ? null : language,
-          });
-
-          console.log(`[CaptionsTab] Native transcription generated ${segments?.length || 0} segments`);
-          if (!segments || segments.length === 0) {
-            console.warn(`[CaptionsTab] No segments found in transcription result for clip ${mediaClip.id}`);
-            continue;
-          }
-
-          allGeneratedSegments.push(...segments);
-
-          withBatch(() => {
-            segments.forEach((seg: any) => {
-              const segStartSec = (seg.startMs || 0) / 1000;
-              const segEndSec = (seg.endMs || 0) / 1000;
-              const relativeStart = segStartSec - mediaClip.trimIn;
-
-              if (relativeStart >= 0 && relativeStart < mediaClip.duration) {
-                const startTime = mediaClip.startTime + relativeStart;
-                const segmentDuration = Math.min(segEndSec - segStartSec, mediaClip.duration - relativeStart);
-
-                // Convert word timestamps to clip-relative seconds
-                const words = seg.words?.map((w: any) => ({
-                  word: w.word,
-                  start: Math.max(0, (w.startMs || 0) / 1000 - segStartSec),
-                  end: Math.max(0, (w.endMs || 0) / 1000 - segStartSec),
-                }));
-
-                const textClip = createTextClip({
-                  trackId,
-                  startTime,
-                  duration: segmentDuration,
-                  text: seg.text,
-                  canvasWidth,
-                  canvasHeight,
-                  fontSize: 32,
-                  bold: false,
-                  position: "bottom",
-                  textRole: "caption",
-                  words, // Include word-level timestamps for karaoke-style rendering
-                  styleId: undefined,
-                  fontFamily: "Inter Variable",
-                });
-
-                addClip(textClip);
-                totalCaptions++;
-                console.log(`[CaptionsTab] Added caption to timeline: "${seg.text}"`);
-              }
-            });
-          });
-        } catch (clipError: any) {
-          console.error(`[CaptionsTab] Error processing clip ${mediaClip.id}:`, clipError);
-          setErrorMsg(`Error: ${clipError.message || clipError}`);
-        }
-      }
-
-      // Update captionStore segments for live Karaoke overlay
-      if (allGeneratedSegments.length > 0) {
-        useCaptionStore.setState({ segments: allGeneratedSegments });
-      }
-
-      if (totalCaptions > 0) {
-        setErrorMsg(null);
-      } else {
-        setErrorMsg("No captions were generated. Please check your audio contains speech.");
-      }
-    } catch (error: any) {
-      console.error(`[CaptionsTab] Top-level error:`, error);
-      setErrorMsg(error.message || "Failed to generate captions.");
-    } finally {
-      setIsGenerating(false);
-    }
-  };
-
   // Direct update helpers
   const handleTextChange = (clipId: string, text: string) => {
     updateClip(clipId, { text } as any);
@@ -376,34 +208,6 @@ export const CaptionsTab: React.FC<TabProps> = ({ onAddToTimeline }) => {
           </div>
         </div>
       )}
-
-      {/* Auto-Generate Section — Zero Config UX */}
-      <div className="space-y-2">
-        {!isModelDownloaded && (
-          <div className="p-2.5 bg-yellow-500/10 border border-yellow-500/25 rounded-lg text-yellow-200 text-xs flex items-start gap-2">
-            <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
-            <div className="flex-1">
-              <p className="font-semibold">Whisper Model Required</p>
-              <p className="mt-1 opacity-90">The "{selectedModel}" model needs to be downloaded before generating captions.</p>
-              <button onClick={toggleSettingsModal} className="mt-2 px-2 py-1 bg-yellow-500/20 hover:bg-yellow-500/30 rounded text-xs font-semibold transition-colors">
-                Download Model in Settings
-              </button>
-            </div>
-          </div>
-        )}
-
-        <div className="relative">
-          <Button variant="default" size="sm" className="w-full bg-accent hover:bg-accent/80 text-white flex items-center justify-center gap-1.5" onClick={handleAutoGenerate} disabled={isGenerating}>
-            <Sparkles className="w-4 h-4" />
-            {isGenerating ? "Generating..." : "Auto-Generate Captions"}
-          </Button>
-
-          {/* Settings gear — subtle, non-blocking */}
-          <button onClick={toggleSettingsModal} className="absolute right-2 top-1/2 -translate-y-1/2 p-1 opacity-40 hover:opacity-100 transition-opacity" title="Caption settings">
-            <Settings className="w-3.5 h-3.5 text-white" />
-          </button>
-        </div>
-      </div>
 
       <div className="grid grid-cols-2 gap-2">
         <Button variant="secondary" size="sm" className="w-full flex items-center justify-center gap-1.5" onClick={handleAddManualCaption}>

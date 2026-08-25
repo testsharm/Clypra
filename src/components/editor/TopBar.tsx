@@ -1,11 +1,13 @@
 import React, { useState, lazy, Suspense } from "react";
-import { Upload, Home, Settings } from "lucide-react";
+import { Upload, Home, Settings, Download } from "lucide-react";
 import { Button } from "../ui/Button";
 import { useProjectStore } from "@/store/projectStore";
+import { useTimelineStore } from "@/store/timelineStore";
 import { useUIStore } from "@/store/uiStore";
 import { platform } from "@/core/platform";
 import { isMacOSPlatform, WindowControls, WindowDragRegion } from "../ui/WindowControls";
 import { LayoutPresetMenu } from "./layout/LayoutPresetMenu";
+import { createCustomProjectBlob } from "@/lib/customProjectFormat";
 
 // Lazy load ExportDialog
 const ExportDialog = lazy(() => import("../ui/ExportDialog").then((m) => ({ default: m.ExportDialog })));
@@ -15,7 +17,10 @@ interface TopBarProps {
 }
 
 const TopBarComponent: React.FC<TopBarProps> = ({ onRequestClose }) => {
-  const projectName = useProjectStore((s) => s.project?.name);
+  const project = useProjectStore((s) => s.project);
+  const projectName = project?.name;
+  const mediaAssets = useProjectStore((s) => s.mediaAssets);
+  const { tracks, clips, transitions, gaps, markers } = useTimelineStore();
   const closeProject = useProjectStore((s) => s.closeProject);
   const toggleSettingsModal = useUIStore((s) => s.toggleSettingsModal);
   const [showExportDialog, setShowExportDialog] = useState(false);
@@ -25,6 +30,37 @@ const TopBarComponent: React.FC<TopBarProps> = ({ onRequestClose }) => {
       onRequestClose();
     } else {
       closeProject();
+    }
+  };
+
+  const handleExportCustom = () => {
+    if (!project) {
+      alert("No project open to export.");
+      return;
+    }
+    try {
+      const blob = createCustomProjectBlob(
+        project,
+        {
+          tracks,
+          clips,
+          transitions,
+          gaps,
+          markers,
+          mediaAssets,
+        },
+        true // pretty-print
+      );
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `${project.name || "project"}.clypra`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    } catch (err) {
+      alert(`Export failed: ${err instanceof Error ? err.message : String(err)}`);
     }
   };
 
@@ -61,9 +97,20 @@ const TopBarComponent: React.FC<TopBarProps> = ({ onRequestClose }) => {
             <Upload className="w-3.5 h-3.5 mr-1" />
             Export
           </Button>
+
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={handleExportCustom}
+            title="Export project as custom JSON (.clypra)"
+            className="text-xs h-6 px-2.5"
+            style={{ WebkitAppRegion: "no-drag", cursor: "pointer" } as React.CSSProperties}
+          >
+            <Download className="w-3.5 h-3.5 mr-1" />
+            JSON
+          </Button>
         </div>
       </div>
-
 
       {/* Export Dialog */}
       {showExportDialog && (
@@ -76,4 +123,3 @@ const TopBarComponent: React.FC<TopBarProps> = ({ onRequestClose }) => {
 };
 
 export const TopBar = React.memo(TopBarComponent);
-
