@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <Fragment>
+    <ComponentGroup Id="CustomComponents" Directory="INSTALLFOLDER">
+      <Component Id="FFmpegDLLs" Guid="{A7B8C9D0-E1F2-3344-5566-778899AABBCC}">
+        <File Source="src-tauri/bin/avcodec-63.dll" />
+        <File Source="src-tauri/bin/avdevice-63.dll" />
+        <File Source="src-tauri/bin/avfilter-10.dll" />
+        <File Source="src-tauri/bin/avformat-63.dll" />
+        <File Source="src-tauri/bin/avutil-60.dll" />
+        <File Source="src-tauri/bin/postproc-60.dll" />
+        <File Source="src-tauri/bin/swresample-6.dll" />
+        <File Source="src-tauri/bin/swscale-8.dll" />
+      </Component>
+    </ComponentGroup>
+  </Fragment>
+</Wix>
