@@ -50,6 +50,11 @@
     }
   },
   "bundle": {
+    "windows": {
+      "wix": {
+        "component": "ffmpeg-dlls.wxs"
+      }
+    },
     "active": true,
     "targets": "all",
     "publisher": "AIEraDev",

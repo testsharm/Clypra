@@ -1,9 +1,0 @@
-{
-  "bundle": {
-    "windows": {
-      "wix": {
-        "componentGroup": "ffmpeg-dlls.wxs"
-      }
-    }
-  }
-}
