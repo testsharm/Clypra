@@ -8,6 +8,7 @@ interface WindowControlsProps {
 }
 
 const noDragStyle = { WebkitAppRegion: "no-drag" } as React.CSSProperties;
+const dragStyle = { WebkitAppRegion: "drag" } as React.CSSProperties;
 
 export function WindowControls({ mac = false, className = "" }: WindowControlsProps) {
   const [isMaximized, setIsMaximized] = useState(false);
@@ -47,4 +48,12 @@ export function WindowControls({ mac = false, className = "" }: WindowControlsPr
       </button>
     </div>
   );
+}
+
+export function isMacOSPlatform(): boolean {
+  return typeof navigator !== "undefined" && navigator.userAgent.includes("Mac OS X");
+}
+
+export function WindowDragRegion({ className = "" }: { className?: string }) {
+  return <div data-tauri-drag-region className={className} style={dragStyle} />;
 }
