@@ -65,15 +65,24 @@
       "icons/icon.icns",
       "icons/icon.ico"
     ],
-    "windows": {
-      "wix": {
-        "fragmentPaths": ["ffmpeg-dlls.wxs"],
-        "componentRefs": ["FFmpegDLLs"]
-      }
-    },
     "macOS": {
       "infoPlist": "Info.plist",
       "entitlements": "Entitlements.plist"
+    },
+    "windows": {
+      "wix": {
+        "fragmentPaths": ["ffmpeg-dlls.wxs"],
+        "componentRefs": [
+          "FFmpegAvcodec",
+          "FFmpegAvdevice",
+          "FFmpegAvfilter",
+          "FFmpegAvformat",
+          "FFmpegAvutil",
+          "FFmpegPostproc",
+          "FFmpegSwresample",
+          "FFmpegSwscale"
+        ]
+      }
     }
   },
   "plugins": {
