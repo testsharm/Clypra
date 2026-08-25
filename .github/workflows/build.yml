@@ -36,7 +36,30 @@ jobs:
         run: npm install
 
       - name: Build the app
-        run: npm run tauri build
+      - name: Build the app
+        env:
+          TAURI_SIGNING_PRIVATE_KEY: ""
+          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ""
+        shell: powershell
+        run: |
+          # 1. Build the frontend and the Rust binary (no bundling yet)
+          npm run tauri build -- --no-bundle
+
+          # 2. Prepare sidecars (ffmpeg/ffprobe) for Tauri's externalBin
+          # These are used for CLI-based operations (export, trim, etc.)
+          Copy-Item "C:\ffmpeg\bin\ffmpeg.exe" "src-tauri\bin\ffmpeg-x86_64-pc-windows-msvc.exe" -Force
+          Copy-Item "C:\ffmpeg\bin\ffprobe.exe" "src-tauri\bin\ffprobe-x86_64-pc-windows-msvc.exe" -Force
+
+          # 3. Copy FFmpeg runtime DLLs next to the executable
+          # This is required for the Rust 'ffmpeg-next' bindings to load at runtime.
+          # We copy them to target\release so the bundler can find them (if configured)
+          # and also to src-tauri\bin as resources.
+          Copy-Item "C:\ffmpeg\bin\*.dll" "src-tauri\target\release\" -Force
+          Copy-Item "C:\ffmpeg\bin\*.dll" "src-tauri\bin\" -Force
+
+          # 4. Final bundling into MSI
+          # Note: We use --skip-dev-install to speed up and avoid re-checking dependencies
+          npm run tauri build -- --skip-dev-install --bundle msi
 
       - name: Upload the finished installer
         uses: actions/upload-artifact@v4
