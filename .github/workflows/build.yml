@@ -50,7 +50,7 @@ jobs:
           Copy-Item "C:\ffmpeg\bin\*.dll" "src-tauri\target\release\" -Force
           Copy-Item "C:\ffmpeg\bin\*.dll" "src-tauri\bin\" -Force
           # 4. Final bundling into MSI
-          npm run tauri build -- --skip-dev-install --bundle msi
+          npm run tauri build -- --bundles msi
 
       - name: Upload the finished installer
         uses: actions/upload-artifact@v4
