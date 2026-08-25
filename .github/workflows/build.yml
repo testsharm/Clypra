@@ -35,46 +35,13 @@ jobs:
       - name: Install npm dependencies
         run: npm install
 
-      - name: Generate WiX component for FFmpeg DLLs (dynamic - matches real files, no hardcoding)
+      - name: Copy FFmpeg DLLs and sidecars for bundling
         shell: powershell
         run: |
           New-Item -ItemType Directory -Force -Path "src-tauri\bin" | Out-Null
           Copy-Item "C:\ffmpeg\bin\ffmpeg.exe" "src-tauri\bin\ffmpeg-x86_64-pc-windows-msvc.exe" -Force
           Copy-Item "C:\ffmpeg\bin\ffprobe.exe" "src-tauri\bin\ffprobe-x86_64-pc-windows-msvc.exe" -Force
           Copy-Item "C:\ffmpeg\bin\*.dll" "src-tauri\bin\" -Force
-
-          $dlls = Get-ChildItem "src-tauri\bin\*.dll"
-          Write-Host "Found $($dlls.Count) actual DLL files to bundle:"
-          $dlls | ForEach-Object { Write-Host " - $($_.Name)" }
-
-          $componentXml = ""
-          $refIds = @()
-          $i = 0
-          foreach ($dll in $dlls) {
-            $id = "FFmpegDLL$i"
-            $refIds += $id
-            $componentXml += "    <Component Id=`"$id`" Guid=`"*`" Directory=`"INSTALLFOLDER`">`n"
-            $componentXml += "      <File Source=`"src-tauri/bin/$($dll.Name)`" />`n"
-            $componentXml += "    </Component>`n"
-            $i++
-          }
-
-          $wxsContent = "<?xml version=`"1.0`" encoding=`"UTF-8`"?>`n<Wix xmlns=`"http://schemas.microsoft.com/wix/2006/wi`">`n  <Fragment>`n$componentXml  </Fragment>`n</Wix>"
-          Set-Content -Path "src-tauri\ffmpeg-dlls.wxs" -Value $wxsContent -Encoding UTF8
-
-          $confPath = "src-tauri\tauri.conf.json"
-          $conf = Get-Content $confPath -Raw | ConvertFrom-Json
-          if (-not ($conf.bundle.PSObject.Properties.Name -contains "windows")) {
-            $conf.bundle | Add-Member -NotePropertyName "windows" -NotePropertyValue ([PSCustomObject]@{}) -Force
-          }
-          $wixObj = [PSCustomObject]@{
-            fragmentPaths = @("ffmpeg-dlls.wxs")
-            componentRefs = $refIds
-          }
-          $conf.bundle.windows | Add-Member -NotePropertyName "wix" -NotePropertyValue $wixObj -Force
-          $conf | ConvertTo-Json -Depth 30 | Set-Content -Path $confPath -Encoding UTF8
-
-          Write-Host "Patched tauri.conf.json with $($refIds.Count) componentRefs"
 
       - name: Build the app
         env:
