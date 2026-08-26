@@ -64,6 +64,47 @@ export const TransformSection: React.FC<TransformSectionProps> = ({ selectedClip
     [selectedClip.visualKeyframes, handleUpdate],
   );
 
+  const applyQuickAnimation = useCallback(
+    (type: string) => {
+      if (!selectedClip) return;
+      const dur = Math.max(selectedClip.duration, 0.1);
+      const mk = (time: number, value: number) => ({
+        id: `kf-${Date.now()}-${Math.random().toString(36).slice(2)}`,
+        time,
+        value,
+        easing: "linear" as const,
+      });
+      const nextKfs = { ...(selectedClip.visualKeyframes || {}) } as Record<string, any[]>;
+
+      if (type === "fade-in") {
+        nextKfs.opacity = [mk(0, 0), mk(dur, 1)];
+        handleUpdateMultiple({ visualKeyframes: nextKfs, opacity: 1 });
+      } else if (type === "fade-out") {
+        nextKfs.opacity = [mk(0, 1), mk(dur, 0)];
+        handleUpdateMultiple({ visualKeyframes: nextKfs, opacity: 1 });
+      } else if (type === "slide-left") {
+        nextKfs.x = [mk(0, selectedClip.x + 200), mk(dur, selectedClip.x)];
+        handleUpdateMultiple({ visualKeyframes: nextKfs });
+      } else if (type === "slide-right") {
+        nextKfs.x = [mk(0, selectedClip.x - 200), mk(dur, selectedClip.x)];
+        handleUpdateMultiple({ visualKeyframes: nextKfs });
+      } else if (type === "zoom-in") {
+        const startW = Math.round(Math.abs(selectedClip.width) * 0.7);
+        const startH = Math.round(Math.abs(selectedClip.height) * 0.7);
+        nextKfs.width = [mk(0, startW), mk(dur, Math.abs(selectedClip.width))];
+        nextKfs.height = [mk(0, startH), mk(dur, Math.abs(selectedClip.height))];
+        handleUpdateMultiple({ visualKeyframes: nextKfs });
+      } else if (type === "zoom-out") {
+        const endW = Math.round(Math.abs(selectedClip.width) * 0.7);
+        const endH = Math.round(Math.abs(selectedClip.height) * 0.7);
+        nextKfs.width = [mk(0, Math.abs(selectedClip.width)), mk(dur, endW)];
+        nextKfs.height = [mk(0, Math.abs(selectedClip.height)), mk(dur, endH)];
+        handleUpdateMultiple({ visualKeyframes: nextKfs });
+      }
+    },
+    [selectedClip, handleUpdateMultiple],
+  );
+
   const handleCenterOnCanvas = useCallback(() => {
     const w = Math.abs(selectedClip.width);
     const h = Math.abs(selectedClip.height);
@@ -312,6 +353,29 @@ export const TransformSection: React.FC<TransformSectionProps> = ({ selectedClip
           </div>
         </div>
       </PropertySection>
+
+      {/* Quick Animations */}
+      <div className="border-t border-border/40 pt-3 mt-3">
+        <span className="text-[10px] font-medium text-text-muted select-none block mb-2">Quick Animations</span>
+        <div className="grid grid-cols-3 gap-1.5">
+          {[
+            { id: "fade-in", label: "Fade In" },
+            { id: "fade-out", label: "Fade Out" },
+            { id: "slide-left", label: "Slide Left" },
+            { id: "slide-right", label: "Slide Right" },
+            { id: "zoom-in", label: "Zoom In" },
+            { id: "zoom-out", label: "Zoom Out" },
+          ].map((anim) => (
+            <button
+              key={anim.id}
+              onClick={() => applyQuickAnimation(anim.id)}
+              className="px-2 py-1.5 rounded-md bg-surface-raised border border-border/60 text-[10px] font-medium text-text-muted hover:text-accent hover:border-accent/50 hover:bg-accent/5 transition-all cursor-pointer"
+            >
+              {anim.label}
+            </button>
+          ))}
+        </div>
+      </div>
 
       {/* Timing Section */}
       <PropertySection title="Timing" icon={<Timer className="w-3.5 h-3.5" />} defaultCollapsed>
