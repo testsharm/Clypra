@@ -61,6 +61,10 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onProjectCreate, onP
   const [renameValue, setRenameValue] = useState("");
   const [isRenaming, setIsRenaming] = useState(false);
   const [menuOpen, setMenuOpen] = useState<string | null>(null);
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [createName, setCreateName] = useState("Untitled Project");
+  const [createAspect, setCreateAspect] = useState<AspectRatio>("16:9");
+  const [createFrameRate, setCreateFrameRate] = useState<24 | 30 | 60>(30);
   const isMacNativeWindow = isTauri && isMacOSPlatform();
 
   const [isRecordOpen, setIsRecordOpen] = useState(false);
@@ -320,8 +324,13 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onProjectCreate, onP
   }, [setRecentProjects]);
 
   const handleStartNewProject = () => {
-    const { defaultFrameRate } = useSettingsStore.getState();
-    onProjectCreate("Untitled Project", "16:9", defaultFrameRate);
+    setIsCreateModalOpen(true);
+  };
+
+  const handleConfirmCreateProject = () => {
+    const name = createName.trim() || "Untitled Project";
+    onProjectCreate(name, createAspect, createFrameRate);
+    setIsCreateModalOpen(false);
   };
 
   const handleDeleteClick = (e: React.MouseEvent, project: Project) => {
@@ -720,6 +729,70 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onProjectCreate, onP
           )}
         </section>
       </div>
+
+      {/* Create Project Modal */}
+      <Modal isOpen={isCreateModalOpen} onClose={() => setIsCreateModalOpen(false)} title="Create New Project">
+        <div className="p-5 space-y-5">
+          <div>
+            <label className="text-[10px] font-bold text-text-muted uppercase tracking-wider block mb-1.5">Project Name</label>
+            <input
+              type="text"
+              value={createName}
+              onChange={(e) => setCreateName(e.target.value)}
+              autoFocus
+              className="w-full px-3 py-2 rounded-lg bg-bg border border-border text-sm text-text-primary focus:outline-none focus:border-accent transition-colors selectable"
+              placeholder="My Video Project"
+            />
+          </div>
+
+          <div>
+            <label className="text-[10px] font-bold text-text-muted uppercase tracking-wider block mb-2">Aspect Ratio</label>
+            <div className="grid grid-cols-3 gap-2">
+              {(["16:9", "9:16", "1:1", "4:3", "21:9", "4:5"] as AspectRatio[]).map((ratio) => (
+                <button
+                  key={ratio}
+                  onClick={() => setCreateAspect(ratio)}
+                  className={`py-2 rounded-lg border text-xs font-semibold transition-all cursor-pointer ${
+                    createAspect === ratio
+                      ? "bg-accent/15 text-accent border-accent"
+                      : "bg-surface-raised text-text-muted border-border hover:border-accent/50 hover:text-text-primary"
+                  }`}
+                >
+                  {ratio}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div>
+            <label className="text-[10px] font-bold text-text-muted uppercase tracking-wider block mb-2">Frame Rate</label>
+            <div className="grid grid-cols-3 gap-2">
+              {([24, 30, 60] as const).map((fps) => (
+                <button
+                  key={fps}
+                  onClick={() => setCreateFrameRate(fps)}
+                  className={`py-2 rounded-lg border text-xs font-semibold transition-all cursor-pointer ${
+                    createFrameRate === fps
+                      ? "bg-accent/15 text-accent border-accent"
+                      : "bg-surface-raised text-text-muted border-border hover:border-accent/50 hover:text-text-primary"
+                  }`}
+                >
+                  {fps} fps
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="flex gap-3 justify-end pt-2">
+            <Button variant="ghost" onClick={() => setIsCreateModalOpen(false)}>
+              Cancel
+            </Button>
+            <Button variant="default" onClick={handleConfirmCreateProject}>
+              Create Project
+            </Button>
+          </div>
+        </div>
+      </Modal>
 
       {/* Rename Modal */}
       <Modal isOpen={!!projectToRename} onClose={() => setProjectToRename(null)} title="Rename Project">
