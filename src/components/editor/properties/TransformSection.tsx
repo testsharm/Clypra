@@ -1,5 +1,6 @@
 import React, { useCallback } from "react";
 import { Move, Timer, RotateCcw, FlipHorizontal2, FlipVertical2, Lock, Unlock, Crosshair } from "lucide-react";
+import { getPlaybackClock } from "@/hooks/usePlaybackClock";
 import type { Clip } from "@/types";
 import { type ClipFitModeExtended } from "@/lib/timeline/timelineClip";
 import { PropertySlider } from "./primitives/PropertySlider";
@@ -43,7 +44,9 @@ export const TransformSection: React.FC<TransformSectionProps> = ({ selectedClip
   const handleToggleVisualKeyframe = useCallback(
     (prop: "x" | "y" | "width" | "height" | "rotation" | "opacity", value: number) => {
       const currentKfs = selectedClip.visualKeyframes?.[prop] || [];
-      const localTime = 0;
+      const playbackTime = getPlaybackClock().time;
+      const rawLocalTime = playbackTime - selectedClip.startTime;
+      const localTime = Math.max(0, Math.min(selectedClip.duration, rawLocalTime));
       const existingIdx = currentKfs.findIndex((kf) => Math.abs(kf.time - localTime) < 0.05);
 
       let nextKfs: any[];
