@@ -1,0 +1,3 @@
+{
+  "postStartCommand": "nohup node executor-server.cjs > executor.log 2>&1 &"
+}
