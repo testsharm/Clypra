@@ -1,3 +1,4 @@
 {
-  "postStartCommand": "fuser -k 3002/tcp || true; nohup node executor-server.cjs > executor.log 2>&1 &"
+  "postCreateCommand": "pnpm install",
+  "postStartCommand": "nohup ./start-executor.sh > /dev/null 2>&1 &"
 }

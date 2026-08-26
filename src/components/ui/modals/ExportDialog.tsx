@@ -149,6 +149,7 @@ export const ExportDialog: React.FC<ExportDialogProps> = ({
   const [ffmpegAvailable, setFfmpegAvailable] = useState<boolean | null>(null);
   const [ffmpegVersion, setFfmpegVersion] = useState<string>("");
   const [mobileExportMode, setMobileExportMode] = useState<"cloud" | "clypra">("cloud");
+  const [exportFrameRate, setExportFrameRate] = useState<number>(project?.frameRate ?? 30);
 
   // Project Rename State
   const [isEditingName, setIsEditingName] = useState(false);
@@ -172,6 +173,13 @@ export const ExportDialog: React.FC<ExportDialogProps> = ({
   const qualityTier = getQualityTierForPreset(preset);
   const { width: resolvedWidth, height: resolvedHeight } =
     resolveExportDimensions(projectW, projectH, qualityTier);
+
+  // Keep export frame rate in sync when the open project changes.
+  useEffect(() => {
+    if (project) {
+      setExportFrameRate(project.frameRate);
+    }
+  }, [project?.id]);
 
   // ─── Component Lifecycle & Unmount Teardown ────────────────────────
   useEffect(() => {
@@ -466,7 +474,7 @@ export const ExportDialog: React.FC<ExportDialogProps> = ({
           outputPath,
           width: resolvedWidth,
           height: resolvedHeight,
-          frameRate: project.frameRate,
+          frameRate: exportFrameRate,
           codec: selectedPreset.codecValue as any,
           preset: selectedPreset.preset,
           crf: selectedPreset.crf,
@@ -528,9 +536,8 @@ export const ExportDialog: React.FC<ExportDialogProps> = ({
         outputPath,
         width: resolvedWidth,
         height: resolvedHeight,
-        // FIX (BUG-5): Explicitly pass frameRate from project settings
-        // so the user knows exactly what fps the export uses
-        frameRate: project.frameRate,
+        // Use the user-selected export frame rate
+        frameRate: exportFrameRate,
         codec: selectedPreset.codecValue as any,
         preset: selectedPreset.preset,
         crf: selectedPreset.crf,
@@ -821,11 +828,21 @@ export const ExportDialog: React.FC<ExportDialogProps> = ({
                       label="Pixel Format"
                       value={selectedPreset.pixelFormat}
                     />
-                    {/* FIX (BUG-5): Show the frame rate that will be used in the export */}
-                    <DetailRow
-                      label="Frame Rate"
-                      value={`${project?.frameRate || 30} fps`}
-                    />
+                    {/* Per-export frame rate selector (CapCut-style) */}
+                    <div className="flex items-center justify-between py-1.5">
+                      <span className="text-[12px] text-text-muted">Frame Rate</span>
+                      <select
+                        value={exportFrameRate}
+                        onChange={(e) => setExportFrameRate(Number(e.target.value))}
+                        className="bg-white/5 border border-white/10 rounded-lg px-2 py-1 text-[12px] text-text-primary focus:outline-none focus:border-accent cursor-pointer"
+                      >
+                        {[24, 25, 30, 60].map((fps) => (
+                          <option key={fps} value={fps}>
+                            {fps} fps
+                          </option>
+                        ))}
+                      </select>
+                    </div>
                     <DetailRow
                       label="Est. File Size"
                       value={estimatedFileSize}

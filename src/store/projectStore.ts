@@ -446,25 +446,8 @@ export const useProjectStore = create<ProjectStore>((set, get) => ({
         // ═══════════════════════════════════════════════════════════════════════════════
         // PHASE 5: Prewarm Video Decoders (Background)
         // ═══════════════════════════════════════════════════════════════════════════════
-        try {
-          const { prewarmDecoders } = await import("@/lib/platform/tauri");
-          const videoAssets = (payload?.mediaAssets ?? []).filter((a) => a.type === "video");
-          if (videoAssets.length > 0) {
-            const videoPaths = videoAssets.map((a) => a.path);
-            // ✅ FIX (RACE-002): Capture project ID before the async call. Validate it in the
-            // .then() callback so that if the user switches projects during the Rust decode
-            // operation the stale result is discarded instead of polluting the decoder pool.
-            const projectIdAtPrewarm = project.id;
-            prewarmDecoders(videoPaths).then((count) => {
-              const currentProject = get().project;
-              if (!currentProject || currentProject.id !== projectIdAtPrewarm) {
-                return;
-              }
-            });
-          }
-        } catch (err) {
-          // Prewarming failed silently - graceful degradation
-        }
+        // Eager prewarm removed to eliminate project-load/import lag.
+        // The render runtime creates decoders lazily when playback starts.
       } finally {
         enableAutoSave();
         // ✅ FIX-005: Clear load mutex after completion
@@ -493,17 +476,20 @@ export const useProjectStore = create<ProjectStore>((set, get) => ({
     // Trigger eager background baseline preload for video assets on project import.
     // Bounded to <=300 L0 tiles at low concurrency so tiles are warm before timeline drop.
     if (asset.type === "video" && asset.path && typeof asset.duration === "number" && asset.duration > 0) {
-      try {
-        const session = getActiveSessionOrNull();
-        if (session && session.state === "active") {
-          session.renderRuntime.preloadAssetCoarseBaseline({
-            videoPath: asset.path,
-            duration: asset.duration,
-          });
+      // Defer baseline preloading slightly so the import UI remains responsive.
+      setTimeout(() => {
+        try {
+          const session = getActiveSessionOrNull();
+          if (session && session.state === "active") {
+            session.renderRuntime.preloadAssetCoarseBaseline({
+              videoPath: asset.path,
+              duration: asset.duration,
+            });
+          }
+        } catch (err) {
+          console.warn("[projectStore] Failed to trigger coarse baseline preload for asset:", asset.path, err);
         }
-      } catch (err) {
-        console.warn("[projectStore] Failed to trigger coarse baseline preload for asset:", asset.path, err);
-      }
+      }, 500);
     }
   },
 

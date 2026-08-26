@@ -17,6 +17,8 @@
         "height": 720,
         "minWidth": 1100,
         "minHeight": 720,
+        "minimizable": true,
+        "maximizable": true,
         "dragDropEnabled": false,
         "decorations": true,
         "transparent": false,
