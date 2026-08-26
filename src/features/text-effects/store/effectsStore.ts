@@ -6,11 +6,12 @@ import { builtInPresets } from "@clypra-studio/engine";
 import { getTextEffectCache } from "../cache/persistentCache";
 import { getApiHeaders, getApiBaseUrl } from "@/lib/api";
 import { convertConfigToDefinition, convertRawConfigToDefinition, type EffectDefinitionWithBounds } from "../lib/definitionConversion";
+import { localTextEffectPresets } from "../localPresets";
 
 const API_BASE = getApiBaseUrl();
 
-const initialDefinitions = builtInPresets.reduce<Record<string, EffectDefinitionWithBounds>>((acc, preset) => {
-  acc[preset.id] = convertConfigToDefinition(preset);
+const initialDefinitions = [...builtInPresets, ...localTextEffectPresets].reduce<Record<string, EffectDefinitionWithBounds>>((acc, preset) => {
+  acc[preset.id] = convertConfigToDefinition(preset as any);
   return acc;
 }, {});
 

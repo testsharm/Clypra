@@ -69,7 +69,7 @@ export const useSettingsStore = create<SettingsStore>()(
       proxyEditingEnabled: false,
       autoClearCacheOnProjectClose: false,
       // Layout — read legacy localStorage on first load, fall back to defaults
-      layoutPreset: "default",
+      layoutPreset: "tall-player-right",
       sidebarWidth: (() => {
         if (typeof window === "undefined") return 400;
         const v = parseInt(localStorage.getItem("clypra_sidebar_width") ?? "", 10);
@@ -147,8 +147,8 @@ const themes: Record<Exclude<Theme, "custom">, Record<string, string>> = {
     "--color-surface-floating": "#20242a",
     "--color-border": "#2e2e2e",
     "--color-border-soft": "#343b45",
-    "--color-accent": "#6c63ff",
-    "--color-accent-soft": "#8b84ff",
+    "--color-accent": "#00c2ff",
+    "--color-accent-soft": "#4dd6ff",
     "--color-text-primary": "#f0f0f0",
     "--color-text-muted": "#666666",
     "--color-danger": "#e05252",
@@ -200,7 +200,7 @@ const themes: Record<Exclude<Theme, "custom">, Record<string, string>> = {
     "--card-foreground": "#f0f0f0",
     "--popover": "#1a1a1a",
     "--popover-foreground": "#f0f0f0",
-    "--primary": "#6c63ff",
+    "--primary": "#00c2ff",
     "--primary-foreground": "#ffffff",
     "--secondary": "#242424",
     "--secondary-foreground": "#f0f0f0",
