@@ -158,10 +158,10 @@ export const PreviewTransport: React.FC<PreviewTransportProps> = ({
           <button
             onClick={disabled ? undefined : onPlayPause}
             disabled={disabled}
-            className={`w-7 h-7 flex items-center justify-center rounded-full transition-all cursor-pointer mx-0.5 active:scale-95 ${
+            className={`w-9 h-9 flex items-center justify-center rounded-full transition-all cursor-pointer mx-0.5 active:scale-95 ${
               disabled
-                ? "cursor-not-allowed text-text-muted/50"
-                : "hover:bg-white/10 text-text-primary hover:shadow-sm"
+                ? "cursor-not-allowed bg-text-muted/20 text-text-muted/50"
+                : "bg-accent hover:bg-accent/90 text-white shadow-[0_4px_12px_rgba(0,194,255,0.35)]"
             }`}
             title={disabled ? "No clips on timeline" : isPlaying ? "Pause (Space)" : "Play (Space)"}
             aria-label={isPlaying ? "Pause playback" : "Play playback"}
