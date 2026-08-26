@@ -1,5 +1,5 @@
 import React, { useState, lazy, Suspense, useRef } from "react";
-import { Upload, Home, Settings, Download, FolderOpen } from "lucide-react";
+import { Upload, Home, Settings, Download, FolderOpen, Pencil } from "lucide-react";
 import { Button } from "../ui/Button";
 import { useProjectStore } from "@/store/projectStore";
 import { useTimelineStore } from "@/store/timelineStore";
@@ -26,9 +26,12 @@ const TopBarComponent: React.FC<TopBarProps> = ({ onRequestClose }) => {
   const mediaAssets = useProjectStore((s) => s.mediaAssets);
   const { tracks, clips, transitions, gaps, markers } = useTimelineStore();
   const closeProject = useProjectStore((s) => s.closeProject);
+  const renameProject = useProjectStore((s) => s.renameProject);
   const toggleSettingsModal = useUIStore((s) => s.toggleSettingsModal);
   const loadProject = useProjectStore((s) => s.loadProject);
   const [showExportDialog, setShowExportDialog] = useState(false);
+  const [isRenaming, setIsRenaming] = useState(false);
+  const [renameValue, setRenameValue] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleClose = () => {
@@ -36,6 +39,26 @@ const TopBarComponent: React.FC<TopBarProps> = ({ onRequestClose }) => {
       onRequestClose();
     } else {
       closeProject();
+    }
+  };
+
+  const startRename = () => {
+    if (!project) return;
+    setRenameValue(project.name);
+    setIsRenaming(true);
+  };
+
+  const commitRename = async () => {
+    if (!project || !renameValue.trim()) {
+      setIsRenaming(false);
+      return;
+    }
+    try {
+      await renameProject(project.id, renameValue.trim());
+      setIsRenaming(false);
+    } catch (err) {
+      console.error("Failed to rename project:", err);
+      setIsRenaming(false);
     }
   };
 
@@ -111,9 +134,29 @@ const TopBarComponent: React.FC<TopBarProps> = ({ onRequestClose }) => {
           </Button>
         </div>
 
-        <span className="text-xs font-semibold text-text-primary truncate max-w-[120px] sm:max-w-[240px] text-center shrink-0" title={projectName}>
-          {projectName}
-        </span>
+        {isRenaming ? (
+          <input
+            autoFocus
+            value={renameValue}
+            onChange={(e) => setRenameValue(e.target.value)}
+            onBlur={commitRename}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") commitRename();
+              if (e.key === "Escape") setIsRenaming(false);
+            }}
+            className="text-xs font-semibold text-text-primary bg-surface-raised border border-accent/40 rounded px-2 py-0.5 outline-none selectable"
+            style={{ maxWidth: "240px" }}
+          />
+        ) : (
+          <button
+            onClick={startRename}
+            className="group flex items-center gap-1.5 text-xs font-semibold text-text-primary truncate max-w-[120px] sm:max-w-[240px] text-center shrink-0 hover:text-accent transition-colors cursor-pointer"
+            title="Rename project"
+          >
+            <span className="truncate">{projectName}</span>
+            <Pencil className="w-3 h-3 text-text-muted group-hover:text-accent shrink-0" />
+          </button>
+        )}
 
         <div style={{ WebkitAppRegion: "drag" } as any} className="flex-1" />
 

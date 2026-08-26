@@ -210,12 +210,10 @@ export async function exportVideo(config: VideoExportConfig): Promise<VideoExpor
   }
 
   // EX-2 fix: Batch size reduced from 30 → 10 frames.
-  // At 1080p a single frame is ~8 MB (1920×1080×4). BATCH_SIZE=30 caused a ~248 MB
-  // contiguous allocation per flush (plus the 30 source frames still in memory = ~496 MB peak).
-  // BATCH_SIZE=10 caps that at ~83 MB batch + ~83 MB source = ~166 MB peak — safe on 4 GB machines.
-  const BATCH_SIZE = 10;
-  const frameBuffer: Uint8Array[] = [];
+  // For high resolutions (4K) reduce further to 5 frames to keep peak memory low.
   const frameSize = width * height * 4; // RGBA bytes per frame
+  const BATCH_SIZE = frameSize > 1920 * 1080 * 4 ? 5 : 10;
+  const frameBuffer: Uint8Array[] = [];
 
   /**
    * Flush accumulated frames to backend in a single batch.

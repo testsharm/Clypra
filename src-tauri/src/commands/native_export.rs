@@ -277,15 +277,16 @@ fn build_segment_args(
     let source_duration = number(clip.duration);
     let output_duration = number(clip.frame_count as f64 / plan.frame_rate);
     let frame_rate = number(plan.frame_rate);
+    let threads = if plan.width * plan.height > 1920 * 1080 { 8 } else { 4 };
     let mut args = vec![
         "-hide_banner".into(),
         "-loglevel".into(),
         "error".into(),
         "-nostdin".into(),
         "-threads".into(),
-        "4".into(),
+        threads.to_string(),
         "-filter_threads".into(),
-        "2".into(),
+        "4".into(),
     ];
 
     if let Some(ref hwaccel) = encoder.hwaccel_flag {
