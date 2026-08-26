@@ -112,6 +112,32 @@ export const AudioSection: React.FC<AudioSectionProps> = ({
         icon={<AudioLines className="w-3.5 h-3.5" />}
       >
         <div className="space-y-2.5">
+          {/* Quick fade presets (CapCut-style) */}
+          <div className="flex items-center gap-1 pb-1">
+            <span className="text-[9px] text-text-muted mr-1">Quick:</span>
+            {[
+              { label: "None", in: 0, out: 0 },
+              { label: "0.5s", in: 0.5, out: 0.5 },
+              { label: "1s", in: 1, out: 1 },
+              { label: "2s", in: 2, out: 2 },
+            ].map((p) => (
+              <button
+                key={p.label}
+                onClick={() => {
+                  handleUpdate("fadeIn", clampFade(p.in));
+                  handleUpdate("fadeOut", clampFade(p.out));
+                }}
+                className={`px-1.5 py-0.5 text-[9px] rounded border transition-all cursor-pointer ${
+                  fadeIn === p.in && fadeOut === p.out
+                    ? "bg-accent/15 text-accent border-accent/30"
+                    : "text-text-muted border-white/10 hover:text-text-primary hover:bg-white/[0.04]"
+                }`}
+              >
+                {p.label}
+              </button>
+            ))}
+          </div>
+
           {/* Fade In: slider + exact numeric input */}
           <div className="space-y-1">
             <PropertySlider

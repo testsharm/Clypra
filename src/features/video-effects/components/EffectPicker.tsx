@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useRef } from "react";
 import { Search, Sparkles, AlertCircle, Star, Download, Plus } from "lucide-react";
 import type { EffectPreset } from "../types";
 import { VideoEffectsApi } from "../api/videoEffectsApi";
@@ -14,6 +14,8 @@ export function EffectPicker({ onSelect }: EffectPickerProps) {
   const [effects, setEffects] = useState<EffectPreset[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [previewUrls, setPreviewUrls] = useState<Record<string, string>>({});
+  const [downloadingPreviews, setDownloadingPreviews] = useState<Set<string>>(new Set());
 
   const { favorites, downloadedEffects, downloadingIds, toggleFavorite, startDownload, completeDownload } = useFavoritesStore();
 
@@ -54,6 +56,24 @@ export function EffectPicker({ onSelect }: EffectPickerProps) {
       completeDownload(itemId, "effect");
       handleApplyEffect(effect);
     }, 650);
+  };
+
+  const handleDownloadPreview = async (effectId: string) => {
+    if (previewUrls[effectId] || downloadingPreviews.has(effectId)) return;
+
+    setDownloadingPreviews((prev) => new Set(prev).add(effectId));
+    try {
+      const url = await VideoEffectsApi.getEffectPreviewObjectURL(effectId, "body");
+      setPreviewUrls((prev) => ({ ...prev, [effectId]: url }));
+    } catch (error) {
+      console.error(`Failed to download body effect preview for ${effectId}:`, error);
+    } finally {
+      setDownloadingPreviews((prev) => {
+        const next = new Set(prev);
+        next.delete(effectId);
+        return next;
+      });
+    }
   };
 
   const filteredEffects = useMemo(() => {
@@ -123,6 +143,8 @@ export function EffectPicker({ onSelect }: EffectPickerProps) {
                   e.stopPropagation();
                   handleDownloadAndApply(effect);
                 }}
+                previewUrl={previewUrls[effect.id]}
+                onDownloadPreview={() => handleDownloadPreview(effect.id)}
               />
             ))}
           </div>
@@ -139,10 +161,24 @@ interface EffectCardProps {
   isDownloading: boolean;
   onFavorite: (e: React.MouseEvent) => void;
   onApply: (e: React.MouseEvent) => void;
+  previewUrl?: string;
+  onDownloadPreview?: () => void;
 }
 
-function EffectCard({ effect, isFavorite, isDownloaded, isDownloading, onFavorite, onApply }: EffectCardProps) {
+function EffectCard({ effect, isFavorite, isDownloaded, isDownloading, onFavorite, onApply, previewUrl, onDownloadPreview }: EffectCardProps) {
   const [isHovered, setIsHovered] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    if (videoRef.current) {
+      if (isHovered && previewUrl) {
+        videoRef.current.play().catch(() => {});
+      } else {
+        videoRef.current.pause();
+        if (videoRef.current) videoRef.current.currentTime = 0;
+      }
+    }
+  }, [isHovered, previewUrl]);
 
   return (
     <div onClick={onApply} onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)} className="w-full aspect-square bg-surface-raised/40 hover:bg-surface-raised/80 border border-border/40 hover:border-accent/40 rounded-xl relative overflow-hidden flex flex-col justify-between p-1 transition-all duration-300 group cursor-pointer shadow-[0_4px_16px_rgba(0,0,0,0.3)]">
@@ -172,11 +208,27 @@ function EffectCard({ effect, isFavorite, isDownloaded, isDownloading, onFavorit
 
       {/* Thumbnail or Category fallback */}
       <div className="flex-1 flex items-center justify-center w-full select-none relative overflow-hidden rounded-lg bg-surface">
-        {effect.thumbnail ? (
+        {previewUrl ? (
+          <video ref={videoRef} src={previewUrl} loop muted playsInline className="w-full h-full object-cover rounded-lg" />
+        ) : effect.thumbnail ? (
           <img src={effect.thumbnail} alt={effect.name} className="w-full h-full object-cover rounded-lg" />
         ) : (
           <div className="flex flex-col items-center justify-center h-full w-full bg-linear-to-br from-accent/10 to-accent/0 text-center rounded-lg p-2">
             <span className="text-4xl filter drop-shadow-[0_4px_8px_rgba(0,0,0,0.3)] group-hover:scale-[1.05] transition-transform duration-300">{getCategoryIcon(effect.category || "aura")}</span>
+          </div>
+        )}
+        {!previewUrl && onDownloadPreview && (
+          <div className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg">
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                onDownloadPreview();
+              }}
+              className="p-1.5 bg-white/20 backdrop-blur-sm rounded-full hover:bg-white/30 text-white transition-colors"
+              title="Download animated preview"
+            >
+              <Download className="w-3 h-3" />
+            </button>
           </div>
         )}
       </div>
