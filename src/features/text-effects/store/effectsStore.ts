@@ -10,10 +10,16 @@ import { localTextEffectPresets } from "../localPresets";
 
 const API_BASE = getApiBaseUrl();
 
-const initialDefinitions = [...builtInPresets, ...localTextEffectPresets].reduce<Record<string, EffectDefinitionWithBounds>>((acc, preset) => {
+const initialDefinitions = builtInPresets.reduce<Record<string, EffectDefinitionWithBounds>>((acc, preset) => {
   acc[preset.id] = convertConfigToDefinition(preset as any);
   return acc;
 }, {});
+
+// Local presets are already in definition-like shape (font/fills arrays), so
+// convert them directly without expecting a nested `.config` object.
+for (const preset of localTextEffectPresets) {
+  initialDefinitions[preset.id] = convertRawConfigToDefinition(preset);
+}
 
 interface EffectsState {
   // ── Phase 1: Grid index ─────────────────────────────────────────
