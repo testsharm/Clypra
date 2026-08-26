@@ -165,27 +165,54 @@ pub fn detect_best_encoder(codec: &str) -> SelectedEncoder {
     }
     #[cfg(target_os = "windows")]
     {
-        let is_hevc = codec == "h265" || codec == "hevc";
-        if test_encoder_available("h264_nvenc") {
-            SelectedEncoder {
-                codec_name: if is_hevc { "hevc_nvenc".into() } else { "h264_nvenc".into() },
-                hw_type: HwAccelType::Nvenc,
-                hwaccel_flag: Some("cuda".into()),
+        match codec {
+            "h264" => {
+                if test_encoder_available("h264_nvenc") {
+                    SelectedEncoder {
+                        codec_name: "h264_nvenc".into(),
+                        hw_type: HwAccelType::Nvenc,
+                        hwaccel_flag: Some("cuda".into()),
+                    }
+                } else if test_encoder_available("h264_qsv") {
+                    SelectedEncoder {
+                        codec_name: "h264_qsv".into(),
+                        hw_type: HwAccelType::Qsv,
+                        hwaccel_flag: Some("qsv".into()),
+                    }
+                } else if test_encoder_available("h264_amf") {
+                    SelectedEncoder {
+                        codec_name: "h264_amf".into(),
+                        hw_type: HwAccelType::Amf,
+                        hwaccel_flag: Some("d3d11va".into()),
+                    }
+                } else {
+                    software_fallback_encoder(codec)
+                }
             }
-        } else if test_encoder_available("h264_qsv") {
-            SelectedEncoder {
-                codec_name: if is_hevc { "hevc_qsv".into() } else { "h264_qsv".into() },
-                hw_type: HwAccelType::Qsv,
-                hwaccel_flag: Some("qsv".into()),
+            "h265" | "hevc" => {
+                if test_encoder_available("hevc_nvenc") {
+                    SelectedEncoder {
+                        codec_name: "hevc_nvenc".into(),
+                        hw_type: HwAccelType::Nvenc,
+                        hwaccel_flag: Some("cuda".into()),
+                    }
+                } else if test_encoder_available("hevc_qsv") {
+                    SelectedEncoder {
+                        codec_name: "hevc_qsv".into(),
+                        hw_type: HwAccelType::Qsv,
+                        hwaccel_flag: Some("qsv".into()),
+                    }
+                } else if test_encoder_available("hevc_amf") {
+                    SelectedEncoder {
+                        codec_name: "hevc_amf".into(),
+                        hw_type: HwAccelType::Amf,
+                        hwaccel_flag: Some("d3d11va".into()),
+                    }
+                } else {
+                    software_fallback_encoder(codec)
+                }
             }
-        } else if test_encoder_available("h264_amf") {
-            SelectedEncoder {
-                codec_name: if is_hevc { "hevc_amf".into() } else { "h264_amf".into() },
-                hw_type: HwAccelType::Amf,
-                hwaccel_flag: Some("d3d11va".into()),
-            }
-        } else {
-            software_fallback_encoder(codec)
+            _ => software_fallback_encoder(codec),
         }
     }
     #[cfg(target_os = "linux")]

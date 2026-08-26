@@ -89,6 +89,13 @@ export function analyzeNativeTimelineExport(
     return { eligible: false, reasons: ["Project settings are unavailable"] };
   }
 
+  // Native export currently only supports h264, h265, and prores codecs.
+  // WebM (vp9) and GIF require a different container/muxing pipeline and must
+  // use the compositor export path instead.
+  if (!["h264", "h265", "prores"].includes(input.codec)) {
+    reasons.push(`Native export does not support codec: ${input.codec}`);
+  }
+
   const videoTracks = input.tracks.filter(
     (track) => track.type === "video" && track.visible,
   );

@@ -411,9 +411,8 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onProjectCreate, onP
       {/* Native title bar area. Controls are explicit because the main window is borderless. */}
       <div className="h-8 shrink-0 flex items-center gap-2 px-1 select-none">
         <span className={`text-xs font-semibold text-text-muted/60 shrink-0 ${isMacNativeWindow ? "ml-[76px]" : ""}`}>Clypra</span>
-        <div className="flex-1" />
+        <div className="flex-1" style={{ WebkitAppRegion: "drag" } as any} />
         {platform.type === "tauri" && !isMacNativeWindow && <WindowControls className="mr-1" />}
-        <div style={{ WebkitAppRegion: "drag" } as any} className="absolute inset-0 h-10 z-5" />
       </div>
 
       {/* ── Background gradients ─────────────────────────────────── */}
