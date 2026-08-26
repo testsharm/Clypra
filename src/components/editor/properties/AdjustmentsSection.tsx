@@ -124,6 +124,19 @@ export const AdjustmentsSection: React.FC<AdjustmentsSectionProps> = ({
 
   const hasAnyManual = Object.keys(adjustments).length > 0;
 
+  const applyAdjustmentPreset = (presetId: string) => {
+    const presets: Record<string, Partial<ColorAdjustments>> = {
+      vibrant: { saturation: 0.3, contrast: 0.1, vibrance: { amount: 0.4 } },
+      cool: { temperature: -0.2, tint: -0.05, contrast: 0.05 },
+      warm: { temperature: 0.25, tint: 0.08, contrast: 0.03 },
+      vintage: { sepia: 0.4, vignette: 0.5, contrast: 0.08, saturation: -0.15 },
+      bw: { grayscale: 1.0, contrast: 0.15 },
+    };
+    const preset = presets[presetId];
+    if (!preset) return;
+    handleUpdate("adjustments", { ...adjustments, ...preset });
+  };
+
   // Resolve values defensively
   const getVal = (key: keyof ColorAdjustments, defaultVal: number): number => {
     if (key in adjustments) {
@@ -166,6 +179,33 @@ export const AdjustmentsSection: React.FC<AdjustmentsSectionProps> = ({
       }
     >
       <div className="space-y-4 pt-1">
+        {/* One-tap looks (CapCut-style) */}
+        <div className="flex flex-wrap gap-1.5 pb-1">
+          {[
+            { id: "vibrant", label: "Vibrant" },
+            { id: "cool", label: "Cool" },
+            { id: "warm", label: "Warm" },
+            { id: "vintage", label: "Vintage" },
+            { id: "bw", label: "B&W" },
+          ].map((p) => (
+            <button
+              key={p.id}
+              onClick={() => applyAdjustmentPreset(p.id)}
+              className="px-2 py-1 rounded-full bg-surface-raised border border-border/60 text-[10px] font-medium text-text-muted hover:text-accent hover:border-accent/50 hover:bg-accent/5 transition-all cursor-pointer"
+            >
+              {p.label}
+            </button>
+          ))}
+          {hasAnyManual && (
+            <button
+              onClick={resetAllAdjustments}
+              className="px-2 py-1 rounded-full bg-destructive/10 border border-destructive/30 text-[10px] font-medium text-destructive hover:bg-destructive/20 transition-all cursor-pointer"
+            >
+              Reset Look
+            </button>
+          )}
+        </div>
+
         {/* Category: Basic Adjustments */}
         <div className="space-y-3">
           <span className="text-[9px] font-bold uppercase tracking-wider text-text-muted select-none">Basic Adjustments</span>

@@ -368,7 +368,8 @@ const arePropsEqual = (prevProps: TrackProps, nextProps: TrackProps) => {
       prevClip.volume !== nextClip.volume ||
       prevClip.fadeIn !== nextClip.fadeIn ||
       prevClip.fadeOut !== nextClip.fadeOut ||
-      prevClip.volumeKeyframes !== nextClip.volumeKeyframes
+      prevClip.volumeKeyframes !== nextClip.volumeKeyframes ||
+      prevClip.visualKeyframes !== nextClip.visualKeyframes
     ) {
       return false;
     }

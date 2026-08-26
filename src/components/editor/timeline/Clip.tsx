@@ -878,6 +878,26 @@ const ClipInner: React.FC<ClipProps> = ({
         </div>
       )}
 
+      {/* Visual keyframe markers */}
+      {clip.visualKeyframes &&
+        Object.values(clip.visualKeyframes).some((kfs) => kfs && kfs.length > 0) && (
+          <div className="pointer-events-none absolute inset-x-0 top-0 z-20 h-full overflow-visible">
+            {Object.entries(clip.visualKeyframes).flatMap(([prop, kfs]) =>
+              (kfs || []).map((kf: any) => {
+                const xPx = timeToPixel(kf.time, pixelsPerSecond);
+                return (
+                  <div
+                    key={`${prop}-${kf.id}`}
+                    className="absolute h-2 w-2 rotate-45 rounded-[1px] border border-white/90 bg-accent shadow-[0_0_4px_rgba(0,0,0,0.4)]"
+                    style={{ left: `${xPx - 4}px`, top: "3px" }}
+                    title={`${prop}: ${kf.value}`}
+                  />
+                );
+              }),
+            )}
+          </div>
+        )}
+
       {/* Audio Envelope Editor - overlay for clips with audio */}
       {(isClipAudio || isClipVideo) && (
         <AudioEnvelopeEditor
@@ -937,7 +957,8 @@ const arePropsEqual = (prevProps: ClipProps, nextProps: ClipProps) => {
     prevProps.clip.volume !== nextProps.clip.volume ||
     prevProps.clip.fadeIn !== nextProps.clip.fadeIn ||
     prevProps.clip.fadeOut !== nextProps.clip.fadeOut ||
-    prevProps.clip.volumeKeyframes !== nextProps.clip.volumeKeyframes
+    prevProps.clip.volumeKeyframes !== nextProps.clip.volumeKeyframes ||
+    prevProps.clip.visualKeyframes !== nextProps.clip.visualKeyframes
   ) {
     return false;
   }

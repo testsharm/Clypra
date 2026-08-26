@@ -62,6 +62,7 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onProjectCreate, onP
   const [renameValue, setRenameValue] = useState("");
   const [isRenaming, setIsRenaming] = useState(false);
   const [menuOpen, setMenuOpen] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState("");
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [createName, setCreateName] = useState("Untitled Project");
   const [createAspect, setCreateAspect] = useState<AspectRatio>("16:9");
@@ -637,6 +638,13 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onProjectCreate, onP
                 </span>
               )}
             </div>
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search projects..."
+              className="bg-surface-raised border border-border/60 rounded-lg px-2 py-1 text-xs text-text-primary outline-none focus:border-accent selectable w-[180px]"
+            />
             {recentProjects.length > 0 && (
               <button
                 className="text-[11px] font-semibold text-text-muted hover:text-text-primary transition-colors cursor-pointer flex items-center gap-0.5"
@@ -667,7 +675,7 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onProjectCreate, onP
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {recentProjects.map((project) => {
+              {recentProjects.filter((p) => p.name.toLowerCase().includes(searchQuery.toLowerCase())).map((project) => {
                 const thumbnail = getProjectThumbnail(project);
                 const cardGlow = getAspectRatioGlow(project.aspectRatio);
                 return (

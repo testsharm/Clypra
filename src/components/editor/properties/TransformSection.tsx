@@ -356,7 +356,14 @@ export const TransformSection: React.FC<TransformSectionProps> = ({ selectedClip
 
       {/* Quick Animations */}
       <div className="border-t border-border/40 pt-3 mt-3">
-        <span className="text-[10px] font-medium text-text-muted select-none block mb-2">Quick Animations</span>
+        <div className="flex items-center justify-between mb-2">
+          <span className="text-[10px] font-medium text-text-muted select-none">Quick Animations</span>
+          {Object.values(selectedClip.visualKeyframes || {}).some((kfs: any) => kfs && kfs.length > 0) && (
+            <button onClick={() => handleUpdate("visualKeyframes", {})} className="text-[9px] text-destructive hover:text-red-400 transition-colors cursor-pointer">
+              Reset All
+            </button>
+          )}
+        </div>
         <div className="grid grid-cols-3 gap-1.5">
           {[
             { id: "fade-in", label: "Fade In" },
