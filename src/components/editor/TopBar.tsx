@@ -5,12 +5,16 @@ import { useProjectStore } from "@/store/projectStore";
 import { useTimelineStore } from "@/store/timelineStore";
 import { useUIStore } from "@/store/uiStore";
 import { platform } from "@/core/platform";
-import { isMacOSPlatform, WindowControls, WindowDragRegion } from "../ui/WindowControls";
+import { WindowControls } from "../ui/WindowControls";
 import { LayoutPresetMenu } from "./layout/LayoutPresetMenu";
 import { createCustomProjectBlob, parseCustomProjectFile } from "@/lib/customProjectFormat";
 
 // Lazy load ExportDialog
 const ExportDialog = lazy(() => import("../ui/ExportDialog").then((m) => ({ default: m.ExportDialog })));
+
+function isMacOSPlatform() {
+  return navigator.platform.toLowerCase().includes("mac");
+}
 
 interface TopBarProps {
   onRequestClose?: () => void;
@@ -111,26 +115,26 @@ const TopBarComponent: React.FC<TopBarProps> = ({ onRequestClose }) => {
           {projectName}
         </span>
 
-        <WindowDragRegion />
+        <div style={{ WebkitAppRegion: "drag" } as any} className="flex-1" />
 
-        <div className="flex items-center gap-1.5 shrink-0" style={{ WebkitAppRegion: "no-drag" } as React.CSSProperties}>
+        <div className="flex items-center gap-1.5 shrink-0" style={{ WebkitAppRegion: "no-drag" } as any}>
           <LayoutPresetMenu />
 
-          <Button variant="ghost" size="icon-sm" onClick={toggleSettingsModal} title="Settings" style={{ WebkitAppRegion: "no-drag", cursor: "pointer" } as React.CSSProperties}>
+          <Button variant="ghost" size="icon-sm" onClick={toggleSettingsModal} title="Settings" style={{ WebkitAppRegion: "no-drag", cursor: "pointer" } as any}>
             <Settings className="w-3.5 h-3.5" />
           </Button>
 
-          <Button variant="default" size="sm" onClick={() => setShowExportDialog(true)} className="text-xs h-6 px-2.5" style={{ WebkitAppRegion: "no-drag", cursor: "pointer" } as React.CSSProperties}>
+          <Button variant="default" size="sm" onClick={() => setShowExportDialog(true)} className="text-xs h-6 px-2.5" style={{ WebkitAppRegion: "no-drag", cursor: "pointer" } as any}>
             <Upload className="w-3.5 h-3.5 mr-1" />
             Export
           </Button>
 
-          <Button variant="ghost" size="sm" onClick={handleImportClick} title="Import custom JSON (.clypra)" className="text-xs h-6 px-2.5" style={{ WebkitAppRegion: "no-drag", cursor: "pointer" } as React.CSSProperties}>
+          <Button variant="ghost" size="sm" onClick={handleImportClick} title="Import custom JSON (.clypra)" className="text-xs h-6 px-2.5" style={{ WebkitAppRegion: "no-drag", cursor: "pointer" } as any}>
             <FolderOpen className="w-3.5 h-3.5 mr-1" />
             Import
           </Button>
 
-          <Button variant="ghost" size="sm" onClick={handleExportCustom} title="Export as custom JSON (.clypra)" className="text-xs h-6 px-2.5" style={{ WebkitAppRegion: "no-drag", cursor: "pointer" } as React.CSSProperties}>
+          <Button variant="ghost" size="sm" onClick={handleExportCustom} title="Export as custom JSON (.clypra)" className="text-xs h-6 px-2.5" style={{ WebkitAppRegion: "no-drag", cursor: "pointer" } as any}>
             <Download className="w-3.5 h-3.5 mr-1" />
             JSON
           </Button>
@@ -147,3 +151,4 @@ const TopBarComponent: React.FC<TopBarProps> = ({ onRequestClose }) => {
 };
 
 export const TopBar = React.memo(TopBarComponent);
+

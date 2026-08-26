@@ -1,10 +1,13 @@
 const fs = require('fs');
 const path = require('path');
-const http = require('http');
+const express = require('express');
 const { exec } = require('child_process');
 const { promisify } = require('util');
 const execAsync = promisify(exec);
 const PROJECT_ROOT = process.cwd();
+
+const app = express();
+app.use(express.text({ type: '*/*' }));
 
 function resolvePath(filePath) {
     const resolved = path.resolve(PROJECT_ROOT, filePath);
@@ -70,115 +73,56 @@ const opMap = {
     }
 };
 
-const server = http.createServer(async (req, res) => {
-    if (req.method === 'GET' && req.url === '/') {
-        res.writeHead(200, { 'Content-Type': 'text/html' });
-        res.end(`
-            <!DOCTYPE html>
-            <html>
-            <head>
-                <title>Executor Interface</title>
-                <style>
-                    body { font-family: sans-serif; background: #1e1e26; color: #eee; padding: 20px; }
-                    textarea { width: 100%; height: 300px; background: #0e0e12; color: #ddd; border: 1px solid #2a2a38; padding: 10px; font-family: monospace; }
-                    button { background: #7C6FFF; color: white; border: none; padding: 10px 20px; margin: 10px 0; cursor: pointer; border-radius: 4px; }
-                    button:hover { background: #5B4EE8; }
-                    #output { background: #0e0e12; border: 1px solid #2a2a38; padding: 10px; white-space: pre-wrap; font-family: monospace; max-height: 400px; overflow: auto; }
-                </style>
-            </head>
-            <body>
-                <h2>Executor Interface</h2>
-                <p>Paste your EXECUTOR_PACKAGE_V1 block below and click Run.</p>
-                <textarea id="input">EXECUTOR_PACKAGE_V1
-        {
-          "version": "1",
-          "operations": [
-            {"type": "read_file", "path": "src/hello.txt"}
-          ]
-        }
-        END_EXECUTOR_PACKAGE</textarea>
-                <br>
-                <button onclick="run()">Run</button>
-                <button onclick="document.getElementById('input').value=''">Clear</button>
-                <h3>Output</h3>
-                <div id="output">Ready</div>
-                <script>
-                    async function run() {
-                        const input = document.getElementById('input').value;
-                        const output = document.getElementById('output');
-                        output.textContent = 'Running...';
-                        try {
-                            const resp = await fetch('/execute', {
-                                method: 'POST',
-                                headers: { 'Content-Type': 'text/plain' },
-                                body: input
-                            });
-                            const text = await resp.text();
-                            output.textContent = text;
-                        } catch(e) {
-                            output.textContent = 'Error: ' + e.message;
-                        }
-                    }
-                </script>
-            </body>
-            </html>
-        `);
-    } else 
+// Route: GET '/'
+app.get('/', (req, res) => {
+    res.send('<h1>Executor Server</h1>');
+});
 
- if (req.method === 'POST' && req.url === '/execute') {
-        let body = '';
-        req.on('data', chunk => body += chunk);
-        req.on('end', async () => {
-            try {
-                const match = body.match(/EXECUTOR_PACKAGE_V1\s*({[\s\S]*?})\s*END_EXECUTOR_PACKAGE/);
-                if (!match) {
-                    res.writeHead(400);
-                    res.end('No valid package found. Must contain EXECUTOR_PACKAGE_V1 ... END_EXECUTOR_PACKAGE');
-                    return;
-                }
-                const pkg = JSON.parse(match[1]);
-                const results = [];
-                for (const op of pkg.operations) {
-                    const handler = opMap[op.type];
-                    if (!handler) {
-                        results.push({ type: op.type, status: 'error', message: 'Unknown operation' });
-                        continue;
-                    }
-                    try {
-                        const result = await handler(op);
-                        results.push({ ...result, type: op.type });
-                    } catch (e) {
-                        results.push({ type: op.type, status: 'error', message: e.message });
-                    }
-                    if (results[results.length-1].status === 'error' && !pkg.continueOnError) break;
-                }
-                let report = '=== EXECUTION REPORT ===\n';
-                for (const r of results) {
-                    const icon = r.status === 'success' ? '✓' : '✗';
-                    report += `${icon} ${r.type}: ${r.message}\n`;
-                    if (r.stdout) report += `  stdout: ${r.stdout}\n`;
-                    if (r.stderr) report += `  stderr: ${r.stderr}\n`;
-                }
-                const failed = results.filter(r => r.status === 'error');
-                if (failed.length) report += `\n❌ ${failed.length} operation(s) failed.`;
-                else report += '\n✅ All operations completed successfully.';
-                report += '\n\n=== RESULT PACKAGE ===\n' + JSON.stringify({ results }, null, 2);
-                res.writeHead(200, { 'Content-Type': 'text/plain' });
-                res.end(report);
-            } catch (e) {
-                res.writeHead(400);
-                res.end('Error: ' + e.message);
+// Route: GET '/health'
+app.get('/health', (req, res) => {
+    res.send('Server is running');
+});
+
+// Route: POST '/execute'
+app.post('/execute', async (req, res) => {
+    const body = req.body;
+    try {
+        const match = body.match(/EXECUTOR_PACKAGE_V1\s*({[\s\S]*?})\s*END_EXECUTOR_PACKAGE/);
+        if (!match) {
+            return res.status(400).send('No valid package found. Must contain EXECUTOR_PACKAGE_V1 ... END_EXECUTOR_PACKAGE');
+        }
+        const pkg = JSON.parse(match[1]);
+        const results = [];
+        for (const op of pkg.operations) {
+            const handler = opMap[op.type];
+            if (!handler) {
+                results.push({ type: op.type, status: 'error', message: 'Unknown operation' });
+                continue;
             }
-        });
-    } else {
-        res.writeHead(404);
-        res.end('Not found');
+            try {
+                const result = await handler(op);
+                results.push({ ...result, type: op.type });
+            } catch (e) {
+                results.push({ type: op.type, status: 'error', message: e.message });
+            }
+            if (results[results.length-1].status === 'error' && !pkg.continueOnError) break;
+        }
+        let report = '=== EXECUTION REPORT ===\n';
+        for (const r of results) {
+            const icon = r.status === 'success' ? '✓' : '✗';
+            report += `${icon} ${r.type}: ${r.message}\n`;
+            if (r.stdout) report += `  stdout: ${r.stdout}\n`;
+            if (r.stderr) report += `  stderr: ${r.stderr}\n`;
+        }
+        const failed = results.filter(r => r.status === 'error');
+        if (failed.length) report += `\n❌ ${failed.length} operation(s) failed.`;
+        else report += '\n✅ All operations completed successfully.';
+        report += '\n\n=== RESULT PACKAGE ===\n' + JSON.stringify({ results }, null, 2);
+        res.status(200).send(report);
+    } catch (e) {
+        res.status(400).send('Error: ' + e.message);
     }
 });
 
-const PORT = 3001;
-server.listen(PORT, () => {
-    console.log(`Executor server running at http://localhost:${PORT}`);
-    console.log('Open this URL in your browser.');
-});
-
+const PORT = process.env.PORT || 3002;
+app.listen(PORT, '0.0.0.0', () => console.log(`Server running on http://0.0.0.0:${PORT}`));
