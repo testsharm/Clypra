@@ -862,10 +862,21 @@ async fn run_native_export(
             .await?,
         );
 
-        // Atomic commit: rename temporary muxed file to destination output_path
-        tokio::fs::rename(&muxed_temp_path, &output_path)
-            .await
-            .map_err(|error| format!("Failed to commit native export file: {error}"))?;
+        // Atomic commit: rename temporary muxed file to destination output_path.
+        // On Windows, rename fails across drives (os error 17) since it's not a true move.
+        // Fall back to copy+delete when that happens.
+        if let Err(rename_err) = tokio::fs::rename(&muxed_temp_path, &output_path).await {
+            let is_cross_device = rename_err.raw_os_error() == Some(17) // Windows/Linux ERROR_NOT_SAME_DEVICE / EXDEV
+                || rename_err.raw_os_error() == Some(18);
+            if is_cross_device {
+                tokio::fs::copy(&muxed_temp_path, &output_path)
+                    .await
+                    .map_err(|error| format!("Failed to commit native export file (cross-drive copy): {error}"))?;
+                let _ = tokio::fs::remove_file(&muxed_temp_path).await;
+            } else {
+                return Err(format!("Failed to commit native export file: {rename_err}"));
+            }
+        }
 
         let elapsed = started.elapsed().as_secs_f64();
         let _ = on_progress.send(ExportProgress {
