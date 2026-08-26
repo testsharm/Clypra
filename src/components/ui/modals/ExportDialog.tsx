@@ -560,7 +560,7 @@ export const ExportDialog: React.FC<ExportDialogProps> = ({
       }
     } catch (err) {
       if (!isMountedRef.current) return;
-      const msg = err instanceof Error ? err.message : "Export failed";
+      const msg = err instanceof Error ? err.message : typeof err === "string" ? err : "Export failed";
       safeSetError(msg);
       safeSetPhase("error");
       toast.error(`Export failed: ${msg}`);

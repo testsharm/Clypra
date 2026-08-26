@@ -1,8 +1,9 @@
-import React from "react";
-import { Palette, Sparkles, Sliders, EyeOff, Check } from "lucide-react";
+import React, { useRef } from "react";
+import { Palette, Sparkles, Sliders, EyeOff, Check, Upload, Film } from "lucide-react";
 import { useProjectStore } from "@/store/projectStore";
 import type { CanvasBackgroundConfig } from "@/types";
 import { ClypraColorPicker } from "@clypra/ui-color-picker";
+import { platform } from "@/core/platform";
 
 const QUICK_COLORS = [
   "#000000",
@@ -26,6 +27,7 @@ const SHADER_PRESETS = [
 
 export const BackgroundInspectorPanel: React.FC = () => {
   const { project, updateProject } = useProjectStore();
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const bgConfig: CanvasBackgroundConfig = project?.canvasBackground || {
     type: "solid",
@@ -38,6 +40,36 @@ export const BackgroundInspectorPanel: React.FC = () => {
     if (!project) return;
     const newBg = { ...bgConfig, ...updates };
     updateProject({ canvasBackground: newBg });
+  };
+
+  const handleBrowseMedia = async () => {
+    if (platform.type === "tauri") {
+      try {
+        const { open } = await import("@tauri-apps/plugin-dialog");
+        const file = await open({
+          filters: [
+            { name: "Media", extensions: ["mp4", "mov", "webm", "jpg", "jpeg", "png", "webp", "gif"] },
+          ],
+          multiple: false,
+        });
+        if (typeof file === "string") {
+          handleUpdate({ mediaUrl: file });
+        }
+      } catch (error) {
+        console.error("Failed to open native file dialog:", error);
+      }
+    } else {
+      fileInputRef.current?.click();
+    }
+  };
+
+  const handleBrowserFileSelected = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const url = URL.createObjectURL(file);
+      handleUpdate({ mediaUrl: url });
+    }
+    e.target.value = "";
   };
 
   return (
@@ -251,6 +283,38 @@ export const BackgroundInspectorPanel: React.FC = () => {
                   </div>
                 )}
               </div>
+            </div>
+          )}
+
+          {/* Media Mode */}
+          {bgConfig.type === "media" && (
+            <div className="space-y-3 p-3 rounded-xl bg-surface-raised/30 border border-border/40">
+              <div className="flex items-center gap-1.5 text-accent font-medium">
+                <Film className="w-3.5 h-3.5" />
+                Background Media
+              </div>
+
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="video/*,image/*"
+                className="hidden"
+                onChange={handleBrowserFileSelected}
+              />
+
+              <button
+                onClick={handleBrowseMedia}
+                className="w-full flex items-center justify-center gap-2 p-2.5 rounded-lg border border-dashed border-border/60 hover:border-accent hover:bg-accent/5 text-text-secondary hover:text-accent transition-all text-[11px] font-medium"
+              >
+                <Upload className="w-3.5 h-3.5" />
+                {bgConfig.mediaUrl ? "Change Media" : "Choose Video or Image"}
+              </button>
+
+              {bgConfig.mediaUrl && (
+                <div className="text-[10px] text-text-muted truncate p-2 rounded-md bg-surface/60 border border-border/30">
+                  {bgConfig.mediaUrl.split(/[/\\]/).pop()}
+                </div>
+              )}
             </div>
           )}
 

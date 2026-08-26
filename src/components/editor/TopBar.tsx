@@ -103,9 +103,9 @@ const TopBarComponent: React.FC<TopBarProps> = ({ onRequestClose }) => {
     <>
       <input type="file" ref={fileInputRef} accept=".clypra" onChange={handleImportFile} className="hidden" />
       <div className="h-8 shrink-0 flex items-center gap-2 px-1 select-none">
-        {platform.type === "tauri" && !isMacNativeWindow && <WindowControls className="mr-1" />}
+        {isMacNativeWindow && <div className="pl-[76px]" />}
 
-        <div className={`flex items-center gap-2 shrink-0 ${isMacNativeWindow ? "pl-[76px]" : "pl-1"}`} style={{ WebkitAppRegion: "no-drag" } as React.CSSProperties}>
+        <div className={`flex items-center gap-2 shrink-0 pl-1`} style={{ WebkitAppRegion: "no-drag" } as React.CSSProperties}>
           <Button variant="ghost" size="icon-sm" onClick={handleClose} title="Back to Home" style={{ WebkitAppRegion: "no-drag", cursor: "pointer" } as React.CSSProperties}>
             <Home className="w-4 h-4" />
           </Button>
@@ -138,6 +138,8 @@ const TopBarComponent: React.FC<TopBarProps> = ({ onRequestClose }) => {
             <Download className="w-3.5 h-3.5 mr-1" />
             JSON
           </Button>
+
+          {platform.type === "tauri" && !isMacNativeWindow && <WindowControls className="ml-1" />}
         </div>
       </div>
 

@@ -225,12 +225,13 @@ export const useProjectStore = create<ProjectStore>((set, get) => ({
 
   showToast: (message, variant = "success", durationMs = 3000) => {
     set({ toastMessage: message, toastVariant: variant });
+    const toastId = `project-toast-${variant}`;
     if (variant === "error") {
-      toast.error(message, { duration: durationMs });
+      toast.error(message, { id: toastId, duration: durationMs });
     } else if (variant === "warning") {
-      toast.warning(message, { duration: durationMs });
+      toast.warning(message, { id: toastId, duration: durationMs });
     } else {
-      toast.success(message, { duration: durationMs });
+      toast.success(message, { id: toastId, duration: durationMs });
     }
     if (durationMs > 0) {
       setTimeout(() => set({ toastMessage: null }), durationMs);
