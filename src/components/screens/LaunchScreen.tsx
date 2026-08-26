@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/Button";
 import { WindowControls } from "../ui/WindowControls";
 import { Modal } from "@/components/ui/Modal";
 import { useProjectStore } from "@/store/projectStore";
+import { parseCustomProjectFile } from "@/lib/customProjectFormat";
 import { useSettingsStore } from "@/store/settingsStore";
 import type { AspectRatio, MediaAsset, Project } from "@/types";
 import { getProjectThumbnail, formatEditorTimecode } from "@/lib/media/projectThumbnail";
@@ -54,7 +55,7 @@ const getAspectRatioGlow = (ratio: string) =>
   aspectRatioGlow[ratio] ?? "rgba(108, 99, 255, 0.14)";
 
 export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onProjectCreate, onProjectOpen }) => {
-  const { recentProjects, setRecentProjects, deleteProject, renameProject } = useProjectStore();
+  const { recentProjects, setRecentProjects, deleteProject, renameProject, loadProject } = useProjectStore();
   const [projectToDelete, setProjectToDelete] = useState<Project | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
   const [projectToRename, setProjectToRename] = useState<Project | null>(null);
@@ -333,6 +334,55 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onProjectCreate, onP
     setIsCreateModalOpen(false);
   };
 
+  const handleImportMedia = async () => {
+    try {
+      const selected = await platform.openFileDialog({
+        multiple: true,
+        filters: [
+          {
+            name: "Media",
+            extensions: ["mp4", "mov", "mkv", "webm", "m4v", "mp3", "wav", "aac", "ogg", "flac", "m4a", "jpg", "png", "webp"],
+          },
+        ],
+      });
+      if (!selected || selected.length === 0) return;
+      const { defaultFrameRate } = useSettingsStore.getState();
+      onProjectCreate(
+        "Imported Media",
+        "16:9",
+        defaultFrameRate,
+        selected.map((f) => f.path),
+      );
+    } catch (err) {
+      console.error("[LaunchScreen] Failed to import media:", err);
+    }
+  };
+
+  const handleOpenProjectFile = async () => {
+    try {
+      const selected = await platform.openFileDialog({
+        multiple: false,
+        filters: [{ name: "Clypra Project", extensions: ["clypra"] }],
+      });
+      if (!selected || selected.length === 0) return;
+      const filePath = selected[0].path;
+      const { readTextFile } = await import("@tauri-apps/plugin-fs");
+      const text = await readTextFile(filePath);
+      const parsed = await parseCustomProjectFile(text);
+      await loadProject(parsed.project, {
+        tracks: parsed.timelineData.tracks,
+        clips: parsed.timelineData.clips,
+        transitions: parsed.timelineData.transitions,
+        gaps: parsed.timelineData.gaps,
+        markers: parsed.timelineData.markers,
+        mediaAssets: parsed.timelineData.mediaAssets,
+      });
+    } catch (err) {
+      console.error("[LaunchScreen] Failed to open project file:", err);
+      alert(`Failed to open project: ${err instanceof Error ? err.message : String(err)}`);
+    }
+  };
+
   const handleDeleteClick = (e: React.MouseEvent, project: Project) => {
     e.stopPropagation();
     setMenuOpen(null);
@@ -530,7 +580,7 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onProjectCreate, onP
           <div className="grid grid-cols-3 gap-3">
             {/* Import Media */}
             <button
-              onClick={handleStartNewProject}
+              onClick={handleImportMedia}
               className="group flex flex-col items-start gap-2 p-4 rounded-xl border border-white/5 bg-surface hover:bg-surface-raised hover:border-white/10 hover:shadow-lg hover:shadow-black/20 transition-all duration-200 cursor-pointer text-left"
             >
               <div className="w-8 h-8 rounded-lg bg-accent/10 border border-accent/20 flex items-center justify-center group-hover:bg-accent/15 transition-colors">
@@ -561,7 +611,7 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onProjectCreate, onP
 
             {/* Open File */}
             <button
-              onClick={handleStartNewProject}
+              onClick={handleOpenProjectFile}
               className="group flex flex-col items-start gap-2 p-4 rounded-xl border border-white/5 bg-surface hover:bg-surface-raised hover:border-white/10 hover:shadow-lg hover:shadow-black/20 transition-all duration-200 cursor-pointer text-left"
             >
               <div className="w-8 h-8 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center group-hover:bg-emerald-500/15 transition-colors">
