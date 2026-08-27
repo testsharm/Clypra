@@ -52,7 +52,7 @@ pub fn run() {
         if std::env::var("WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS").is_err() {
             std::env::set_var(
                 "WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS",
-                "--enable-gpu-rasterization --ignore-gpu-blocklist --enable-zero-copy --allow-file-access-from-files",
+                "--enable-gpu-rasterization --ignore-gpu-blocklist --enable-zero-copy --allow-file-access-from-files --enable-features=VaapiVideoDecoder,HardwareMediaKeySystemSupport --enable-hardware-overlays --use-angle=d3d11",
             );
         }
     }

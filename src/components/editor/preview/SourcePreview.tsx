@@ -37,6 +37,7 @@ export const SourcePreview: React.FC = () => {
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [sourceVideoError, setSourceVideoError] = useState(false);
+  const currentTimeRef = useRef(0);
   const sourceCtxRef = useRef<SourcePlaybackContext | null>(null);
 
   const [lottieData, setLottieData] = useState<object | null>(null);
@@ -65,9 +66,15 @@ export const SourcePreview: React.FC = () => {
       ctx.setMediaElement(null);
     }
 
-    // Subscribe to context state
+    // Subscribe to context state (throttle time updates to ~4 Hz)
+    let lastTime = performance.now();
     const unsub = ctx.subscribe((snapshot) => {
-      setCurrentTime(snapshot.time);
+      const now = performance.now();
+      if (now - lastTime >= 250 || Math.abs(snapshot.time - currentTimeRef.current) > 0.2) {
+        lastTime = now;
+        currentTimeRef.current = snapshot.time;
+        setCurrentTime(snapshot.time);
+      }
       setDuration(snapshot.duration);
       setIsPlaying(snapshot.state === "playing");
     });

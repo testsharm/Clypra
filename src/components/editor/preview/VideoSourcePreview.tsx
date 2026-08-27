@@ -28,6 +28,11 @@ export const VideoSourcePreview: React.FC<VideoSourcePreviewProps> = ({
       )}
       playsInline
       preload="auto"
+      style={{
+        transform: 'translateZ(0)',
+        backfaceVisibility: 'hidden',
+        willChange: 'transform',
+      }}
     />
   );
 };

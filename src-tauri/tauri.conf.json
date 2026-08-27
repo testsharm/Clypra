@@ -23,7 +23,8 @@
         "decorations": true,
         "transparent": false,
         "shadow": true,
-        "devtools": true
+        "devtools": true,
+        "additionalBrowserArgs": "--enable-gpu-rasterization --ignore-gpu-blocklist --enable-zero-copy --allow-file-access-from-files --enable-features=VaapiVideoDecoder,HardwareMediaKeySystemSupport --enable-hardware-overlays --use-angle=d3d11"
       }
     ],
     "macOSPrivateApi": true,
