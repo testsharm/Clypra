@@ -360,7 +360,31 @@ export const useProjectStore = create<ProjectStore>((set, get) => ({
         // ═══════════════════════════════════════════════════════════════════════════════
         // PHASE 2: Load Project & Media Assets
         // ═══════════════════════════════════════════════════════════════════════════════
-        set({ project, mediaAssets: payload?.mediaAssets ?? [], lastSavedHash: "" });
+        const providedAssets = payload?.mediaAssets ?? [];
+        const recoveredAssets: MediaAsset[] = [];
+        for (const clip of (payload?.clips ?? []) as any[]) {
+          try {
+            const mediaId = clip?.mediaId;
+            if (!mediaId || !["video", "audio", "image"].includes(clip?.kind)) continue;
+            if (providedAssets.some((a) => a.id === mediaId) || recoveredAssets.some((a) => a.id === mediaId)) continue;
+            const sourcePath = clip?.path || clip?.audioPath || clip?.sourcePath || "";
+            if (!sourcePath) continue;
+            recoveredAssets.push({
+              id: mediaId,
+              name: clip?.name || clip?.fileName || mediaId,
+              path: sourcePath,
+              type: clip.kind,
+              duration: typeof clip?.duration === "number" ? clip.duration : 0,
+              width: typeof clip?.width === "number" ? clip.width : 0,
+              height: typeof clip?.height === "number" ? clip.height : 0,
+              posterFrame: clip?.posterFrame,
+              coverArt: clip?.coverArt,
+              size: typeof clip?.size === "number" ? clip.size : 0,
+            } as MediaAsset);
+          } catch {}
+        }
+        const mergedMediaAssets = [...providedAssets, ...recoveredAssets];
+        set({ project, mediaAssets: mergedMediaAssets, lastSavedHash: "" });
 
         await preloadTextEffectDefinitionsFromClips(payload?.clips);
         if (currentLoadId !== loadId) return;
