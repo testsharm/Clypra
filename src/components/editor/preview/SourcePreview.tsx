@@ -19,6 +19,7 @@ import { TextSourcePreview } from "./TextSourcePreview";
 import { useEffectsStore } from "@/features/text-effects/store/effectsStore";
 import { useStickersStore } from "@/features/stickers/store/stickersStore";
 import { VideoSourcePreview } from "./VideoSourcePreview";
+import { CanvasScrubPreview } from "./CanvasScrubPreview";
 import { AudioSourcePreview } from "./AudioSourcePreview";
 import { ImageSourcePreview } from "./ImageSourcePreview";
 import { StickerSourcePreview, type StickerSourcePreviewHandle } from "./StickerSourcePreview";
@@ -491,17 +492,25 @@ export const SourcePreview: React.FC = () => {
         <div className="w-full h-full flex items-center justify-center relative z-10">
           {sourceAsset.type === "video" ? (
             <div className="relative w-full h-full flex items-center justify-center">
-              <VideoSourcePreview
-                videoRef={videoRef}
-                src={sourcePath}
-                onLoadedMetadata={(event) => {
-                  const mediaDuration = Number(event.currentTarget.duration);
-                  if (Number.isFinite(mediaDuration) && mediaDuration > 0) {
-                    setDuration(mediaDuration);
-                  }
-                }}
-                onError={() => setSourceVideoError(true)}
-              />
+              {isPlaying ? (
+                <VideoSourcePreview
+                  videoRef={videoRef}
+                  src={sourcePath}
+                  onLoadedMetadata={(event) => {
+                    const mediaDuration = Number(event.currentTarget.duration);
+                    if (Number.isFinite(mediaDuration) && mediaDuration > 0) {
+                      setDuration(mediaDuration);
+                    }
+                  }}
+                  onError={() => setSourceVideoError(true)}
+                />
+              ) : (
+                <CanvasScrubPreview
+                  videoRef={videoRef}
+                  currentTime={currentTime}
+                  className="max-w-full max-h-full object-contain shadow-[0_0_40px_rgba(0,0,0,0.8)] ring-1 ring-white/10 bg-black"
+                />
+              )}
               {sourceVideoError && (
                 <div className="absolute inset-0 flex items-center justify-center bg-black/55 pointer-events-none">
                   <span className="rounded bg-black/80 px-3 py-1.5 text-xs text-red-200">Unable to load source video</span>
