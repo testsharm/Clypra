@@ -514,17 +514,16 @@ const App = () => {
       .then(async ({ getCurrentWindow }) => {
         if (disposed) return;
         const win = getCurrentWindow();
-        unlisten = await win.onCloseRequested(async () => {
+        unlisten = await win.onCloseRequested(async (event) => {
           if (closingWindowRef.current) return;
           closingWindowRef.current = true;
+          event.preventDefault();
           try {
             if (useProjectStore.getState().project) {
               await handleCloseProject();
             }
           } catch (err) {
             console.error("[App] Project close handler failed:", err);
-          } finally {
-            closingWindowRef.current = false;
           }
           await win.close();
         });
