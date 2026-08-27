@@ -3,7 +3,7 @@ import type { StickerItem } from "./api/stickersApi";
 export const LOCAL_STICKERS: StickerItem[] = [
   {
     id: "sticker1",
-    name: "Sticker 1",
+    name: "Grinning Face",
     category: "emoji",
     thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/stickers/sticker1.png",
     lottieUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/stickers/sticker1.json",
@@ -12,7 +12,7 @@ export const LOCAL_STICKERS: StickerItem[] = [
   },
   {
     id: "sticker2",
-    name: "Sticker 2",
+    name: "OMG",
     category: "text",
     thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/stickers/sticker2.png",
     lottieUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/stickers/sticker2.json",
@@ -21,7 +21,7 @@ export const LOCAL_STICKERS: StickerItem[] = [
   },
   {
     id: "sticker3",
-    name: "Sticker 3",
+    name: "Game Over",
     category: "gaming",
     thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/stickers/sticker3.png",
     lottieUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/stickers/sticker3.json",
@@ -30,7 +30,7 @@ export const LOCAL_STICKERS: StickerItem[] = [
   },
   {
     id: "sticker4",
-    name: "Sticker 4",
+    name: "Goal",
     category: "sports",
     thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/stickers/sticker4.png",
     lottieUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/stickers/sticker4.json",
@@ -39,7 +39,7 @@ export const LOCAL_STICKERS: StickerItem[] = [
   },
   {
     id: "sticker5",
-    name: "Sticker 5",
+    name: "Cute Cat",
     category: "animals",
     thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/stickers/sticker5.png",
     lottieUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/stickers/sticker5.json",
@@ -48,7 +48,7 @@ export const LOCAL_STICKERS: StickerItem[] = [
   },
   {
     id: "sticker6",
-    name: "Sticker 6",
+    name: "Heart",
     category: "love",
     thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/stickers/sticker6.png",
     lottieUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/stickers/sticker6.json",
@@ -57,7 +57,7 @@ export const LOCAL_STICKERS: StickerItem[] = [
   },
   {
     id: "sticker7",
-    name: "Sticker 7",
+    name: "Mood",
     category: "mood",
     thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/stickers/sticker7.png",
     lottieUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/stickers/sticker7.json",
@@ -66,7 +66,7 @@ export const LOCAL_STICKERS: StickerItem[] = [
   },
   {
     id: "sticker8",
-    name: "Sticker 8",
+    name: "Pizza",
     category: "food",
     thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/stickers/sticker8.png",
     lottieUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/stickers/sticker8.json",
@@ -75,7 +75,7 @@ export const LOCAL_STICKERS: StickerItem[] = [
   },
   {
     id: "sticker9",
-    name: "Sticker 9",
+    name: "Passport",
     category: "travel",
     thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/stickers/sticker9.png",
     lottieUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/stickers/sticker9.json",
@@ -84,7 +84,7 @@ export const LOCAL_STICKERS: StickerItem[] = [
   },
   {
     id: "sticker10",
-    name: "Sticker 10",
+    name: "Happy Birthday",
     category: "birthday",
     thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/stickers/sticker10.png",
     lottieUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/stickers/sticker10.json",
@@ -93,7 +93,7 @@ export const LOCAL_STICKERS: StickerItem[] = [
   },
   {
     id: "sticker11",
-    name: "Sticker 11",
+    name: "Circle",
     category: "frames",
     thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/stickers/sticker11.png",
     lottieUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/stickers/sticker11.json",
@@ -102,7 +102,7 @@ export const LOCAL_STICKERS: StickerItem[] = [
   },
   {
     id: "sticker12",
-    name: "Sticker 12",
+    name: "Arrow",
     category: "shapes",
     thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/stickers/sticker12.png",
     lottieUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/stickers/sticker12.json",
@@ -111,7 +111,7 @@ export const LOCAL_STICKERS: StickerItem[] = [
   },
   {
     id: "sticker13",
-    name: "Sticker 13",
+    name: "Cool Shades",
     category: "fashion",
     thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/stickers/sticker13.png",
     lottieUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/stickers/sticker13.json",
@@ -120,7 +120,7 @@ export const LOCAL_STICKERS: StickerItem[] = [
   },
   {
     id: "sticker14",
-    name: "Sticker 14",
+    name: "Retro TV",
     category: "retro",
     thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/stickers/sticker14.png",
     lottieUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/stickers/sticker14.json",
@@ -129,7 +129,7 @@ export const LOCAL_STICKERS: StickerItem[] = [
   },
   {
     id: "sticker15",
-    name: "Sticker 15",
+    name: "Doodle",
     category: "illustration",
     thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/stickers/sticker15.png",
     lottieUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/stickers/sticker15.json",
@@ -138,7 +138,7 @@ export const LOCAL_STICKERS: StickerItem[] = [
   },
   {
     id: "sticker16",
-    name: "Sticker 16",
+    name: "Smiling Eyes",
     category: "emoji",
     thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/stickers/sticker16.png",
     lottieUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/stickers/sticker16.json",
@@ -147,7 +147,7 @@ export const LOCAL_STICKERS: StickerItem[] = [
   },
   {
     id: "sticker17",
-    name: "Sticker 17",
+    name: "LOL",
     category: "text",
     thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/stickers/sticker17.png",
     lottieUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/stickers/sticker17.json",
@@ -156,7 +156,7 @@ export const LOCAL_STICKERS: StickerItem[] = [
   },
   {
     id: "sticker18",
-    name: "Sticker 18",
+    name: "Level Up",
     category: "gaming",
     thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/stickers/sticker18.png",
     lottieUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/stickers/sticker18.json",
@@ -165,7 +165,7 @@ export const LOCAL_STICKERS: StickerItem[] = [
   },
   {
     id: "sticker19",
-    name: "Sticker 19",
+    name: "Home Run",
     category: "sports",
     thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/stickers/sticker19.png",
     lottieUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/stickers/sticker19.json",
@@ -174,7 +174,7 @@ export const LOCAL_STICKERS: StickerItem[] = [
   },
   {
     id: "sticker20",
-    name: "Sticker 20",
+    name: "Happy Dog",
     category: "animals",
     thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/stickers/sticker20.png",
     lottieUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/stickers/sticker20.json",
@@ -183,7 +183,7 @@ export const LOCAL_STICKERS: StickerItem[] = [
   },
   {
     id: "sticker21",
-    name: "Sticker 21",
+    name: "Kiss",
     category: "love",
     thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/stickers/sticker21.png",
     lottieUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/stickers/sticker21.json",
@@ -192,7 +192,7 @@ export const LOCAL_STICKERS: StickerItem[] = [
   },
   {
     id: "sticker22",
-    name: "Sticker 22",
+    name: "Vibes",
     category: "mood",
     thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/stickers/sticker22.png",
     lottieUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/stickers/sticker22.json",
@@ -201,7 +201,7 @@ export const LOCAL_STICKERS: StickerItem[] = [
   },
   {
     id: "sticker23",
-    name: "Sticker 23",
+    name: "Burger",
     category: "food",
     thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/stickers/sticker23.png",
     lottieUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/stickers/sticker23.json",
@@ -210,7 +210,7 @@ export const LOCAL_STICKERS: StickerItem[] = [
   },
   {
     id: "sticker24",
-    name: "Sticker 24",
+    name: "Airplane",
     category: "travel",
     thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/stickers/sticker24.png",
     lottieUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/stickers/sticker24.json",
@@ -219,7 +219,7 @@ export const LOCAL_STICKERS: StickerItem[] = [
   },
   {
     id: "sticker25",
-    name: "Sticker 25",
+    name: "Cake",
     category: "birthday",
     thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/stickers/sticker25.png",
     lottieUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/stickers/sticker25.json",
@@ -228,7 +228,7 @@ export const LOCAL_STICKERS: StickerItem[] = [
   },
   {
     id: "sticker26",
-    name: "Sticker 26",
+    name: "Square",
     category: "frames",
     thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/stickers/sticker26.png",
     lottieUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/stickers/sticker26.json",
@@ -237,7 +237,7 @@ export const LOCAL_STICKERS: StickerItem[] = [
   },
   {
     id: "sticker27",
-    name: "Sticker 27",
+    name: "Sparkle",
     category: "shapes",
     thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/stickers/sticker27.png",
     lottieUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/stickers/sticker27.json",
@@ -246,7 +246,7 @@ export const LOCAL_STICKERS: StickerItem[] = [
   },
   {
     id: "sticker28",
-    name: "Sticker 28",
+    name: "Lipstick",
     category: "fashion",
     thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/stickers/sticker28.png",
     lottieUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/stickers/sticker28.json",
@@ -255,7 +255,7 @@ export const LOCAL_STICKERS: StickerItem[] = [
   },
   {
     id: "sticker29",
-    name: "Sticker 29",
+    name: "Cassette",
     category: "retro",
     thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/stickers/sticker29.png",
     lottieUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/stickers/sticker29.json",
@@ -264,7 +264,7 @@ export const LOCAL_STICKERS: StickerItem[] = [
   },
   {
     id: "sticker30",
-    name: "Sticker 30",
+    name: "Sketch",
     category: "illustration",
     thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/stickers/sticker30.png",
     lottieUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/stickers/sticker30.json",
@@ -273,7 +273,7 @@ export const LOCAL_STICKERS: StickerItem[] = [
   },
   {
     id: "sticker31",
-    name: "Sticker 31",
+    name: "Tears of Joy",
     category: "emoji",
     thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/stickers/sticker31.png",
     lottieUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/stickers/sticker31.json",
@@ -282,7 +282,7 @@ export const LOCAL_STICKERS: StickerItem[] = [
   },
   {
     id: "sticker32",
-    name: "Sticker 32",
+    name: "WOW",
     category: "text",
     thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/stickers/sticker32.png",
     lottieUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/stickers/sticker32.json",
@@ -291,7 +291,7 @@ export const LOCAL_STICKERS: StickerItem[] = [
   },
   {
     id: "sticker33",
-    name: "Sticker 33",
+    name: "Victory",
     category: "gaming",
     thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/stickers/sticker33.png",
     lottieUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/stickers/sticker33.json",
@@ -300,7 +300,7 @@ export const LOCAL_STICKERS: StickerItem[] = [
   },
   {
     id: "sticker34",
-    name: "Sticker 34",
+    name: "Slam Dunk",
     category: "sports",
     thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/stickers/sticker34.png",
     lottieUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/stickers/sticker34.json",
@@ -309,7 +309,7 @@ export const LOCAL_STICKERS: StickerItem[] = [
   },
   {
     id: "sticker35",
-    name: "Sticker 35",
+    name: "Panda",
     category: "animals",
     thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/stickers/sticker35.png",
     lottieUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/stickers/sticker35.json",
@@ -318,7 +318,7 @@ export const LOCAL_STICKERS: StickerItem[] = [
   },
   {
     id: "sticker36",
-    name: "Sticker 36",
+    name: "Love Letter",
     category: "love",
     thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/stickers/sticker36.png",
     lottieUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/stickers/sticker36.json",
@@ -327,7 +327,7 @@ export const LOCAL_STICKERS: StickerItem[] = [
   },
   {
     id: "sticker37",
-    name: "Sticker 37",
+    name: "Chill",
     category: "mood",
     thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/stickers/sticker37.png",
     lottieUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/stickers/sticker37.json",
@@ -336,7 +336,7 @@ export const LOCAL_STICKERS: StickerItem[] = [
   },
   {
     id: "sticker38",
-    name: "Sticker 38",
+    name: "Ice Cream",
     category: "food",
     thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/stickers/sticker38.png",
     lottieUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/stickers/sticker38.json",
@@ -345,7 +345,7 @@ export const LOCAL_STICKERS: StickerItem[] = [
   },
   {
     id: "sticker39",
-    name: "Sticker 39",
+    name: "Beach",
     category: "travel",
     thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/stickers/sticker39.png",
     lottieUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/stickers/sticker39.json",
@@ -354,7 +354,7 @@ export const LOCAL_STICKERS: StickerItem[] = [
   },
   {
     id: "sticker40",
-    name: "Sticker 40",
+    name: "Balloons",
     category: "birthday",
     thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/stickers/sticker40.png",
     lottieUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/stickers/sticker40.json",
@@ -363,7 +363,7 @@ export const LOCAL_STICKERS: StickerItem[] = [
   },
   {
     id: "sticker41",
-    name: "Sticker 41",
+    name: "Star",
     category: "frames",
     thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/stickers/sticker41.png",
     lottieUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/stickers/sticker41.json",
@@ -372,7 +372,7 @@ export const LOCAL_STICKERS: StickerItem[] = [
   },
   {
     id: "sticker42",
-    name: "Sticker 42",
+    name: "Burst",
     category: "shapes",
     thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/stickers/sticker42.png",
     lottieUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/stickers/sticker42.json",
@@ -381,7 +381,7 @@ export const LOCAL_STICKERS: StickerItem[] = [
   },
   {
     id: "sticker43",
-    name: "Sticker 43",
+    name: "High Heels",
     category: "fashion",
     thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/stickers/sticker43.png",
     lottieUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/stickers/sticker43.json",
@@ -390,7 +390,7 @@ export const LOCAL_STICKERS: StickerItem[] = [
   },
   {
     id: "sticker44",
-    name: "Sticker 44",
+    name: "Pixel Heart",
     category: "retro",
     thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/stickers/sticker44.png",
     lottieUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/stickers/sticker44.json",
@@ -399,7 +399,7 @@ export const LOCAL_STICKERS: StickerItem[] = [
   },
   {
     id: "sticker45",
-    name: "Sticker 45",
+    name: "Watercolor",
     category: "illustration",
     thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/stickers/sticker45.png",
     lottieUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/stickers/sticker45.json",
@@ -408,7 +408,7 @@ export const LOCAL_STICKERS: StickerItem[] = [
   },
   {
     id: "sticker46",
-    name: "Sticker 46",
+    name: "Heart Eyes",
     category: "emoji",
     thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/stickers/sticker46.png",
     lottieUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/stickers/sticker46.json",
@@ -417,7 +417,7 @@ export const LOCAL_STICKERS: StickerItem[] = [
   },
   {
     id: "sticker47",
-    name: "Sticker 47",
+    name: "YES",
     category: "text",
     thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/stickers/sticker47.png",
     lottieUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/stickers/sticker47.json",
@@ -426,7 +426,7 @@ export const LOCAL_STICKERS: StickerItem[] = [
   },
   {
     id: "sticker48",
-    name: "Sticker 48",
+    name: "Epic Win",
     category: "gaming",
     thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/stickers/sticker48.png",
     lottieUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/stickers/sticker48.json",
@@ -435,7 +435,7 @@ export const LOCAL_STICKERS: StickerItem[] = [
   },
   {
     id: "sticker49",
-    name: "Sticker 49",
+    name: "Touchdown",
     category: "sports",
     thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/stickers/sticker49.png",
     lottieUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/stickers/sticker49.json",
@@ -444,11 +444,12 @@ export const LOCAL_STICKERS: StickerItem[] = [
   },
   {
     id: "sticker50",
-    name: "Sticker 50",
+    name: "Bunny",
     category: "animals",
     thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/stickers/sticker50.png",
     lottieUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/stickers/sticker50.json",
     preview: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/stickers/sticker50.webm",
     tags: ["animals"],
-  }
+  },
 ];
+

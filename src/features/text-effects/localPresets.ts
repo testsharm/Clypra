@@ -98,7 +98,7 @@ export const localTextEffectPresets: any[] = [
   },
   {
     id: "local-effect-1",
-    name: "Effect 1",
+    name: "Soft Glow",
     description: "Local text effect number 1",
     font: {
       family: "Poppins",
@@ -112,7 +112,7 @@ export const localTextEffectPresets: any[] = [
   },
   {
     id: "local-effect-2",
-    name: "Effect 2",
+    name: "Neon Pop",
     description: "Local text effect number 2",
     font: {
       family: "Roboto Variable",
@@ -126,7 +126,7 @@ export const localTextEffectPresets: any[] = [
   },
   {
     id: "local-effect-3",
-    name: "Effect 3",
+    name: "Golden Touch",
     description: "Local text effect number 3",
     font: {
       family: "Montserrat Variable",
@@ -140,7 +140,7 @@ export const localTextEffectPresets: any[] = [
   },
   {
     id: "local-effect-4",
-    name: "Effect 4",
+    name: "Ice Chrome",
     description: "Local text effect number 4",
     font: {
       family: "Space Grotesk Variable",
@@ -154,7 +154,7 @@ export const localTextEffectPresets: any[] = [
   },
   {
     id: "local-effect-5",
-    name: "Effect 5",
+    name: "Pastel Dream",
     description: "Local text effect number 5",
     font: {
       family: "Outfit Variable",
@@ -168,7 +168,7 @@ export const localTextEffectPresets: any[] = [
   },
   {
     id: "local-effect-6",
-    name: "Effect 6",
+    name: "Retro Vibes",
     description: "Local text effect number 6",
     font: {
       family: "Oswald",
@@ -182,7 +182,7 @@ export const localTextEffectPresets: any[] = [
   },
   {
     id: "local-effect-7",
-    name: "Effect 7",
+    name: "Comic Pop",
     description: "Local text effect number 7",
     font: {
       family: "Raleway",
@@ -196,7 +196,7 @@ export const localTextEffectPresets: any[] = [
   },
   {
     id: "local-effect-8",
-    name: "Effect 8",
+    name: "Urban Edge",
     description: "Local text effect number 8",
     font: {
       family: "Playfair Display",
@@ -210,7 +210,7 @@ export const localTextEffectPresets: any[] = [
   },
   {
     id: "local-effect-9",
-    name: "Effect 9",
+    name: "Bubble Gum",
     description: "Local text effect number 9",
     font: {
       family: "Anton",
@@ -224,7 +224,7 @@ export const localTextEffectPresets: any[] = [
   },
   {
     id: "local-effect-10",
-    name: "Effect 10",
+    name: "Silk Screen",
     description: "Local text effect number 10",
     font: {
       family: "Bebas Neue",
@@ -238,7 +238,7 @@ export const localTextEffectPresets: any[] = [
   },
   {
     id: "local-effect-11",
-    name: "Effect 11",
+    name: "Royal Blue",
     description: "Local text effect number 11",
     font: {
       family: "Dancing Script",
@@ -252,7 +252,7 @@ export const localTextEffectPresets: any[] = [
   },
   {
     id: "local-effect-12",
-    name: "Effect 12",
+    name: "Mint Fresh",
     description: "Local text effect number 12",
     font: {
       family: "Pacifico",
@@ -266,7 +266,7 @@ export const localTextEffectPresets: any[] = [
   },
   {
     id: "local-effect-13",
-    name: "Effect 13",
+    name: "Sunset Fade",
     description: "Local text effect number 13",
     font: {
       family: "Nunito",
@@ -280,7 +280,7 @@ export const localTextEffectPresets: any[] = [
   },
   {
     id: "local-effect-14",
-    name: "Effect 14",
+    name: "Electric Pulse",
     description: "Local text effect number 14",
     font: {
       family: "Inter Variable",
@@ -294,7 +294,7 @@ export const localTextEffectPresets: any[] = [
   },
   {
     id: "local-effect-15",
-    name: "Effect 15",
+    name: "Candy Coated",
     description: "Local text effect number 15",
     font: {
       family: "Poppins",
@@ -308,7 +308,7 @@ export const localTextEffectPresets: any[] = [
   },
   {
     id: "local-effect-16",
-    name: "Effect 16",
+    name: "Velvet Night",
     description: "Local text effect number 16",
     font: {
       family: "Roboto Variable",
@@ -322,7 +322,7 @@ export const localTextEffectPresets: any[] = [
   },
   {
     id: "local-effect-17",
-    name: "Effect 17",
+    name: "Crystal Clear",
     description: "Local text effect number 17",
     font: {
       family: "Montserrat Variable",
@@ -336,7 +336,7 @@ export const localTextEffectPresets: any[] = [
   },
   {
     id: "local-effect-18",
-    name: "Effect 18",
+    name: "Lime Light",
     description: "Local text effect number 18",
     font: {
       family: "Space Grotesk Variable",
@@ -350,7 +350,7 @@ export const localTextEffectPresets: any[] = [
   },
   {
     id: "local-effect-19",
-    name: "Effect 19",
+    name: "Cherry Bomb",
     description: "Local text effect number 19",
     font: {
       family: "Outfit Variable",
@@ -364,7 +364,7 @@ export const localTextEffectPresets: any[] = [
   },
   {
     id: "local-effect-20",
-    name: "Effect 20",
+    name: "Ocean Breeze",
     description: "Local text effect number 20",
     font: {
       family: "Oswald",
@@ -378,7 +378,7 @@ export const localTextEffectPresets: any[] = [
   },
   {
     id: "local-effect-21",
-    name: "Effect 21",
+    name: "Amber Glow",
     description: "Local text effect number 21",
     font: {
       family: "Raleway",
@@ -392,7 +392,7 @@ export const localTextEffectPresets: any[] = [
   },
   {
     id: "local-effect-22",
-    name: "Effect 22",
+    name: "Lavender Haze",
     description: "Local text effect number 22",
     font: {
       family: "Playfair Display",
@@ -406,7 +406,7 @@ export const localTextEffectPresets: any[] = [
   },
   {
     id: "local-effect-23",
-    name: "Effect 23",
+    name: "Cocoa Shine",
     description: "Local text effect number 23",
     font: {
       family: "Anton",
@@ -420,7 +420,7 @@ export const localTextEffectPresets: any[] = [
   },
   {
     id: "local-effect-24",
-    name: "Effect 24",
+    name: "Mango Tango",
     description: "Local text effect number 24",
     font: {
       family: "Bebas Neue",
@@ -434,7 +434,7 @@ export const localTextEffectPresets: any[] = [
   },
   {
     id: "local-effect-25",
-    name: "Effect 25",
+    name: "Berry Sweet",
     description: "Local text effect number 25",
     font: {
       family: "Dancing Script",
@@ -448,7 +448,7 @@ export const localTextEffectPresets: any[] = [
   },
   {
     id: "local-effect-26",
-    name: "Effect 26",
+    name: "Pine Fresh",
     description: "Local text effect number 26",
     font: {
       family: "Pacifico",
@@ -462,7 +462,7 @@ export const localTextEffectPresets: any[] = [
   },
   {
     id: "local-effect-27",
-    name: "Effect 27",
+    name: "Rose Petal",
     description: "Local text effect number 27",
     font: {
       family: "Nunito",
@@ -476,7 +476,7 @@ export const localTextEffectPresets: any[] = [
   },
   {
     id: "local-effect-28",
-    name: "Effect 28",
+    name: "Silver Lining",
     description: "Local text effect number 28",
     font: {
       family: "Inter Variable",
@@ -490,7 +490,7 @@ export const localTextEffectPresets: any[] = [
   },
   {
     id: "local-effect-29",
-    name: "Effect 29",
+    name: "Peach Sorbet",
     description: "Local text effect number 29",
     font: {
       family: "Poppins",
@@ -504,7 +504,7 @@ export const localTextEffectPresets: any[] = [
   },
   {
     id: "local-effect-30",
-    name: "Effect 30",
+    name: "Midnight Blue",
     description: "Local text effect number 30",
     font: {
       family: "Roboto Variable",
@@ -518,7 +518,7 @@ export const localTextEffectPresets: any[] = [
   },
   {
     id: "local-effect-31",
-    name: "Effect 31",
+    name: "Vanilla Cream",
     description: "Local text effect number 31",
     font: {
       family: "Montserrat Variable",
@@ -532,7 +532,7 @@ export const localTextEffectPresets: any[] = [
   },
   {
     id: "local-effect-32",
-    name: "Effect 32",
+    name: "Crimson Flame",
     description: "Local text effect number 32",
     font: {
       family: "Space Grotesk Variable",
@@ -546,7 +546,7 @@ export const localTextEffectPresets: any[] = [
   },
   {
     id: "local-effect-33",
-    name: "Effect 33",
+    name: "Forest Whisper",
     description: "Local text effect number 33",
     font: {
       family: "Outfit Variable",
@@ -560,7 +560,7 @@ export const localTextEffectPresets: any[] = [
   },
   {
     id: "local-effect-34",
-    name: "Effect 34",
+    name: "Sky High",
     description: "Local text effect number 34",
     font: {
       family: "Oswald",
@@ -574,7 +574,7 @@ export const localTextEffectPresets: any[] = [
   },
   {
     id: "local-effect-35",
-    name: "Effect 35",
+    name: "Lemon Zest",
     description: "Local text effect number 35",
     font: {
       family: "Raleway",
@@ -588,7 +588,7 @@ export const localTextEffectPresets: any[] = [
   },
   {
     id: "local-effect-36",
-    name: "Effect 36",
+    name: "Coral Reef",
     description: "Local text effect number 36",
     font: {
       family: "Playfair Display",
@@ -602,7 +602,7 @@ export const localTextEffectPresets: any[] = [
   },
   {
     id: "local-effect-37",
-    name: "Effect 37",
+    name: "Plum Perfect",
     description: "Local text effect number 37",
     font: {
       family: "Anton",
@@ -616,7 +616,7 @@ export const localTextEffectPresets: any[] = [
   },
   {
     id: "local-effect-38",
-    name: "Effect 38",
+    name: "Cocoa Butter",
     description: "Local text effect number 38",
     font: {
       family: "Bebas Neue",
@@ -630,7 +630,7 @@ export const localTextEffectPresets: any[] = [
   },
   {
     id: "local-effect-39",
-    name: "Effect 39",
+    name: "Ivory Tower",
     description: "Local text effect number 39",
     font: {
       family: "Dancing Script",
@@ -644,7 +644,7 @@ export const localTextEffectPresets: any[] = [
   },
   {
     id: "local-effect-40",
-    name: "Effect 40",
+    name: "Aqua Fresh",
     description: "Local text effect number 40",
     font: {
       family: "Pacifico",
@@ -658,7 +658,7 @@ export const localTextEffectPresets: any[] = [
   },
   {
     id: "local-effect-41",
-    name: "Effect 41",
+    name: "Magenta Pop",
     description: "Local text effect number 41",
     font: {
       family: "Nunito",
@@ -672,7 +672,7 @@ export const localTextEffectPresets: any[] = [
   },
   {
     id: "local-effect-42",
-    name: "Effect 42",
+    name: "Honey Drizzle",
     description: "Local text effect number 42",
     font: {
       family: "Inter Variable",
@@ -686,7 +686,7 @@ export const localTextEffectPresets: any[] = [
   },
   {
     id: "local-effect-43",
-    name: "Effect 43",
+    name: "Tangerine Dream",
     description: "Local text effect number 43",
     font: {
       family: "Poppins",
@@ -700,7 +700,7 @@ export const localTextEffectPresets: any[] = [
   },
   {
     id: "local-effect-44",
-    name: "Effect 44",
+    name: "Mocha Swirl",
     description: "Local text effect number 44",
     font: {
       family: "Roboto Variable",
