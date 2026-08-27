@@ -23,6 +23,8 @@ export const CaptionsTab: React.FC<TabProps> = ({ onAddToTimeline }) => {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
+  const [captionColor, setCaptionColor] = useState("#ffffff");
+  const [captionFont, setCaptionFont] = useState("Outfit Variable");
 
   const mediaAssets = project?.mediaAssets || [];
 
@@ -170,6 +172,16 @@ export const CaptionsTab: React.FC<TabProps> = ({ onAddToTimeline }) => {
     });
   };
 
+  const handleApplyCustomCaptionStyle = () => {
+    if (captionClips.length === 0) return;
+    captionClips.forEach((clip) => {
+      updateClip(clip.id, {
+        fillColor: captionColor,
+        fontFamily: captionFont,
+      } as any);
+    });
+  };
+
   return (
     <div className="flex-1 flex flex-col min-h-0 bg-background overflow-hidden p-3 space-y-3">
       {/* Hidden file input */}
@@ -206,6 +218,28 @@ export const CaptionsTab: React.FC<TabProps> = ({ onAddToTimeline }) => {
               </button>
             ))}
           </div>
+        </div>
+      )}
+
+      {/* Custom caption style controls */}
+      {captionClips.length > 0 && (
+        <div className="p-2 bg-surface-raised border border-white/6 rounded-lg space-y-1.5 select-none">
+          <div className="flex items-center justify-between text-[10px] text-text-muted font-medium">
+            <span>Custom Caption Style</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <label className="text-[10px] text-text-muted">Text Color</label>
+            <input type="color" value={captionColor} onChange={(e) => setCaptionColor(e.target.value)} className="w-7 h-7 rounded cursor-pointer bg-transparent" />
+          </div>
+          <div className="flex items-center gap-2">
+            <label className="text-[10px] text-text-muted">Font</label>
+            <select value={captionFont} onChange={(e) => setCaptionFont(e.target.value)} className="flex-1 bg-surface border border-white/10 rounded px-1 py-1 text-[10px] text-text-primary focus:outline-none focus:border-accent cursor-pointer">
+              {["Outfit Variable","Inter Variable","Poppins","Roboto Variable","Montserrat Variable","Space Grotesk Variable","Playfair Display","Nunito","Oswald","Bangers","Permanent Marker"].map((f) => (
+                <option key={f} value={f}>{f}</option>
+              ))}
+            </select>
+          </div>
+          <button onClick={handleApplyCustomCaptionStyle} className="w-full px-2 py-1 text-[10px] font-semibold rounded bg-accent/15 hover:bg-accent/25 text-accent transition-all cursor-pointer">Apply to Captions</button>
         </div>
       )}
 
