@@ -624,7 +624,11 @@ export const NativeProgramPreview: React.FC = () => {
       registeredNativeTextAssets.add(asset.assetId);
     };
 
-    const rasterizeNativeTextLayers = async (scene: EvaluatedScene): Promise<NativeRasterLayerSnapshot[]> => {
+    const rasterizeNativeTextLayers = async (
+      scene: EvaluatedScene,
+      previewScaleX: number,
+      previewScaleY: number,
+    ): Promise<NativeRasterLayerSnapshot[]> => {
       const textLayers = scene.visualLayers.filter((layer) => layer.layerType === "text");
       if (!isTauriRuntime() || textLayers.length === 0) return [];
 
@@ -638,7 +642,7 @@ export const NativeProgramPreview: React.FC = () => {
             return cached;
           }
 
-          const raster = rasterizeTextLayerForNative(layer);
+          const raster = rasterizeTextLayerForNative(layer, previewScaleX, previewScaleY);
           nativeTextRasterCache.set(key, raster);
           while (nativeTextRasterCache.size > maxNativeTextRasterCacheEntries) {
             const oldestKey = nativeTextRasterCache.keys().next().value as string | undefined;
@@ -683,6 +687,8 @@ export const NativeProgramPreview: React.FC = () => {
     const rasterizeNativeBodyMasks = async (
       scene: EvaluatedScene,
       videoElements: Map<string, HTMLVideoElement>,
+      previewScaleX: number,
+      previewScaleY: number,
     ): Promise<NativeRasterLayerSnapshot[]> => {
       if (!isTauriRuntime()) return [];
       const assets: NativeRasterLayerSnapshot[] = [];
@@ -699,8 +705,10 @@ export const NativeProgramPreview: React.FC = () => {
 
         const source = videoElements.get(`${layer.clipId}-${layer.mediaId}`);
         if (!source || source.readyState < HTMLMediaElement.HAVE_CURRENT_DATA) continue;
-        const width = Math.max(1, Math.floor(source.videoWidth || layer.width));
-        const height = Math.max(1, Math.floor(source.videoHeight || layer.height));
+        const sourceWidth = Math.max(1, Math.floor(source.videoWidth || layer.width));
+        const sourceHeight = Math.max(1, Math.floor(source.videoHeight || layer.height));
+        const width = Math.max(2, Math.floor(sourceWidth * previewScaleX));
+        const height = Math.max(2, Math.floor(sourceHeight * previewScaleY));
 
         for (const effect of bodyEffects) {
           const renderer = (effect.renderer || effect.effectId).replace(/^fx-/, "").replace(/-/g, "_").toLowerCase();
@@ -782,7 +790,11 @@ export const NativeProgramPreview: React.FC = () => {
       registeredNativeAnimatedStickerAssets.add(asset.assetId);
     };
 
-    const rasterizeNativeAnimatedStickers = async (scene: EvaluatedScene): Promise<NativeRasterLayerSnapshot[]> => {
+    const rasterizeNativeAnimatedStickers = async (
+      scene: EvaluatedScene,
+      previewScaleX: number,
+      previewScaleY: number,
+    ): Promise<NativeRasterLayerSnapshot[]> => {
       if (!isTauriRuntime()) return [];
       const layers = scene.visualLayers.filter(
         (layer): layer is import("@/core/evaluation/types").EvaluatedMediaLayer =>
@@ -791,7 +803,7 @@ export const NativeProgramPreview: React.FC = () => {
       const assets: NativeRasterLayerSnapshot[] = [];
       for (const layer of layers) {
         try {
-          const raster = await nativeAnimatedStickerRenderer.render(layer);
+          const raster = await nativeAnimatedStickerRenderer.render(layer, previewScaleX, previewScaleY);
           if (!raster) continue;
           const cached = nativeAnimatedStickerAssetsById.get(raster.assetId);
           if (!cached) await ensureNativeAnimatedStickerAssetRegistered(raster);
@@ -1050,6 +1062,8 @@ export const NativeProgramPreview: React.FC = () => {
       const renderHeight = Math.max(2, Math.min(state.canvasHeight, Math.floor(renderProfile.maxHeight)));
       const safeRenderWidth = renderWidth - (renderWidth % 2);
       const safeRenderHeight = renderHeight - (renderHeight % 2);
+      const previewScaleX = state.canvasWidth > 0 ? safeRenderWidth / state.canvasWidth : 1;
+      const previewScaleY = state.canvasHeight > 0 ? safeRenderHeight / state.canvasHeight : 1;
       const fullFrameBytes = state.canvasWidth * state.canvasHeight * 4;
       const renderFrameBytes = safeRenderWidth * safeRenderHeight * 4;
       const profileLogKey = `${state.previewQuality}:${isPlaying}:${safeRenderWidth}x${safeRenderHeight}`;
@@ -1081,12 +1095,14 @@ export const NativeProgramPreview: React.FC = () => {
 
       const scene = evaluateTimelineSceneCached(frameStartTime, state.clips, state.tracks, state.mediaAssets, state.project, state.epoch, state.transitions, state.sceneVersions);
       const nativeBackground = await rasterizeNativeBackground(scene, frameIndex, safeRenderWidth, safeRenderHeight);
-      const nativeTextRasters = await rasterizeNativeTextLayers(scene);
+      const nativeTextRasters = await rasterizeNativeTextLayers(scene, previewScaleX, previewScaleY);
       const nativeBodyMasks = await rasterizeNativeBodyMasks(
         scene,
         session?.getPreviewVideoElements() ?? new Map(),
+        previewScaleX,
+        previewScaleY,
       );
-      const nativeAnimatedStickers = await rasterizeNativeAnimatedStickers(scene);
+      const nativeAnimatedStickers = await rasterizeNativeAnimatedStickers(scene, previewScaleX, previewScaleY);
       const nativeActiveSmartClips = state.clips.filter(
         (clip): clip is SmartOverlayClip =>
           clip.kind === "smart-overlay" &&
@@ -1140,8 +1156,8 @@ export const NativeProgramPreview: React.FC = () => {
               state.sceneVersions,
             );
             const lookAheadBackground = await rasterizeNativeBackground(lookAheadScene, lookAheadFrame, safeRenderWidth, safeRenderHeight);
-            const lookAheadTextRasters = await rasterizeNativeTextLayers(lookAheadScene);
-            const lookAheadAnimatedStickers = await rasterizeNativeAnimatedStickers(lookAheadScene);
+            const lookAheadTextRasters = await rasterizeNativeTextLayers(lookAheadScene, previewScaleX, previewScaleY);
+            const lookAheadAnimatedStickers = await rasterizeNativeAnimatedStickers(lookAheadScene, previewScaleX, previewScaleY);
             const lookAheadSmartClips = state.clips.filter(
               (clip): clip is SmartOverlayClip =>
                 clip.kind === "smart-overlay" &&

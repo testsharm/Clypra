@@ -28,7 +28,11 @@ interface StickerRendererEntry {
 export class NativeAnimatedStickerRenderer {
   private readonly entries = new Map<string, StickerRendererEntry>();
 
-  async render(layer: EvaluatedMediaLayer): Promise<NativeAnimatedStickerRaster | null> {
+  async render(
+    layer: EvaluatedMediaLayer,
+    renderScaleX: number,
+    renderScaleY: number,
+  ): Promise<NativeAnimatedStickerRaster | null> {
     if (layer.clipKind !== "sticker" || layer.stickerFormat !== "lottie") return null;
     if (typeof document === "undefined") return null;
 
@@ -45,8 +49,12 @@ export class NativeAnimatedStickerRenderer {
       sourcePath = await join(await appCacheDir(), sourcePath);
     }
 
-    const width = Math.max(1, Math.ceil(layer.width));
-    const height = Math.max(1, Math.ceil(layer.height));
+    const logicalWidth = Math.max(1, Math.ceil(layer.width));
+    const logicalHeight = Math.max(1, Math.ceil(layer.height));
+    const scaleX = Number.isFinite(renderScaleX) && renderScaleX > 0 ? renderScaleX : 1;
+    const scaleY = Number.isFinite(renderScaleY) && renderScaleY > 0 ? renderScaleY : 1;
+    const width = Math.max(1, Math.round(logicalWidth * scaleX));
+    const height = Math.max(1, Math.round(logicalHeight * scaleY));
     let entry = this.entries.get(layer.layerId);
     if (!entry || entry.sourcePath !== sourcePath || entry.width !== width || entry.height !== height) {
       if (entry) this.destroyEntry(entry);

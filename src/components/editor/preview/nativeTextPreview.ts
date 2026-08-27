@@ -86,6 +86,8 @@ function createCanvas(width: number, height: number): HTMLCanvasElement | Offscr
  */
 export async function rasterizeTextLayerForNative(
   layer: EvaluatedTextLayer,
+  renderScaleX: number,
+  renderScaleY: number,
 ): Promise<NativeTextRasterAsset> {
   const effectDefinition = layer.styleId
     ? (useEffectsStore.getState().definitions[layer.styleId] ?? layer.styleDefinition)
@@ -107,8 +109,12 @@ export async function rasterizeTextLayerForNative(
   });
   const bleedX = Math.max(metrics.paddingX, bleed.x);
   const bleedY = Math.max(metrics.paddingY, bleed.y);
-  const width = Math.max(1, Math.ceil(layer.width + bleedX * 2));
-  const height = Math.max(1, Math.ceil(layer.height + bleedY * 2));
+  const logicalWidth = Math.max(1, Math.ceil(layer.width + bleedX * 2));
+  const logicalHeight = Math.max(1, Math.ceil(layer.height + bleedY * 2));
+  const scaleX = Number.isFinite(renderScaleX) && renderScaleX > 0 ? renderScaleX : 1;
+  const scaleY = Number.isFinite(renderScaleY) && renderScaleY > 0 ? renderScaleY : 1;
+  const width = Math.max(1, Math.round(logicalWidth * scaleX));
+  const height = Math.max(1, Math.round(logicalHeight * scaleY));
   const canvas = createCanvas(width, height);
   const ctx = canvas.getContext("2d", { alpha: true });
   if (!ctx) throw new Error("Unable to create a 2D context for native text rasterization");
@@ -116,12 +122,13 @@ export async function rasterizeTextLayerForNative(
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   ctx.clearRect(0, 0, width, height);
   ctx.save();
+  ctx.scale(scaleX, scaleY);
   ctx.translate(layer.width / 2 + bleedX, layer.height / 2 + bleedY);
   await rasterizeTextLayer(ctx, layer, layer.width, layer.height, 1, 1);
   ctx.restore();
 
   const rgba = Array.from(ctx.getImageData(0, 0, width, height).data);
-  const cacheKey = buildNativeTextRasterKey(layer);
+  const cacheKey = `${buildNativeTextRasterKey(layer)}:${width}x${height}`;
 
   return {
     assetId: `native-text:${layer.layerId}:${hashTextRasterKey(cacheKey)}`,
