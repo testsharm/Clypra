@@ -517,24 +517,15 @@ const App = () => {
       .then(async ({ getCurrentWindow }) => {
         if (disposed) return;
         const win = getCurrentWindow();
-        unlisten = await win.onCloseRequested(async (event) => {
+        unlisten = await win.onCloseRequested(async () => {
           if (closingWindowRef.current) return;
-
-          event.preventDefault();
           closingWindowRef.current = true;
           try {
             if (useProjectStore.getState().project) {
               await handleCloseProject();
             }
-            try {
-              const { exit } = await import("@tauri-apps/plugin-process");
-              await exit(0);
-            } catch {
-              await win.destroy();
-            }
           } catch (err) {
-            console.error("[App] Failed to cleanly exit app:", err);
-            await win.destroy();
+            console.error("[App] Project close handler failed:", err);
           } finally {
             closingWindowRef.current = false;
           }
