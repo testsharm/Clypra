@@ -567,7 +567,7 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onProjectCreate, onP
 
         {/* ── Quick Actions ─────────────────────────────────────── */}
         <section className="mb-10">
-          <div className="grid grid-cols-3 gap-3">
+          <div className="grid grid-cols-2 gap-3">
             {/* Import Media */}
             <button
               onClick={handleImportMedia}
@@ -581,23 +581,6 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onProjectCreate, onP
                 <p className="text-[11px] text-text-muted mt-0.5">Start from your files</p>
               </div>
             </button>
-
-            {/* New from Template — coming soon */}
-            <div
-              title="Coming soon"
-              className="group flex flex-col items-start gap-2 p-4 rounded-xl border border-white/5 bg-surface opacity-50 cursor-not-allowed text-left select-none"
-            >
-              <div className="w-8 h-8 rounded-lg bg-surface-raised border border-white/8 flex items-center justify-center">
-                <LayoutTemplate className="w-4 h-4 text-text-muted" />
-              </div>
-              <div>
-                <div className="flex items-center gap-1.5">
-                  <p className="text-sm font-semibold text-text-primary">Templates</p>
-                  <span className="text-[9px] font-bold px-1.5 py-0.5 rounded bg-surface-raised text-text-muted border border-white/6 uppercase tracking-wide">Soon</span>
-                </div>
-                <p className="text-[11px] text-text-muted mt-0.5">Start from a preset</p>
-              </div>
-            </div>
 
             {/* Open File */}
             <button
