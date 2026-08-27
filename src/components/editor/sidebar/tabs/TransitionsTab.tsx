@@ -13,6 +13,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/Tooltip
 import { TransitionsApi } from "@/features/transitions/api/transitionsApi";
 import type { TransitionAsset } from "@/features/transitions/types";
 import { getPlaybackClock } from "@/hooks/usePlaybackClock";
+import { getAssetUrl } from "@/lib/assets";
 
 // Hardcoded transition categories for instant UI rendering
 // Matches GPU transition categories from Transition Lab Console
@@ -157,7 +158,9 @@ const SkeletonCard = () => (
 const TransitionCard: React.FC<{ transition: TransitionAsset; onAddToTimeline: () => void; disabled?: boolean }> = ({ transition, onAddToTimeline, disabled = false }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [imageError, setImageError] = useState(false);
+  const [online] = useState(navigator.onLine);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const remoteThumbnail = transition.thumbnail || (online ? getAssetUrl(`thumbnails/transitions/${transition.id}.png`) : "");
 
   // Handle video playback on hover (only if not disabled)
   useEffect(() => {
@@ -201,7 +204,7 @@ const TransitionCard: React.FC<{ transition: TransitionAsset; onAddToTimeline: (
         {transition.preview && !disabled ? (
           <video ref={videoRef} src={transition.preview} loop muted playsInline preload="auto" controls={false} disablePictureInPicture style={{ pointerEvents: "none" }} className={`max-w-full max-h-full object-contain drop-shadow-[0_4px_8px_rgba(0,0,0,0.5)] select-none transition-opacity duration-300 absolute inset-0 m-auto ${isHovered ? "opacity-100 z-10" : "opacity-0 z-0"}`} />
         ) : transition.thumbnail && !imageError ? (
-          <img src={transition.thumbnail} alt={transition.name} className={`max-w-full max-h-full object-contain drop-shadow-[0_4px_8px_rgba(0,0,0,0.5)] select-none pointer-events-none transition-opacity duration-300 absolute inset-0 m-auto ${isHovered && !disabled ? "opacity-0 z-0" : "opacity-100 z-10"}`} onError={() => setImageError(true)} />
+          <img src={remoteThumbnail} alt={transition.name} className={`max-w-full max-h-full object-contain drop-shadow-[0_4px_8px_rgba(0,0,0,0.5)] select-none pointer-events-none transition-opacity duration-300 absolute inset-0 m-auto ${isHovered && !disabled ? "opacity-0 z-0" : "opacity-100 z-10"}`} onError={() => setImageError(true)} />
         ) : (
           <div className="absolute inset-0 m-auto flex items-center justify-center overflow-hidden rounded-lg bg-surface">
             <div className={`w-3/4 h-1/2 rounded ${transition.renderer?.includes("fade") ? "bg-gradient-to-r from-black/70 via-transparent to-white/50" : "bg-gradient-to-r from-accent/50 to-accent/10"}`} />

@@ -6,6 +6,7 @@ import { FiltersApi } from "@/features/filters/api/filtersApi";
 import { filterCacheManager } from "@/features/filters/cache/filterCache";
 import type { FilterAsset } from "@/features/filters/types";
 import { useFavoritesStore } from "@/store/favoritesStore";
+import { getAssetUrl } from "@/lib/assets";
 
 type FilterCategory = string;
 
@@ -171,6 +172,8 @@ interface FilterCardProps {
 
 const FilterCard: React.FC<FilterCardProps> = ({ filter, isFavorite, onFavorite, onAddToTimeline }) => {
   const Icon = FILTER_ICONS[filter.id] || DEFAULT_ICON;
+  const [online] = React.useState(navigator.onLine);
+  const previewSrc = filter.thumbnail || (online ? getAssetUrl(`thumbnails/filters/${filter.id}.png`) : "");
   const isReady = true; // All filters are ready (status field is just for UI labeling)
   const [isDownloading, setIsDownloading] = useState(false);
   const [isDownloaded, setIsDownloaded] = useState(false);
@@ -257,9 +260,9 @@ const FilterCard: React.FC<FilterCardProps> = ({ filter, isFavorite, onFavorite,
 
       {/* Preview Area / Lightweight CSS Gradient Swatch */}
       <div className="flex-1 flex items-center justify-center w-full select-none relative overflow-hidden rounded-lg bg-surface">
-        {filter.thumbnail ? (
+        {previewSrc ? (
           <img
-            src={filter.thumbnail}
+            src={previewSrc}
             alt={`${filter.name} preview`}
             className="w-full h-full object-cover rounded-lg"
             style={getCSSFilterStyle(filter.id)}
