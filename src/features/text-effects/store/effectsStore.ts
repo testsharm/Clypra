@@ -15,6 +15,17 @@ const initialDefinitions = builtInPresets.reduce<Record<string, EffectDefinition
   return acc;
 }, {});
 
+const initialIndex: Record<string, EffectIndexItem[]> = {
+  essentials: localTextEffectPresets.map((p) => ({
+    id: p.id,
+    name: p.name,
+    category: "essentials",
+    tags: [],
+    thumbnail: "",
+    description: p.description,
+  })),
+};
+
 // Local presets are already in definition-like shape (font/fills arrays), so
 // convert them directly without expecting a nested `.config` object.
 for (const preset of localTextEffectPresets) {
@@ -46,7 +57,7 @@ interface EffectsState {
 }
 
 export const useEffectsStore = create<EffectsState>((set, get) => ({
-  index: {},
+  index: initialIndex,
   indexLoading: false,
   indexError: null,
   definitions: initialDefinitions,

@@ -17,6 +17,7 @@ import { getPlaybackClock } from "@/hooks/usePlaybackClock";
 // Hardcoded transition categories for instant UI rendering
 // Matches GPU transition categories from Transition Lab Console
 const TRANSITION_CATEGORIES = [
+  { id: "basic", label: "Basic" },
   { id: "geometric", label: "Geometric" },
   { id: "optical-distortion", label: "Optical Distortion" },
   { id: "temporal", label: "Temporal" },
@@ -29,7 +30,7 @@ const TRANSITION_CATEGORIES = [
 type TransitionCategory = (typeof TRANSITION_CATEGORIES)[number]["id"];
 
 export const TransitionsTab: React.FC<TabProps> = ({ onAddToTimeline }) => {
-  const [activeCategory, setActiveCategory] = useState<TransitionCategory>("geometric");
+  const [activeCategory, setActiveCategory] = useState<TransitionCategory>("basic");
   const [transitions, setTransitions] = useState<TransitionAsset[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);

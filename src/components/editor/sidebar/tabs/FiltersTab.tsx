@@ -30,6 +30,7 @@ const FILTER_ICONS: Record<string, LucideIcon> = {
 const DEFAULT_ICON = Filter;
 
 const DEFAULT_FILTER_CATEGORIES = [
+  { id: "all", name: "All" },
   { id: "essentials", name: "Essentials" },
   { id: "portrait", name: "Portrait" },
   { id: "landscape", name: "Landscape" },
@@ -44,7 +45,7 @@ const DEFAULT_FILTER_CATEGORIES = [
 
 export const FiltersTab: React.FC<TabProps> = ({ onAddToTimeline }) => {
   const [searchQuery, setSearchQuery] = useState("");
-  const [activeCategory, setActiveCategory] = useState<FilterCategory>("essentials");
+  const [activeCategory, setActiveCategory] = useState<FilterCategory>("all");
   const [categories, setCategories] = useState(DEFAULT_FILTER_CATEGORIES);
   const [filters, setFilters] = useState<FilterAsset[]>([]);
   const [loading, setLoading] = useState(false);
