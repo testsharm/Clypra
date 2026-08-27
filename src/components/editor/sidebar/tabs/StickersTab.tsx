@@ -133,6 +133,7 @@ export const StickersTab: React.FC<TabProps> = ({ onAddToTimeline }) => {
 const StickerCard: React.FC<{ sticker: StickerItem; onAddToTimeline?: (item: any, type: any) => void }> = ({ sticker, onAddToTimeline }) => {
   const [imageError, setImageError] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
+  const [shouldLoadPreview, setShouldLoadPreview] = useState(false);
   const [lottieData, setLottieData] = useState<any>(null);
 
   const { getDownloadState, startDownload, isDownloaded, getCachedSticker } = useStickersStore();
@@ -209,7 +210,7 @@ const StickerCard: React.FC<{ sticker: StickerItem; onAddToTimeline?: (item: any
   };
 
   return (
-    <div onClick={handlePreview} onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)} className="w-full aspect-square bg-surface-raised/40 hover:bg-surface-raised/80 border border-border/40 hover:border-accent/40 rounded-xl relative overflow-hidden flex flex-col justify-between p-1 transition-all duration-300 group cursor-pointer shadow-[0_4px_16px_rgba(0,0,0,0.3)]">
+    <div onClick={handlePreview} onMouseEnter={() => { setIsHovered(true); setShouldLoadPreview(true); }} onMouseLeave={() => setIsHovered(false)} className="w-full aspect-square bg-surface-raised/40 hover:bg-surface-raised/80 border border-border/40 hover:border-accent/40 rounded-xl relative overflow-hidden flex flex-col justify-between p-1 transition-all duration-300 group cursor-pointer shadow-[0_4px_16px_rgba(0,0,0,0.3)]">
       {/* Downloading Overlay - Same as TemplateCard */}
       {isDownloading && (
         <div className="absolute inset-0 bg-black/60 backdrop-blur-[2px] flex items-center justify-center z-20 pointer-events-none">
@@ -230,10 +231,10 @@ const StickerCard: React.FC<{ sticker: StickerItem; onAddToTimeline?: (item: any
       {/* Preview area - with hover scale animation like TemplateCard */}
       <div className="flex-1 flex items-center justify-center w-full select-none relative overflow-hidden transition-transform duration-500 ease-out group-hover:scale-[1.05]">
         {/* GIF Preview (shown on hover) */}
-        <img src={sticker.preview} alt={`${sticker.name} Preview`} className={`max-w-full max-h-full object-contain drop-shadow-[0_4px_8px_rgba(0,0,0,0.5)] select-none pointer-events-none transition-opacity duration-300 absolute inset-0 m-auto ${isHovered ? "opacity-100 z-10" : "opacity-0 z-0"}`} />
+        {shouldLoadPreview && sticker.preview ? <img src={sticker.preview} alt={`${sticker.name} Preview`} className={`max-w-full max-h-full object-contain drop-shadow-[0_4px_8px_rgba(0,0,0,0.5)] select-none pointer-events-none transition-opacity duration-300 absolute inset-0 m-auto ${isHovered ? "opacity-100 z-10" : "opacity-0 z-0"}`} /> : null}
 
         {/* Static Thumbnail */}
-        {!imageError ? (
+        {!imageError && shouldLoadPreview && sticker.thumbnailUrl ? (
           <img src={sticker.thumbnailUrl} alt={sticker.name} className={`max-w-full max-h-full object-contain drop-shadow-[0_4px_8px_rgba(0,0,0,0.5)] select-none pointer-events-none transition-opacity duration-300 absolute inset-0 m-auto ${isHovered ? "opacity-0 z-0" : "opacity-100 z-10"}`} onError={() => setImageError(true)} />
         ) : (
           <div className="flex flex-col items-center justify-center gap-1 text-text-muted">
