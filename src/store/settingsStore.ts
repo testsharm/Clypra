@@ -64,10 +64,10 @@ export const useSettingsStore = create<SettingsStore>()(
       snapToGrid: true,
       autoSave: true,
       defaultFrameRate: 30,
-      previewQuality: "low",
+      previewQuality: "high",
       // Performance
-      proxyEditingEnabled: true,
-      autoClearCacheOnProjectClose: true,
+      proxyEditingEnabled: false,
+      autoClearCacheOnProjectClose: false,
       // Layout — read legacy localStorage on first load, fall back to defaults
       layoutPreset: "tall-player-right",
       sidebarWidth: (() => {
@@ -125,6 +125,17 @@ export const useSettingsStore = create<SettingsStore>()(
     }),
     {
       name: "clypra-settings",
+      merge: (persisted, current) => {
+        const state = { ...current, ...(persisted as any) };
+        // Migrate users away from Proxy 480p editing. Minimum editing quality is 1080p/High.
+        if (state.previewQuality === "low") {
+          state.previewQuality = "high";
+        }
+        if (state.proxyEditingEnabled === true) {
+          state.proxyEditingEnabled = false;
+        }
+        return state;
+      },
       onRehydrateStorage: () => (state) => {
         if (state) {
           applyTheme(state.theme, state.customTheme);
