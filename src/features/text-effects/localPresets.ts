@@ -7,7 +7,7 @@ export const localTextEffectPresets: any[] = [
     id: "local-lemon-burst",
     name: "Lemon Burst",
     description: "Bright yellow pop with a soft glow",
-    thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/thumbnails/text-effects/local-lemon-burst.png",
+    thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/thumbnails/text-effects/local-lemon-burst.svg",
     font: {
       family: "Poppins",
       weight: 900,
@@ -24,7 +24,7 @@ export const localTextEffectPresets: any[] = [
     id: "local-milk-soft",
     name: "Milk Soft",
     description: "Gentle white with subtle shadow",
-    thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/thumbnails/text-effects/local-milk-soft.png",
+    thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/thumbnails/text-effects/local-milk-soft.svg",
     font: {
       family: "Nunito",
       weight: 700,
@@ -40,7 +40,7 @@ export const localTextEffectPresets: any[] = [
     id: "local-ink-brush",
     name: "Ink Brush",
     description: "Bold black ink with rough edges",
-    thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/thumbnails/text-effects/local-ink-brush.png",
+    thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/thumbnails/text-effects/local-ink-brush.svg",
     font: {
       family: "Permanent Marker",
       weight: 400,
@@ -55,7 +55,7 @@ export const localTextEffectPresets: any[] = [
     id: "local-neon-pulse",
     name: "Neon Pulse",
     description: "Electric blue-pink neon glow",
-    thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/thumbnails/text-effects/local-neon-pulse.png",
+    thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/thumbnails/text-effects/local-neon-pulse.svg",
     font: {
       family: "Bangers",
       weight: 400,
@@ -72,7 +72,7 @@ export const localTextEffectPresets: any[] = [
     id: "local-glitch",
     name: "Glitch",
     description: "Digital distortion red/cyan",
-    thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/thumbnails/text-effects/local-glitch.png",
+    thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/thumbnails/text-effects/local-glitch.svg",
     font: {
       family: "Press Start 2P",
       weight: 400,
@@ -89,7 +89,7 @@ export const localTextEffectPresets: any[] = [
     id: "local-gold-shine",
     name: "Gold Shine",
     description: "Luxury metallic gold",
-    thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/thumbnails/text-effects/local-gold-shine.png",
+    thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/thumbnails/text-effects/local-gold-shine.svg",
     font: {
       family: "Playfair Display",
       weight: 700,
@@ -106,7 +106,7 @@ export const localTextEffectPresets: any[] = [
     id: "local-effect-1",
     name: "Soft Glow",
     description: "Local text effect number 1",
-    thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/thumbnails/text-effects/local-effect-1.png",
+    thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/thumbnails/text-effects/local-effect-1.svg",
     font: {
       family: "Poppins",
       weight: 500,
@@ -121,7 +121,7 @@ export const localTextEffectPresets: any[] = [
     id: "local-effect-2",
     name: "Neon Pop",
     description: "Local text effect number 2",
-    thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/thumbnails/text-effects/local-effect-2.png",
+    thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/thumbnails/text-effects/local-effect-2.svg",
     font: {
       family: "Roboto Variable",
       weight: 700,
@@ -136,7 +136,7 @@ export const localTextEffectPresets: any[] = [
     id: "local-effect-3",
     name: "Golden Touch",
     description: "Local text effect number 3",
-    thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/thumbnails/text-effects/local-effect-3.png",
+    thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/thumbnails/text-effects/local-effect-3.svg",
     font: {
       family: "Montserrat Variable",
       weight: 800,
@@ -151,7 +151,7 @@ export const localTextEffectPresets: any[] = [
     id: "local-effect-4",
     name: "Ice Chrome",
     description: "Local text effect number 4",
-    thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/thumbnails/text-effects/local-effect-4.png",
+    thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/thumbnails/text-effects/local-effect-4.svg",
     font: {
       family: "Space Grotesk Variable",
       weight: 900,
@@ -166,7 +166,7 @@ export const localTextEffectPresets: any[] = [
     id: "local-effect-5",
     name: "Pastel Dream",
     description: "Local text effect number 5",
-    thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/thumbnails/text-effects/local-effect-5.png",
+    thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/thumbnails/text-effects/local-effect-5.svg",
     font: {
       family: "Outfit Variable",
       weight: 400,
@@ -181,7 +181,7 @@ export const localTextEffectPresets: any[] = [
     id: "local-effect-6",
     name: "Retro Vibes",
     description: "Local text effect number 6",
-    thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/thumbnails/text-effects/local-effect-6.png",
+    thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/thumbnails/text-effects/local-effect-6.svg",
     font: {
       family: "Oswald",
       weight: 500,
@@ -196,7 +196,7 @@ export const localTextEffectPresets: any[] = [
     id: "local-effect-7",
     name: "Comic Pop",
     description: "Local text effect number 7",
-    thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/thumbnails/text-effects/local-effect-7.png",
+    thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/thumbnails/text-effects/local-effect-7.svg",
     font: {
       family: "Raleway",
       weight: 700,
@@ -211,7 +211,7 @@ export const localTextEffectPresets: any[] = [
     id: "local-effect-8",
     name: "Urban Edge",
     description: "Local text effect number 8",
-    thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/thumbnails/text-effects/local-effect-8.png",
+    thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/thumbnails/text-effects/local-effect-8.svg",
     font: {
       family: "Playfair Display",
       weight: 800,
@@ -226,7 +226,7 @@ export const localTextEffectPresets: any[] = [
     id: "local-effect-9",
     name: "Bubble Gum",
     description: "Local text effect number 9",
-    thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/thumbnails/text-effects/local-effect-9.png",
+    thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/thumbnails/text-effects/local-effect-9.svg",
     font: {
       family: "Anton",
       weight: 900,
@@ -241,7 +241,7 @@ export const localTextEffectPresets: any[] = [
     id: "local-effect-10",
     name: "Silk Screen",
     description: "Local text effect number 10",
-    thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/thumbnails/text-effects/local-effect-10.png",
+    thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/thumbnails/text-effects/local-effect-10.svg",
     font: {
       family: "Bebas Neue",
       weight: 400,
@@ -256,7 +256,7 @@ export const localTextEffectPresets: any[] = [
     id: "local-effect-11",
     name: "Royal Blue",
     description: "Local text effect number 11",
-    thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/thumbnails/text-effects/local-effect-11.png",
+    thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/thumbnails/text-effects/local-effect-11.svg",
     font: {
       family: "Dancing Script",
       weight: 500,
@@ -271,7 +271,7 @@ export const localTextEffectPresets: any[] = [
     id: "local-effect-12",
     name: "Mint Fresh",
     description: "Local text effect number 12",
-    thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/thumbnails/text-effects/local-effect-12.png",
+    thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/thumbnails/text-effects/local-effect-12.svg",
     font: {
       family: "Pacifico",
       weight: 700,
@@ -286,7 +286,7 @@ export const localTextEffectPresets: any[] = [
     id: "local-effect-13",
     name: "Sunset Fade",
     description: "Local text effect number 13",
-    thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/thumbnails/text-effects/local-effect-13.png",
+    thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/thumbnails/text-effects/local-effect-13.svg",
     font: {
       family: "Nunito",
       weight: 800,
@@ -301,7 +301,7 @@ export const localTextEffectPresets: any[] = [
     id: "local-effect-14",
     name: "Electric Pulse",
     description: "Local text effect number 14",
-    thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/thumbnails/text-effects/local-effect-14.png",
+    thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/thumbnails/text-effects/local-effect-14.svg",
     font: {
       family: "Inter Variable",
       weight: 900,
@@ -316,7 +316,7 @@ export const localTextEffectPresets: any[] = [
     id: "local-effect-15",
     name: "Candy Coated",
     description: "Local text effect number 15",
-    thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/thumbnails/text-effects/local-effect-15.png",
+    thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/thumbnails/text-effects/local-effect-15.svg",
     font: {
       family: "Poppins",
       weight: 400,
@@ -331,7 +331,7 @@ export const localTextEffectPresets: any[] = [
     id: "local-effect-16",
     name: "Velvet Night",
     description: "Local text effect number 16",
-    thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/thumbnails/text-effects/local-effect-16.png",
+    thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/thumbnails/text-effects/local-effect-16.svg",
     font: {
       family: "Roboto Variable",
       weight: 500,
@@ -346,7 +346,7 @@ export const localTextEffectPresets: any[] = [
     id: "local-effect-17",
     name: "Crystal Clear",
     description: "Local text effect number 17",
-    thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/thumbnails/text-effects/local-effect-17.png",
+    thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/thumbnails/text-effects/local-effect-17.svg",
     font: {
       family: "Montserrat Variable",
       weight: 700,
@@ -361,7 +361,7 @@ export const localTextEffectPresets: any[] = [
     id: "local-effect-18",
     name: "Lime Light",
     description: "Local text effect number 18",
-    thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/thumbnails/text-effects/local-effect-18.png",
+    thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/thumbnails/text-effects/local-effect-18.svg",
     font: {
       family: "Space Grotesk Variable",
       weight: 800,
@@ -376,7 +376,7 @@ export const localTextEffectPresets: any[] = [
     id: "local-effect-19",
     name: "Cherry Bomb",
     description: "Local text effect number 19",
-    thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/thumbnails/text-effects/local-effect-19.png",
+    thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/thumbnails/text-effects/local-effect-19.svg",
     font: {
       family: "Outfit Variable",
       weight: 900,
@@ -391,7 +391,7 @@ export const localTextEffectPresets: any[] = [
     id: "local-effect-20",
     name: "Ocean Breeze",
     description: "Local text effect number 20",
-    thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/thumbnails/text-effects/local-effect-20.png",
+    thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/thumbnails/text-effects/local-effect-20.svg",
     font: {
       family: "Oswald",
       weight: 400,
@@ -406,7 +406,7 @@ export const localTextEffectPresets: any[] = [
     id: "local-effect-21",
     name: "Amber Glow",
     description: "Local text effect number 21",
-    thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/thumbnails/text-effects/local-effect-21.png",
+    thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/thumbnails/text-effects/local-effect-21.svg",
     font: {
       family: "Raleway",
       weight: 500,
@@ -421,7 +421,7 @@ export const localTextEffectPresets: any[] = [
     id: "local-effect-22",
     name: "Lavender Haze",
     description: "Local text effect number 22",
-    thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/thumbnails/text-effects/local-effect-22.png",
+    thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/thumbnails/text-effects/local-effect-22.svg",
     font: {
       family: "Playfair Display",
       weight: 700,
@@ -436,7 +436,7 @@ export const localTextEffectPresets: any[] = [
     id: "local-effect-23",
     name: "Cocoa Shine",
     description: "Local text effect number 23",
-    thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/thumbnails/text-effects/local-effect-23.png",
+    thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/thumbnails/text-effects/local-effect-23.svg",
     font: {
       family: "Anton",
       weight: 800,
@@ -451,7 +451,7 @@ export const localTextEffectPresets: any[] = [
     id: "local-effect-24",
     name: "Mango Tango",
     description: "Local text effect number 24",
-    thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/thumbnails/text-effects/local-effect-24.png",
+    thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/thumbnails/text-effects/local-effect-24.svg",
     font: {
       family: "Bebas Neue",
       weight: 900,
@@ -466,7 +466,7 @@ export const localTextEffectPresets: any[] = [
     id: "local-effect-25",
     name: "Berry Sweet",
     description: "Local text effect number 25",
-    thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/thumbnails/text-effects/local-effect-25.png",
+    thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/thumbnails/text-effects/local-effect-25.svg",
     font: {
       family: "Dancing Script",
       weight: 400,
@@ -481,7 +481,7 @@ export const localTextEffectPresets: any[] = [
     id: "local-effect-26",
     name: "Pine Fresh",
     description: "Local text effect number 26",
-    thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/thumbnails/text-effects/local-effect-26.png",
+    thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/thumbnails/text-effects/local-effect-26.svg",
     font: {
       family: "Pacifico",
       weight: 500,
@@ -496,7 +496,7 @@ export const localTextEffectPresets: any[] = [
     id: "local-effect-27",
     name: "Rose Petal",
     description: "Local text effect number 27",
-    thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/thumbnails/text-effects/local-effect-27.png",
+    thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/thumbnails/text-effects/local-effect-27.svg",
     font: {
       family: "Nunito",
       weight: 700,
@@ -511,7 +511,7 @@ export const localTextEffectPresets: any[] = [
     id: "local-effect-28",
     name: "Silver Lining",
     description: "Local text effect number 28",
-    thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/thumbnails/text-effects/local-effect-28.png",
+    thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/thumbnails/text-effects/local-effect-28.svg",
     font: {
       family: "Inter Variable",
       weight: 800,
@@ -526,7 +526,7 @@ export const localTextEffectPresets: any[] = [
     id: "local-effect-29",
     name: "Peach Sorbet",
     description: "Local text effect number 29",
-    thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/thumbnails/text-effects/local-effect-29.png",
+    thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/thumbnails/text-effects/local-effect-29.svg",
     font: {
       family: "Poppins",
       weight: 900,
@@ -541,7 +541,7 @@ export const localTextEffectPresets: any[] = [
     id: "local-effect-30",
     name: "Midnight Blue",
     description: "Local text effect number 30",
-    thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/thumbnails/text-effects/local-effect-30.png",
+    thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/thumbnails/text-effects/local-effect-30.svg",
     font: {
       family: "Roboto Variable",
       weight: 400,
@@ -556,7 +556,7 @@ export const localTextEffectPresets: any[] = [
     id: "local-effect-31",
     name: "Vanilla Cream",
     description: "Local text effect number 31",
-    thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/thumbnails/text-effects/local-effect-31.png",
+    thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/thumbnails/text-effects/local-effect-31.svg",
     font: {
       family: "Montserrat Variable",
       weight: 500,
@@ -571,7 +571,7 @@ export const localTextEffectPresets: any[] = [
     id: "local-effect-32",
     name: "Crimson Flame",
     description: "Local text effect number 32",
-    thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/thumbnails/text-effects/local-effect-32.png",
+    thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/thumbnails/text-effects/local-effect-32.svg",
     font: {
       family: "Space Grotesk Variable",
       weight: 700,
@@ -586,7 +586,7 @@ export const localTextEffectPresets: any[] = [
     id: "local-effect-33",
     name: "Forest Whisper",
     description: "Local text effect number 33",
-    thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/thumbnails/text-effects/local-effect-33.png",
+    thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/thumbnails/text-effects/local-effect-33.svg",
     font: {
       family: "Outfit Variable",
       weight: 800,
@@ -601,7 +601,7 @@ export const localTextEffectPresets: any[] = [
     id: "local-effect-34",
     name: "Sky High",
     description: "Local text effect number 34",
-    thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/thumbnails/text-effects/local-effect-34.png",
+    thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/thumbnails/text-effects/local-effect-34.svg",
     font: {
       family: "Oswald",
       weight: 900,
@@ -616,7 +616,7 @@ export const localTextEffectPresets: any[] = [
     id: "local-effect-35",
     name: "Lemon Zest",
     description: "Local text effect number 35",
-    thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/thumbnails/text-effects/local-effect-35.png",
+    thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/thumbnails/text-effects/local-effect-35.svg",
     font: {
       family: "Raleway",
       weight: 400,
@@ -631,7 +631,7 @@ export const localTextEffectPresets: any[] = [
     id: "local-effect-36",
     name: "Coral Reef",
     description: "Local text effect number 36",
-    thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/thumbnails/text-effects/local-effect-36.png",
+    thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/thumbnails/text-effects/local-effect-36.svg",
     font: {
       family: "Playfair Display",
       weight: 500,
@@ -646,7 +646,7 @@ export const localTextEffectPresets: any[] = [
     id: "local-effect-37",
     name: "Plum Perfect",
     description: "Local text effect number 37",
-    thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/thumbnails/text-effects/local-effect-37.png",
+    thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/thumbnails/text-effects/local-effect-37.svg",
     font: {
       family: "Anton",
       weight: 700,
@@ -661,7 +661,7 @@ export const localTextEffectPresets: any[] = [
     id: "local-effect-38",
     name: "Cocoa Butter",
     description: "Local text effect number 38",
-    thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/thumbnails/text-effects/local-effect-38.png",
+    thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/thumbnails/text-effects/local-effect-38.svg",
     font: {
       family: "Bebas Neue",
       weight: 800,
@@ -676,7 +676,7 @@ export const localTextEffectPresets: any[] = [
     id: "local-effect-39",
     name: "Ivory Tower",
     description: "Local text effect number 39",
-    thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/thumbnails/text-effects/local-effect-39.png",
+    thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/thumbnails/text-effects/local-effect-39.svg",
     font: {
       family: "Dancing Script",
       weight: 900,
@@ -691,7 +691,7 @@ export const localTextEffectPresets: any[] = [
     id: "local-effect-40",
     name: "Aqua Fresh",
     description: "Local text effect number 40",
-    thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/thumbnails/text-effects/local-effect-40.png",
+    thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/thumbnails/text-effects/local-effect-40.svg",
     font: {
       family: "Pacifico",
       weight: 400,
@@ -706,7 +706,7 @@ export const localTextEffectPresets: any[] = [
     id: "local-effect-41",
     name: "Magenta Pop",
     description: "Local text effect number 41",
-    thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/thumbnails/text-effects/local-effect-41.png",
+    thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/thumbnails/text-effects/local-effect-41.svg",
     font: {
       family: "Nunito",
       weight: 500,
@@ -721,7 +721,7 @@ export const localTextEffectPresets: any[] = [
     id: "local-effect-42",
     name: "Honey Drizzle",
     description: "Local text effect number 42",
-    thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/thumbnails/text-effects/local-effect-42.png",
+    thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/thumbnails/text-effects/local-effect-42.svg",
     font: {
       family: "Inter Variable",
       weight: 700,
@@ -736,7 +736,7 @@ export const localTextEffectPresets: any[] = [
     id: "local-effect-43",
     name: "Tangerine Dream",
     description: "Local text effect number 43",
-    thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/thumbnails/text-effects/local-effect-43.png",
+    thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/thumbnails/text-effects/local-effect-43.svg",
     font: {
       family: "Poppins",
       weight: 800,
@@ -751,7 +751,7 @@ export const localTextEffectPresets: any[] = [
     id: "local-effect-44",
     name: "Mocha Swirl",
     description: "Local text effect number 44",
-    thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/thumbnails/text-effects/local-effect-44.png",
+    thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/thumbnails/text-effects/local-effect-44.svg",
     font: {
       family: "Roboto Variable",
       weight: 900,
