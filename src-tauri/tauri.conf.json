@@ -23,7 +23,6 @@
         "decorations": true,
         "transparent": false,
         "shadow": true,
-        "titleBarStyle": "Overlay",
         "devtools": true
       }
     ],
