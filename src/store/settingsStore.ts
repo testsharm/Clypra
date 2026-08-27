@@ -64,7 +64,7 @@ export const useSettingsStore = create<SettingsStore>()(
       snapToGrid: true,
       autoSave: true,
       defaultFrameRate: 30,
-      previewQuality: "medium",
+      previewQuality: "low",
       // Performance
       proxyEditingEnabled: true,
       autoClearCacheOnProjectClose: true,
