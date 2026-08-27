@@ -94,6 +94,58 @@ interface TextStyleSectionProps {
   deletePreset: (id: string) => void;
 }
 
+function DebouncedTextarea({
+  value,
+  onCommit,
+  rows = 3,
+  placeholder,
+  className,
+}: {
+  value: string;
+  onCommit: (value: string) => void;
+  rows?: number;
+  placeholder?: string;
+  className?: string;
+}) {
+  const [draft, setDraft] = React.useState(value);
+  const timerRef = React.useRef<number | null>(null);
+  const latestCommitRef = React.useRef(onCommit);
+  latestCommitRef.current = onCommit;
+
+  React.useEffect(() => {
+    setDraft(value);
+  }, [value]);
+
+  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const next = e.target.value;
+    setDraft(next);
+    if (timerRef.current !== null) {
+      window.clearTimeout(timerRef.current);
+    }
+    timerRef.current = window.setTimeout(() => {
+      latestCommitRef.current(next);
+    }, 250);
+  };
+
+  React.useEffect(() => {
+    return () => {
+      if (timerRef.current !== null) {
+        window.clearTimeout(timerRef.current);
+      }
+    };
+  }, []);
+
+  return (
+    <textarea
+      value={draft}
+      onChange={handleChange}
+      rows={rows}
+      placeholder={placeholder}
+      className={className}
+    />
+  );
+}
+
 export const TextStyleSection: React.FC<TextStyleSectionProps> = ({ textClip, presets, newPresetName, setNewPresetName, handleUpdate: originalHandleUpdate, handleUpdateMultiple: originalHandleUpdateMultiple, handleApplyPreset, savePreset, deletePreset }) => {
   const [applyToAll, setApplyToAll] = React.useState(false);
   const [effectSearchQuery, setEffectSearchQuery] = React.useState("");
@@ -371,7 +423,7 @@ export const TextStyleSection: React.FC<TextStyleSectionProps> = ({ textClip, pr
           />
           <div>
             <label className="text-[10px] font-bold text-text-muted uppercase tracking-wider block mb-1.5 select-none">Text Content</label>
-            <textarea value={textClip.text || ""} onChange={(e) => handleUpdate("text", e.target.value)} rows={3} placeholder="CLYPRA" className="w-full bg-surface-raised border border-border/60 rounded-lg p-2.5 text-xs text-text-primary outline-none focus:border-accent focus:ring-1 focus:ring-accent/20 resize-none selectable transition-colors" />
+            <DebouncedTextarea value={textClip.text || ""} onCommit={(value) => handleUpdate("text", value)} rows={3} placeholder="KANDEL" className="w-full bg-surface-raised border border-border/60 rounded-lg p-2.5 text-xs text-text-primary outline-none focus:border-accent focus:ring-1 focus:ring-accent/20 resize-none selectable transition-colors" />
           </div>
         </div>
       )}
@@ -379,7 +431,7 @@ export const TextStyleSection: React.FC<TextStyleSectionProps> = ({ textClip, pr
       {mode === "plain" && (
         <div>
           <label className="text-[10px] font-bold text-text-muted uppercase tracking-wider block mb-1.5 select-none">Text Content</label>
-          <textarea value={textClip.text || ""} onChange={(e) => handleUpdate("text", e.target.value)} rows={3} placeholder="CLYPRA" className="w-full bg-surface-raised border border-border/60 rounded-lg p-2.5 text-xs text-text-primary outline-none focus:border-accent focus:ring-1 focus:ring-accent/20 resize-none selectable transition-colors" />
+          <DebouncedTextarea value={textClip.text || ""} onCommit={(value) => handleUpdate("text", value)} rows={3} placeholder="KANDEL" className="w-full bg-surface-raised border border-border/60 rounded-lg p-2.5 text-xs text-text-primary outline-none focus:border-accent focus:ring-1 focus:ring-accent/20 resize-none selectable transition-colors" />
         </div>
       )}
 
