@@ -464,8 +464,10 @@ const App = () => {
 
       const updateStep = (window as any).__updateClosingStep;
       if (!updateStep) {
-        console.error("[App] Modal step updater not available");
+        console.error("[App] Modal step updater not available. Falling back to direct closeProject()");
+        await useProjectStore.getState().closeProject();
         setIsClosingProject(false);
+        setProjectNameBeforeClose("");
         return;
       }
 
@@ -473,8 +475,7 @@ const App = () => {
       updateStep("save", "in-progress");
       updateStep("session", "in-progress");
 
-      const { closeProject } = useProjectStore.getState();
-      await closeProject(); // closeProject handles saving internally
+      await useProjectStore.getState().closeProject(); // closeProject handles saving internally
 
       updateStep("save", "completed");
       updateStep("session", "completed");
@@ -525,7 +526,12 @@ const App = () => {
           } catch (err) {
             console.error("[App] Project close handler failed:", err);
           }
-          await win.close();
+          try {
+            await win.close();
+          } catch (closeErr) {
+            console.error("[App] win.close() failed:", closeErr);
+            closingWindowRef.current = false; // allow retry after failure
+          }
         });
       })
       .catch((error) => console.warn("[App] Failed to install native close handler:", error));
