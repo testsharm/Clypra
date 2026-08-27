@@ -5,7 +5,7 @@ import { useProjectStore } from "@/store/projectStore";
 import { useTimelineStore } from "@/store/timelineStore";
 import { useUIStore } from "@/store/uiStore";
 import { platform } from "@/core/platform";
-import { WindowControls } from "../ui/WindowControls";
+import { WindowControls, WindowDragRegion } from "../ui/WindowControls";
 import { LayoutPresetMenu } from "./layout/LayoutPresetMenu";
 import { createCustomProjectBlob, parseCustomProjectFile } from "@/lib/customProjectFormat";
 
@@ -158,7 +158,7 @@ const TopBarComponent: React.FC<TopBarProps> = ({ onRequestClose }) => {
           </button>
         )}
 
-        <div style={{ WebkitAppRegion: "drag" } as any} className="flex-1" />
+        <WindowDragRegion className="flex-1" />
 
         <div className="flex items-center gap-1.5 shrink-0" style={{ WebkitAppRegion: "no-drag" } as any}>
           <LayoutPresetMenu />
