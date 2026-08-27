@@ -198,16 +198,14 @@ const TransitionCard: React.FC<{ transition: TransitionAsset; onAddToTimeline: (
 
       {/* Preview area - with hover scale animation */}
       <div className={`flex-1 flex items-center justify-center w-full select-none relative overflow-hidden transition-transform duration-500 ease-out ${!disabled && "group-hover:scale-[1.05]"}`}>
-        {/* WebM Video Preview (shown on hover) */}
-        {transition.preview && !disabled && <video ref={videoRef} src={transition.preview} loop muted playsInline preload="auto" controls={false} disablePictureInPicture style={{ pointerEvents: "none" }} className={`max-w-full max-h-full object-contain drop-shadow-[0_4px_8px_rgba(0,0,0,0.5)] select-none transition-opacity duration-300 absolute inset-0 m-auto ${isHovered ? "opacity-100 z-10" : "opacity-0 z-0"}`} />}
-
-        {/* Static Thumbnail */}
-        {!imageError ? (
+        {transition.preview && !disabled ? (
+          <video ref={videoRef} src={transition.preview} loop muted playsInline preload="auto" controls={false} disablePictureInPicture style={{ pointerEvents: "none" }} className={`max-w-full max-h-full object-contain drop-shadow-[0_4px_8px_rgba(0,0,0,0.5)] select-none transition-opacity duration-300 absolute inset-0 m-auto ${isHovered ? "opacity-100 z-10" : "opacity-0 z-0"}`} />
+        ) : transition.thumbnail && !imageError ? (
           <img src={transition.thumbnail} alt={transition.name} className={`max-w-full max-h-full object-contain drop-shadow-[0_4px_8px_rgba(0,0,0,0.5)] select-none pointer-events-none transition-opacity duration-300 absolute inset-0 m-auto ${isHovered && !disabled ? "opacity-0 z-0" : "opacity-100 z-10"}`} onError={() => setImageError(true)} />
         ) : (
-          <div className="flex flex-col items-center justify-center gap-1 text-text-muted">
-            <Wand2 className="w-6 h-6" />
-            <span className="text-[9px] font-medium">{transition.name}</span>
+          <div className="absolute inset-0 m-auto flex items-center justify-center overflow-hidden rounded-lg bg-surface">
+            <div className={`w-3/4 h-1/2 rounded ${transition.renderer?.includes("fade") ? "bg-gradient-to-r from-black/70 via-transparent to-white/50" : "bg-gradient-to-r from-accent/50 to-accent/10"}`} />
+            <span className="absolute inset-0 flex items-center justify-center text-[8px] font-semibold text-text-muted uppercase tracking-wider">{transition.name}</span>
           </div>
         )}
       </div>

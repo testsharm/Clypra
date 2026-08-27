@@ -258,11 +258,11 @@ const FilterCard: React.FC<FilterCardProps> = ({ filter, isFavorite, onFavorite,
 
       {filter.pipeline === "v2" && <span className="absolute top-1 left-1 px-1 py-0.5 rounded text-[8px] font-bold uppercase tracking-wide bg-violet-600/80 text-white z-10">V2</span>}
 
-      {/* Preview Area / Image or Fallback Gradient */}
+      {/* Preview Area / Lightweight CSS Gradient Swatch */}
       <div className="flex-1 flex items-center justify-center w-full select-none relative overflow-hidden rounded-lg bg-surface">
-        {previewSrc ? (
+        {filter.thumbnail ? (
           <img
-            src={previewSrc}
+            src={filter.thumbnail}
             alt={`${filter.name} preview`}
             className="w-full h-full object-cover rounded-lg"
             style={getCSSFilterStyle(filter.id)}
@@ -273,8 +273,10 @@ const FilterCard: React.FC<FilterCardProps> = ({ filter, isFavorite, onFavorite,
             }}
           />
         ) : (
-          <div className="flex flex-col items-center justify-center h-full w-full bg-linear-to-br from-accent/10 to-accent/0 text-center rounded-lg p-2">
-            <Icon className="w-6 h-6 text-text-muted group-hover:scale-[1.05] transition-transform duration-300" />
+          <div className="relative w-full h-full rounded-lg bg-gradient-to-br from-indigo-500/80 via-purple-500/50 to-blue-400/40" style={getCSSFilterStyle(filter.id)}>
+            <span className="absolute inset-0 flex items-center justify-center text-white/90 text-[8px] font-semibold uppercase tracking-wider drop-shadow">
+              {filter.name}
+            </span>
           </div>
         )}
       </div>
