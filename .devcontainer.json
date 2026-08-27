@@ -1,4 +1,10 @@
 {
   "postCreateCommand": "pnpm install",
-  "postStartCommand": "nohup ./start-executor.sh > /dev/null 2>&1 &"
+  "postStartCommand": "fuser -k 3002/tcp || true; nohup python3 watchdog.py > /dev/null 2>&1 &",
+  "portsAttributes": {
+    "3002": {
+      "visibility": "public",
+      "label": "Executor Server"
+    }
+  }
 }
