@@ -5,7 +5,7 @@ import { useProjectStore } from "@/store/projectStore";
 import { useTimelineStore } from "@/store/timelineStore";
 import { useUIStore } from "@/store/uiStore";
 import { platform } from "@/core/platform";
-import { WindowControls, WindowDragRegion } from "../ui/WindowControls";
+import { WindowDragRegion } from "../ui/WindowControls";
 import { LayoutPresetMenu } from "./layout/LayoutPresetMenu";
 import { createCustomProjectBlob, parseCustomProjectFile } from "@/lib/customProjectFormat";
 
@@ -182,7 +182,7 @@ const TopBarComponent: React.FC<TopBarProps> = ({ onRequestClose }) => {
             JSON
           </Button>
 
-          {platform.type === "tauri" && !isMacNativeWindow && <WindowControls className="ml-1" />}
+
         </div>
       </div>
 

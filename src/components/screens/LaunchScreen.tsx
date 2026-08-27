@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { Film, Image as ImageIcon, Plus, Trash2, Pencil, MoreHorizontal, Clock, ChevronRight, Sparkles, Settings, Video, FolderOpen, LayoutTemplate, FileVideo, Play, Layers } from "lucide-react";
 import { Button } from "@/components/ui/Button";
-import { WindowControls, WindowDragRegion } from "../ui/WindowControls";
+import { WindowDragRegion } from "../ui/WindowControls";
 import { Modal } from "@/components/ui/Modal";
 import { useProjectStore } from "@/store/projectStore";
 import { parseCustomProjectFile } from "@/lib/customProjectFormat";
@@ -472,7 +472,7 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onProjectCreate, onP
       <div className="h-8 shrink-0 flex items-center gap-2 px-1 select-none">
         <span className={`text-xs font-semibold text-text-muted/60 shrink-0 ${isMacNativeWindow ? "ml-[76px]" : ""}`}>Kandel Editor</span>
         <WindowDragRegion className="flex-1" />
-        {platform.type === "tauri" && !isMacNativeWindow && <WindowControls className="mr-1" />}
+
       </div>
 
       {/* ── Background gradients ─────────────────────────────────── */}

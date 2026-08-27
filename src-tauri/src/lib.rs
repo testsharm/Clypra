@@ -76,13 +76,6 @@ pub fn run() {
                     .map_err(|error| format!("failed to enable macOS title bar overlay: {error}"))?;
             }
 
-            #[cfg(not(target_os = "macos"))]
-            if let Some(window) = app.get_webview_window("main") {
-                window
-                    .set_decorations(false)
-                    .map_err(|error| format!("failed to enable custom title bar: {error}"))?;
-            }
-
             // Initialize thumbnail engine
             let handle = app.handle().clone();
             tauri::async_runtime::spawn(async move {
