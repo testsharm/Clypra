@@ -1047,7 +1047,7 @@ export const NativeProgramPreview: React.FC = () => {
 
       const qualityTier = qualityManagerRef.current?.selectTierForInteraction(
         isPlaying,
-        hasActiveTransform,
+        hasActiveTransform || state.clock.isSeeking,
         false,
         state.previewQuality,
       ) ?? PreviewQualityTier.Idle;
