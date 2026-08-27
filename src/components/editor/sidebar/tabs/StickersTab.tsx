@@ -5,7 +5,8 @@ import { useStickersStore } from "@/features/stickers/store/stickersStore";
 import { useUIStore } from "@/store/uiStore";
 import type { MediaAsset } from "@/types";
 import type { TabProps } from "../types";
-import { STICKER_CATEGORIES, StickersApi, type StickerCategory, type StickerItem } from "@/features/stickers/api/stickersApi";
+import { STICKER_CATEGORIES, type StickerCategory, type StickerItem } from "@/features/stickers/api/stickersApi";
+import { LOCAL_STICKERS } from "@/features/stickers/localStickers";
 import { platform } from "@/core/platform";
 
 export const StickersTab: React.FC<TabProps> = ({ onAddToTimeline }) => {
@@ -21,29 +22,18 @@ export const StickersTab: React.FC<TabProps> = ({ onAddToTimeline }) => {
     useStickersStore.getState().initializeCache();
   }, []);
 
-  // Fetch stickers from API by category
+  // Load local GitHub-hosted sticker definitions
   const fetchStickers = () => {
     let cancelled = false;
     setLoading(true);
     setError(null);
     setIsNetworkError(false);
 
-    StickersApi.getStickersByCategory(activeCategory)
-      .then((nextStickers: StickerItem[]) => {
-        if (!cancelled) setStickers(nextStickers);
-      })
-      .catch((err: unknown) => {
-        if (!cancelled) {
-          const errorMessage = err instanceof Error ? err.message : "Failed to load stickers";
-          setError(errorMessage);
-          // Detect network errors
-          const isNetwork = errorMessage.toLowerCase().includes("network") || errorMessage.toLowerCase().includes("fetch") || errorMessage.toLowerCase().includes("connection") || errorMessage.toLowerCase().includes("offline");
-          setIsNetworkError(isNetwork);
-        }
-      })
-      .finally(() => {
-        if (!cancelled) setLoading(false);
-      });
+    const nextStickers = LOCAL_STICKERS.filter((sticker) => sticker.category === activeCategory);
+    if (!cancelled) {
+      setStickers(nextStickers);
+      setLoading(false);
+    }
 
     return () => {
       cancelled = true;
