@@ -1,13 +1,27 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import { TransitionsApi } from '../api/transitionsApi';
+import { LOCAL_TRANSITIONS } from '../localTransitions';
 
 describe('Transition Engine Progress Math & Edge Cases', () => {
-
   describe('Transition API Client Contract', () => {
-    it('handles network failure on getCategories gracefully', async () => {
-      vi.stubGlobal('fetch', vi.fn().mockRejectedValue(new Error('Network error')));
-      await expect(TransitionsApi.getCategories()).rejects.toThrow('Network error');
-      vi.unstubAllGlobals();
+    it('returns bundled local categories without network', async () => {
+      const categories = await TransitionsApi.getCategories();
+      expect(categories.length).toBe(1);
+      expect(categories[0].id).toBe('basic');
+    });
+
+    it('returns all bundled transitions for any category', async () => {
+      const transitions = await TransitionsApi.getByCategory('basic');
+      expect(transitions).toHaveLength(LOCAL_TRANSITIONS.length);
+    });
+
+    it('returns a specific bundled transition by id', async () => {
+      const transition = await TransitionsApi.getById('basic', 'cross-dissolve');
+      expect(transition.renderer).toBe('cross-dissolve');
+    });
+
+    it('throws when a transition id does not exist', async () => {
+      await expect(TransitionsApi.getById('basic', 'missing')).rejects.toThrow('Transition not found');
     });
   });
 
@@ -39,5 +53,4 @@ describe('Transition Engine Progress Math & Edge Cases', () => {
       expect(calculateOverlap(-1.0, 5.0, 5.0)).toBe(0);
     });
   });
-
 });

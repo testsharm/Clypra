@@ -1,90 +1,42 @@
-import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
+import { describe, it, expect } from "vitest";
 import { FiltersApi } from "../api/filtersApi";
+import { LOCAL_FILTERS, LOCAL_FILTER_CATEGORIES } from "../localFilters";
 
-describe("FiltersApi — Network & API Boundary Tests", () => {
-  const originalFetch = globalThis.fetch;
-
-  beforeEach(() => {
-    vi.restoreAllMocks();
+describe("FiltersApi — Local Bundled Filters", () => {
+  it("returns a manifest with one entry per bundled filter", async () => {
+    const manifest = await FiltersApi.getManifest();
+    expect(manifest.totalFilters).toBe(LOCAL_FILTERS.length);
+    expect(manifest.categories.length).toBe(LOCAL_FILTER_CATEGORIES.length);
   });
 
-  afterEach(() => {
-    globalThis.fetch = originalFetch;
+  it("returns all bundled categories", async () => {
+    const categories = await FiltersApi.getCategories();
+    expect(categories.length).toBe(LOCAL_FILTER_CATEGORIES.length);
+    expect(categories[0].id).toBe(LOCAL_FILTER_CATEGORIES[0].id);
   });
 
-  // ─── 1. MANIFEST & CATEGORIES ────────────────────────────────────────────
-  describe("getManifest & getCategories", () => {
-    it("should fetch filter manifest successfully on HTTP 200 OK", async () => {
-      const mockManifest = {
-        categories: [{ id: "cinematic", name: "Cinematic", count: 5 }],
-        totalFilters: 5,
-      };
-
-      globalThis.fetch = vi.fn().mockResolvedValue({
-        ok: true,
-        json: async () => mockManifest,
-      } as Response);
-
-      const result = await FiltersApi.getManifest();
-      expect(result.totalFilters).toBe(5);
-      expect(result.categories.length).toBe(1);
-    });
-
-    it("should throw HTTP error when server returns 404 or 500 status", async () => {
-      globalThis.fetch = vi.fn().mockResolvedValue({
-        ok: false,
-        status: 500,
-        statusText: "Internal Server Error",
-        text: async () => "Server Error",
-      } as Response);
-
-      await expect(FiltersApi.getManifest()).rejects.toThrow("HTTP 500: Server Error");
-    });
+  it("returns filters for a known category", async () => {
+    const vintage = await FiltersApi.getByCategory("vintage");
+    expect(vintage.length).toBeGreaterThan(0);
+    expect(vintage.every((filter) => filter.category === "vintage")).toBe(true);
   });
 
-  // ─── 2. CATEGORY & ID LOOKUPS ─────────────────────────────────────────────
-  describe("getByCategory & getById", () => {
-    it("should fetch filters for a given category name", async () => {
-      const mockFilters = [
-        { id: "f1", name: "Sepia", category: "vintage", pipeline: "v1" },
-      ];
-
-      globalThis.fetch = vi.fn().mockResolvedValue({
-        ok: true,
-        json: async () => mockFilters,
-      } as Response);
-
-      const filters = await FiltersApi.getByCategory("vintage");
-      expect(filters.length).toBe(1);
-      expect(filters[0].id).toBe("f1");
-    });
-
-    it("should fetch specific filter by ID", async () => {
-      const mockFilter = { id: "f-teal", name: "Teal & Orange", category: "cinematic" };
-
-      globalThis.fetch = vi.fn().mockResolvedValue({
-        ok: true,
-        json: async () => mockFilter,
-      } as Response);
-
-      const filter = await FiltersApi.getById("cinematic", "f-teal");
-      expect(filter.name).toBe("Teal & Orange");
-    });
+  it("falls back to all filters for an unknown category", async () => {
+    const all = await FiltersApi.getByCategory("does-not-exist");
+    expect(all).toHaveLength(LOCAL_FILTERS.length);
   });
 
-  // ─── 3. SEARCH & SANITIZATION ─────────────────────────────────────────────
-  describe("search", () => {
-    it("should encode special characters in query string safely", async () => {
-      const fetchSpy = vi.fn().mockResolvedValue({
-        ok: true,
-        json: async () => [],
-      } as Response);
-      globalThis.fetch = fetchSpy;
+  it("returns a specific bundled filter by id", async () => {
+    const filter = await FiltersApi.getById("vibrant", "filter-vivid");
+    expect(filter.name).toBe("Vivid");
+  });
 
-      await FiltersApi.search("teal & orange / 100%");
-      expect(fetchSpy).toHaveBeenCalled();
-      const calledUrl = fetchSpy.mock.calls[0][0] as string;
-      expect(calledUrl).toContain("q=teal%20%26%20orange%20%2F%20100%25");
-    });
+  it("throws when a filter id does not exist", async () => {
+    await expect(FiltersApi.getById("vibrant", "missing-filter")).rejects.toThrow("Filter not found");
+  });
+
+  it("searches local filters by name", async () => {
+    const results = await FiltersApi.search("vivid");
+    expect(results.some((filter) => filter.id === "filter-vivid")).toBe(true);
   });
 });
