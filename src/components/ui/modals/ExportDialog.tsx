@@ -876,7 +876,7 @@ export const ExportDialog: React.FC<ExportDialogProps> = ({
                           <p className="text-[11px] text-text-muted leading-relaxed">
                             On-device encoding and Cloud Rendering are currently
                             unavailable. You can export the project metadata
-                            file (.clypra) and open it on Clypra Desktop to
+                            file (.clypra) and open it on Kandel Editor Desktop to
                             render it at full quality.
                           </p>
                         </div>

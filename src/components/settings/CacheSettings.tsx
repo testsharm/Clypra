@@ -506,8 +506,8 @@ export const CacheSettings: React.FC = () => {
                 "Editing 4K+ footage over 30 min? Enable Proxy Editing Mode in Editor → Performance settings.",
                 "Set Preview Resolution to Medium or Proxy for multi-hour timelines to maintain 60 FPS scrub.",
                 "Use the cache clear buttons above between long editing sessions to free GPU memory.",
-                "Clypra never loads full video files into RAM — only decoded frames are cached (1 GiB default).",
-                "Long exports run as streaming GPU pipelines — Clypra will not overheat or crash on hour-long exports.",
+                "Kandel never loads full video files into RAM — only decoded frames are cached (1 GiB default).",
+                "Long exports run as streaming GPU pipelines — Kandel will not overheat or crash on hour-long exports.",
               ].map((tip, i) => (
                 <li key={i} className="text-[11px] text-text-muted leading-relaxed flex gap-2">
                   <span className="text-accent shrink-0 mt-0.5">•</span>

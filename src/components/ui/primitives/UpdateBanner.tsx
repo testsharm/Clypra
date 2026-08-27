@@ -146,7 +146,7 @@ export const UpdateBanner: React.FC<UpdateBannerProps> = ({ updater }) => {
           >
             {isDownloading
               ? `Downloading update… ${downloadProgress}%`
-              : `Clypra ${updateInfo?.version} is available`}
+              : `Kandel ${updateInfo?.version} is available`}
           </p>
           <p
             style={{

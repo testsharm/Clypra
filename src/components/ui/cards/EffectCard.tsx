@@ -28,11 +28,11 @@ export const EffectCard: React.FC<EffectCardProps> = ({ effect, isFavorite, isDo
     if (canvas && !thumbnailUrl) {
       canvas.width = 250;
       canvas.height = 120;
-      renderTextEffect(canvas, effect.text || "CLYPRA", effect, 34);
+      renderTextEffect(canvas, effect.text || "KANDEL", effect, 34);
 
       if (typeof document !== "undefined" && document.fonts) {
         document.fonts.ready.then(() => {
-          renderTextEffect(canvas, effect.text || "CLYPRA", effect, 34);
+          renderTextEffect(canvas, effect.text || "KANDEL", effect, 34);
         });
       }
     }
