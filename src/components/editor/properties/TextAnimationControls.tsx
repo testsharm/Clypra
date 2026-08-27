@@ -27,6 +27,55 @@ const EASING_OPTIONS = [
   { value: "ease-in-out", label: "Ease In-Out" },
 ];
 
+
+const PREVIEW_KEYFRAMES = `
+@keyframes kap-fade { 0% { opacity:0; } 100% { opacity:1; } }
+@keyframes kap-slide-up { 0% { opacity:0; transform: translateY(24px); } 100% { opacity:1; transform: translateY(0); } }
+@keyframes kap-slide-down { 0% { opacity:0; transform: translateY(-24px); } 100% { opacity:1; transform: translateY(0); } }
+@keyframes kap-slide-left { 0% { opacity:0; transform: translateX(24px); } 100% { opacity:1; transform: translateX(0); } }
+@keyframes kap-slide-right { 0% { opacity:0; transform: translateX(-24px); } 100% { opacity:1; transform: translateX(0); } }
+@keyframes kap-zoom-in { 0% { opacity:0; transform: scale(.5); } 100% { opacity:1; transform: scale(1); } }
+@keyframes kap-zoom-out { 0% { opacity:0; transform: scale(1.6); } 100% { opacity:1; transform: scale(1); } }
+@keyframes kap-pop { 0% { opacity:0; transform: scale(.6); } 60% { opacity:1; transform: scale(1.15); } 100% { opacity:1; transform: scale(1); } }
+@keyframes kap-bounce { 0% { opacity:0; transform: translateY(10px) scale(.8); } 50% { opacity:1; transform: translateY(-4px) scale(1.05); } 100% { opacity:1; transform: translateY(0) scale(1); } }
+@keyframes kap-flip { 0% { opacity:0; transform: rotateX(90deg); } 100% { opacity:1; transform: rotateX(0); } }
+@keyframes kap-rotate { 0% { opacity:0; transform: rotate(-12deg) scale(.8); } 100% { opacity:1; transform: rotate(0) scale(1); } }
+`;
+
+function getPreviewAnimation(type?: string): React.CSSProperties {
+  if (!type || type === "none") return { animation: "none" };
+  const map: Record<string, string> = {
+    fade: "kap-fade",
+    slide_up: "kap-slide-up",
+    slide_down: "kap-slide-down",
+    slide_left: "kap-slide-left",
+    slide_right: "kap-slide-right",
+    zoom_in: "kap-zoom-in",
+    zoom_out: "kap-zoom-out",
+    pop: "kap-pop",
+    bounce: "kap-bounce",
+    flip: "kap-flip",
+    rotate: "kap-rotate",
+  };
+  const anim = map[type] || "kap-fade";
+  return { animation: `${anim} 1s ease-in-out infinite alternate` };
+}
+
+function MiniTextAnimationPreview({ entrance, exit }: { entrance?: TextAnimation; exit?: TextAnimation }) {
+  const activeType = entrance?.type || exit?.type || "none";
+  return (
+    <div className="rounded-lg border border-dashed border-white/10 bg-black/20 p-2 mb-3 overflow-hidden">
+      <style>{PREVIEW_KEYFRAMES}</style>
+      <div className="text-[10px] text-text-muted mb-1">Preview</div>
+      <div className="h-8 flex items-center justify-center">
+        <span key={activeType} className="text-sm font-bold text-accent" style={getPreviewAnimation(activeType)}>
+          {entrance ? entrance.type : exit ? exit.type : "No animation"}
+        </span>
+      </div>
+    </div>
+  );
+}
+
 export const TextAnimationControls: React.FC<TextAnimationControlsProps> = ({ clip, handleUpdate }) => {
   const handleEntranceChange = useCallback(
     (type: string) => {
@@ -97,6 +146,7 @@ export const TextAnimationControls: React.FC<TextAnimationControlsProps> = ({ cl
 
   return (
     <PropertySection title="Text Animations" icon={<Sparkles className="w-3.5 h-3.5" />}>
+      <MiniTextAnimationPreview entrance={clip.entranceAnimation} exit={clip.exitAnimation} />
       <div className="space-y-4">
         {/* Entrance Animation */}
         <div className="space-y-2.5">
