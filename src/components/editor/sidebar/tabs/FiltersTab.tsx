@@ -184,9 +184,6 @@ const FilterCard: React.FC<FilterCardProps> = ({ filter, isFavorite, onFavorite,
     });
   }, [filter.id]);
 
-  // Use filter-specific preview, or fallback to sample image for testing
-  const previewSrc = filter.thumbnail || "/filter-previews/sample.jpg";
-
   // Apply CSS filter approximation based on filter ID for preview
   const getCSSFilterStyle = (filterId: string): React.CSSProperties => {
     const filterMap: Record<string, string> = {
