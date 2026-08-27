@@ -522,7 +522,7 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onProjectCreate, onP
         {/* ── Hero / New Project ────────────────────────────────── */}
         <section className="mb-6">
           <div
-            className="relative rounded-2xl overflow-hidden p-8 md:p-10 flex flex-col items-center text-center"
+            className="relative rounded-2xl overflow-hidden p-6 md:p-8 flex flex-col items-center text-center"
             style={{
               background: "linear-gradient(135deg, var(--color-surface, #1a1a1a) 0%, var(--color-bg, #0f0f0f) 100%)",
               border: "1px solid rgba(255,255,255,0.06)",
@@ -549,28 +549,17 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onProjectCreate, onP
             />
 
             <div className="relative z-10">
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-accent/10 border border-accent/20 text-accent text-[11px] font-semibold mb-4">
-                <Sparkles className="w-3 h-3" />
-                Create something amazing
-              </div>
-              <h2 className="text-2xl md:text-3xl font-bold text-text-primary mb-2 tracking-tight">Start a new project</h2>
-              <p className="text-sm text-text-muted mb-6 max-w-md">Begin with a 16:9 landscape canvas, or capture your screen and face simultaneously.</p>
+              <h2 className="text-2xl md:text-3xl font-bold text-text-primary mb-2 tracking-tight">Start Creating</h2>
+              <p className="text-sm text-text-muted mb-6 max-w-md">Create a new project or open an existing one.</p>
               <div className="flex flex-col sm:flex-row items-center gap-3">
                 <Button variant="default" size="lg" onClick={handleStartNewProject} className="py-2 px-5 text-base font-semibold rounded-xl transition-all cursor-pointer shadow-lg shadow-accent/20">
                   <Plus className="mr-1" />
                   New Project
                 </Button>
-                {!platform.isCapacitor() && (
-                  <Button
-                    variant="secondary"
-                    size="lg"
-                    onClick={openRecordModal}
-                    className="py-2 px-4 text-base font-semibold rounded-xl transition-all cursor-pointer border border-red-500/40 text-red-400 hover:bg-red-500/10 hover:border-red-500/70 hover:text-red-300"
-                  >
-                    <Video className="mr-1.5 w-4 h-4" />
-                    Record Screen & Camera
-                  </Button>
-                )}
+                <Button variant="secondary" size="lg" onClick={handleOpenProjectFile} className="py-2 px-5 text-base font-semibold rounded-xl transition-all cursor-pointer border border-white/10 hover:border-white/20">
+                  <FolderOpen className="mr-1.5 w-4 h-4" />
+                  Open Project
+                </Button>
               </div>
             </div>
           </div>
