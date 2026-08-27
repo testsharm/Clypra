@@ -85,18 +85,11 @@ interface ExportResult {
 }
 
 function getQualityTierForPreset(presetKey: ExportPreset) {
-  if (presetKey.startsWith("720p")) {
+  if (presetKey === "720p") {
     return QUALITY_TIERS[0]; // 720p
   }
-  if (
-    presetKey.startsWith("1080p") ||
-    presetKey.startsWith("prores") ||
-    presetKey.startsWith("webm")
-  ) {
-    return QUALITY_TIERS[1]; // 1080p
-  }
-  if (presetKey === "gif-animated") {
-    return { id: "gif", label: "GIF", longEdge: 480 };
+  if (presetKey === "1080p" || presetKey === "1440p") {
+    return QUALITY_TIERS[1]; // 1080p/1440p
   }
   return QUALITY_TIERS[2]; // 4k
 }
@@ -140,7 +133,7 @@ export const ExportDialog: React.FC<ExportDialogProps> = ({
     useTimelineStore();
 
   // State
-  const [preset, setPreset] = useState<ExportPreset>("1080p-fast");
+  const [preset, setPreset] = useState<ExportPreset>("1080p");
   const [outputPath, setOutputPath] = useState<string>("");
   const [phase, setPhase] = useState<ExportPhase>("configure");
   const [progress, setProgress] = useState<VideoExportProgress | null>(null);

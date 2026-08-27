@@ -1,7 +1,7 @@
 import React from "react";
 import { Zap, Sparkles, Gem } from "lucide-react";
 
-export type ExportPreset = "1080p-fast" | "1080p-quality" | "720p-fast" | "4k-quality" | "prores-422hq" | "gif-animated" | "webm-vp9";
+export type ExportPreset = "720p" | "1080p" | "1440p" | "4k";
 
 export interface PresetConfig {
   label: string;

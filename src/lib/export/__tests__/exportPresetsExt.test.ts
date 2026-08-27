@@ -1,27 +1,22 @@
 import { describe, it, expect } from "vitest";
 import { PRESET_CONFIGS, PRESET_ORDER } from "../exportPresets";
 
-describe("Export Presets Extension (GIF & WebM)", () => {
-  it("includes Animated GIF and WebM VP9 in PRESET_ORDER", () => {
-    expect(PRESET_ORDER).toContain("gif-animated");
-    expect(PRESET_ORDER).toContain("webm-vp9");
+describe("Export Presets", () => {
+  it("includes 720p, 1080p, 1440p, and 4k in PRESET_ORDER", () => {
+    expect(PRESET_ORDER).toEqual(["720p", "1080p", "1440p", "4k"]);
   });
 
-  it("configures Animated GIF preset with correct dimensions and codec", () => {
-    const gifConfig = PRESET_CONFIGS["gif-animated"];
-    expect(gifConfig).toBeDefined();
-    expect(gifConfig.codecValue).toBe("gif");
-    expect(gifConfig.width).toBe(480);
-    expect(gifConfig.height).toBe(270);
-    expect(gifConfig.pixelFormat).toBe("rgb24");
+  it("configures 720p preset with correct dimensions", () => {
+    const config = PRESET_CONFIGS["720p"];
+    expect(config).toBeDefined();
+    expect(config.width).toBe(1280);
+    expect(config.height).toBe(720);
   });
 
-  it("configures WebM VP9 preset with 1080p resolution and vp9 codec", () => {
-    const webmConfig = PRESET_CONFIGS["webm-vp9"];
-    expect(webmConfig).toBeDefined();
-    expect(webmConfig.codecValue).toBe("vp9");
-    expect(webmConfig.width).toBe(1920);
-    expect(webmConfig.height).toBe(1080);
-    expect(webmConfig.pixelFormat).toBe("yuv420p");
+  it("configures 4k preset with correct dimensions", () => {
+    const config = PRESET_CONFIGS["4k"];
+    expect(config).toBeDefined();
+    expect(config.width).toBe(3840);
+    expect(config.height).toBe(2160);
   });
 });
