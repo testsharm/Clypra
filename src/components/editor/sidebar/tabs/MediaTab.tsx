@@ -17,6 +17,7 @@ import { DeleteClipCommand } from "@/core/history/commands/DeleteClipCommand";
 import type { VideoMetadata } from "@/types";
 import type { MediaTabProps } from "../types";
 import { generateId } from "@/lib/utils/id";
+import { generateSimpleWaveform } from "@/lib/audio/audioWaveformGenerator";
 import { MediaCard } from "@/components/ui/MediaCard";
 
 export const MediaTab: React.FC<MediaTabProps> = ({ onAddToTimeline }) => {
@@ -35,8 +36,8 @@ export const MediaTab: React.FC<MediaTabProps> = ({ onAddToTimeline }) => {
 
   const getMediaType = (path: string): "video" | "audio" | "image" => {
     const lower = path.toLowerCase();
-    if (/\.(mp4|mov|mkv|webm|flv)$/i.test(lower)) return "video";
-    if (/\.(mp3|wav|aac|flac|m4a)$/i.test(lower)) return "audio";
+    if (/\.(mp4|mov|mkv|webm|m4v|flv)$/i.test(lower)) return "video";
+    if (/\.(mp3|wav|aac|ogg|flac|m4a)$/i.test(lower)) return "audio";
     return "image";
   };
 
@@ -74,11 +75,28 @@ export const MediaTab: React.FC<MediaTabProps> = ({ onAddToTimeline }) => {
                   duration: metadata.duration,
                   width: metadata.width,
                   height: metadata.height,
-                  posterFrame: undefined,
+                  posterFrame: type === "audio" ? generateSimpleWaveform({
+                    width: 160,
+                    height: 90,
+                    barCount: 32,
+                    barColor: "#22d3ee",
+                    backgroundColor: "#1e293b",
+                  }) : undefined,
                   size: metadata.size || 0,
                 };
 
                 addMediaAsset(asset);
+
+                if (type === "audio") {
+                  platform
+                    .extractAudioArtwork(filePath)
+                    .then((cover) => {
+                      if (cover) {
+                        useProjectStore.getState().updateMediaAsset(asset.id, { coverArt: cover });
+                      }
+                    })
+                    .catch(() => {});
+                }
 
                 // Phase 2 (Async Background): Extract poster frame without blocking UI
                 if (type === "video") {
