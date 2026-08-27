@@ -576,6 +576,7 @@ export const NativeProgramPreview: React.FC = () => {
     let lastSeekTraceKey = "";
     let frameScheduled = false;
     let lastRenderLoopError = "";
+    let lastProfileLogKey = "";
 
     // Native frame decode/presentation is asynchronous. A small measured
     // look-ahead keeps the frame that completes aligned with the audio clock
@@ -821,6 +822,8 @@ export const NativeProgramPreview: React.FC = () => {
     const rasterizeNativeBackground = async (
       scene: EvaluatedScene,
       frameIndex: number,
+      renderWidth?: number,
+      renderHeight?: number,
     ): Promise<NativeRasterLayerSnapshot[]> => {
       if (!isTauriRuntime() || typeof document === "undefined") return [];
       const background = scene.metadata.canvasBackground;
@@ -831,8 +834,8 @@ export const NativeProgramPreview: React.FC = () => {
         (background.type !== "gradient" && background.type !== "shader")
       ) return [];
 
-      const width = Math.max(1, Math.round(scene.metadata.canvasWidth || renderStateRef.current.canvasWidth));
-      const height = Math.max(1, Math.round(scene.metadata.canvasHeight || renderStateRef.current.canvasHeight));
+      const width = Math.max(1, Math.round(renderWidth || scene.metadata.canvasWidth || renderStateRef.current.canvasWidth));
+      const height = Math.max(1, Math.round(renderHeight || scene.metadata.canvasHeight || renderStateRef.current.canvasHeight));
       // Audit 3.2 fix: use a stable sorted-key serializer instead of JSON.stringify.
       // Plain JSON.stringify does not guarantee property order across different creation
       // paths (spread, deserialization, etc.), causing false cache misses for identical
@@ -1030,8 +1033,54 @@ export const NativeProgramPreview: React.FC = () => {
 
       if (!mightNeedRender) return;
 
+      const qualityTier = qualityManagerRef.current?.selectTierForInteraction(
+        isPlaying,
+        hasActiveTransform,
+        false,
+        state.previewQuality,
+      ) ?? PreviewQualityTier.Idle;
+      const renderProfile = qualityManagerRef.current?.getRenderProfile(qualityTier) ?? {
+        maxWidth: state.canvasWidth,
+        maxHeight: state.canvasHeight,
+        dprScale: 1,
+        useDpr: false,
+        estimatedVRAMBytes: state.canvasWidth * state.canvasHeight * 4,
+      };
+      const renderWidth = Math.max(2, Math.min(state.canvasWidth, Math.floor(renderProfile.maxWidth)));
+      const renderHeight = Math.max(2, Math.min(state.canvasHeight, Math.floor(renderProfile.maxHeight)));
+      const safeRenderWidth = renderWidth - (renderWidth % 2);
+      const safeRenderHeight = renderHeight - (renderHeight % 2);
+      const fullFrameBytes = state.canvasWidth * state.canvasHeight * 4;
+      const renderFrameBytes = safeRenderWidth * safeRenderHeight * 4;
+      const profileLogKey = `${state.previewQuality}:${isPlaying}:${safeRenderWidth}x${safeRenderHeight}`;
+      if (profileLogKey !== lastProfileLogKey) {
+        lastProfileLogKey = profileLogKey;
+        tracePlayback("native-render.profile", {
+          previewQuality: state.previewQuality,
+          isPlaying,
+          fullWidth: state.canvasWidth,
+          fullHeight: state.canvasHeight,
+          renderWidth: safeRenderWidth,
+          renderHeight: safeRenderHeight,
+          fullFrameBytes,
+          renderFrameBytes,
+          reductionPercent: fullFrameBytes > 0 ? Math.round((1 - renderFrameBytes / fullFrameBytes) * 100) : 0,
+        });
+        console.info("[PreviewProfile]", {
+          previewQuality: state.previewQuality,
+          isPlaying,
+          fullWidth: state.canvasWidth,
+          fullHeight: state.canvasHeight,
+          renderWidth: safeRenderWidth,
+          renderHeight: safeRenderHeight,
+          fullFrameBytes,
+          renderFrameBytes,
+          reductionPercent: fullFrameBytes > 0 ? Math.round((1 - renderFrameBytes / fullFrameBytes) * 100) : 0,
+        });
+      }
+
       const scene = evaluateTimelineSceneCached(frameStartTime, state.clips, state.tracks, state.mediaAssets, state.project, state.epoch, state.transitions, state.sceneVersions);
-      const nativeBackground = await rasterizeNativeBackground(scene, frameIndex);
+      const nativeBackground = await rasterizeNativeBackground(scene, frameIndex, safeRenderWidth, safeRenderHeight);
       const nativeTextRasters = await rasterizeNativeTextLayers(scene);
       const nativeBodyMasks = await rasterizeNativeBodyMasks(
         scene,
@@ -1049,8 +1098,8 @@ export const NativeProgramPreview: React.FC = () => {
       const nativeSmartOverlays = await rasterizeNativeSmartOverlays(
         nativeActiveSmartClips,
         frameStartTime,
-        state.canvasWidth,
-        state.canvasHeight,
+        safeRenderWidth,
+        safeRenderHeight,
         frameIndex,
       );
       const nativeRasterLayers = [
@@ -1065,8 +1114,8 @@ export const NativeProgramPreview: React.FC = () => {
         `${state.project?.id ?? "unknown-project"}:${state.epoch}`,
         frameIndex,
         frameRate,
-        state.canvasWidth,
-        state.canvasHeight,
+        safeRenderWidth,
+        safeRenderHeight,
         nativeRasterLayers,
       );
       let nativePlaybackRequest = nativeRequest;
@@ -1090,7 +1139,7 @@ export const NativeProgramPreview: React.FC = () => {
               state.transitions,
               state.sceneVersions,
             );
-            const lookAheadBackground = await rasterizeNativeBackground(lookAheadScene, lookAheadFrame);
+            const lookAheadBackground = await rasterizeNativeBackground(lookAheadScene, lookAheadFrame, safeRenderWidth, safeRenderHeight);
             const lookAheadTextRasters = await rasterizeNativeTextLayers(lookAheadScene);
             const lookAheadAnimatedStickers = await rasterizeNativeAnimatedStickers(lookAheadScene);
             const lookAheadSmartClips = state.clips.filter(
@@ -1105,8 +1154,8 @@ export const NativeProgramPreview: React.FC = () => {
             const lookAheadSmartOverlays = await rasterizeNativeSmartOverlays(
               lookAheadSmartClips,
               lookAheadTime,
-              state.canvasWidth,
-              state.canvasHeight,
+              safeRenderWidth,
+              safeRenderHeight,
               lookAheadFrame,
             );
             nativePlaybackRequest = buildNativeFrameRequest(
@@ -1114,8 +1163,8 @@ export const NativeProgramPreview: React.FC = () => {
               `${state.project?.id ?? "unknown-project"}:${state.epoch}`,
               lookAheadFrame,
               frameRate,
-              state.canvasWidth,
-              state.canvasHeight,
+              safeRenderWidth,
+              safeRenderHeight,
               [...lookAheadBackground, ...lookAheadTextRasters, ...lookAheadAnimatedStickers, ...lookAheadSmartOverlays],
             ) ?? nativeRequest;
           }
@@ -1459,8 +1508,8 @@ export const NativeProgramPreview: React.FC = () => {
                 `${state.project?.id ?? "unknown-project"}:${state.epoch}`,
                 targetFrameIndex,
                 frameRate,
-                state.canvasWidth,
-                state.canvasHeight,
+                safeRenderWidth,
+                safeRenderHeight,
               );
               if (!targetRequest) continue;
               prefetchSources.push({

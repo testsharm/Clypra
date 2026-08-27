@@ -363,7 +363,7 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onProjectCreate, onP
     try {
       const selected = await platform.openFileDialog({
         multiple: false,
-        filters: [{ name: "Clypra Project", extensions: ["clypra"] }],
+        filters: [{ name: "Kandel Project", extensions: ["clypra"] }],
       });
       if (!selected || selected.length === 0) return;
       const filePath = selected[0].path;
@@ -470,7 +470,7 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onProjectCreate, onP
 
       {/* Native title bar area. Controls are explicit because the main window is borderless. */}
       <div className="h-8 shrink-0 flex items-center gap-2 px-1 select-none">
-        <span className={`text-xs font-semibold text-text-muted/60 shrink-0 ${isMacNativeWindow ? "ml-[76px]" : ""}`}>Clypra</span>
+        <span className={`text-xs font-semibold text-text-muted/60 shrink-0 ${isMacNativeWindow ? "ml-[76px]" : ""}`}>Kandel Editor</span>
         <div className="flex-1" style={{ WebkitAppRegion: "drag" } as any} />
         {platform.type === "tauri" && !isMacNativeWindow && <WindowControls className="mr-1" />}
       </div>
@@ -504,10 +504,10 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onProjectCreate, onP
             <div className="w-10 h-10 flex items-center justify-center relative">
               <div className="absolute inset-0 bg-accent/25 blur-2xl rounded-full"></div>
               <div className="absolute inset-0 bg-accent/10 blur-md rounded-full"></div>
-              <img src="/clypra.svg" alt="Clypra Logo" className="w-10 h-10 object-contain relative z-10 drop-shadow-[0_0_10px_rgba(108,99,255,0.6)]" />
+              <img src="/logo.svg" alt="Kandel Editor Logo" className="w-10 h-10 object-contain relative z-10 drop-shadow-[0_0_10px_rgba(0,194,255,0.6)]" />
             </div>
             <div>
-              <h1 className="text-xl font-bold text-text-primary tracking-tight leading-tight">Clypra</h1>
+              <h1 className="text-xl font-bold text-text-primary tracking-tight leading-tight">Kandel Editor</h1>
               <span className="inline-flex items-center px-2 py-0.5 rounded-full bg-accent/10 border border-accent/20 text-[10px] font-semibold text-accent tracking-wider">VIDEO EDITOR</span>
             </div>
           </div>

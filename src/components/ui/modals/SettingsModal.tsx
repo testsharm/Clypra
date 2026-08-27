@@ -343,7 +343,7 @@ function AppearanceTab() {
     <div className="space-y-7">
       <section>
         <h3 className="text-[11px] font-semibold uppercase tracking-wider text-text-muted mb-3">Language</h3>
-        <SettingRow label="Interface language" description="Choose the language used throughout Clypra">
+        <SettingRow label="Interface language" description="Choose the language used throughout Kandel Editor">
           <select value={language} onChange={(event) => setLanguage(event.target.value as "en" | "zh-TW" | "zh-CN")} aria-label="Interface language" className="px-3 py-1.5 text-[11px] rounded-lg bg-surface-raised border border-white/6 text-text-primary focus:outline-none focus:border-accent/40">
             <option value="en">English</option>
             <option value="zh-TW">Traditional Chinese</option>
@@ -657,10 +657,10 @@ function AboutTab() {
       setUpdateStatus("available");
       setUpdateInfo({ version: result.version!, body: result.body });
       setUpdateObject(result.updateObject);
-      toast.info(`Clypra v${result.version} is available!`);
+      toast.info(`Kandel Editor v${result.version} is available!`);
     } else {
       setUpdateStatus("up-to-date");
-      toast.success("Clypra is up to date");
+      toast.success("Kandel Editor is up to date");
     }
   };
 
@@ -688,10 +688,10 @@ function AboutTab() {
     <div className="flex flex-col items-center text-center py-6 gap-4">
       <div className="w-16 h-16 flex items-center justify-center relative">
         <div className="absolute inset-0 bg-accent/20 blur-xl rounded-full"></div>
-        <img src="/clypra.svg" alt="Clypra Logo" className="w-16 h-16 object-contain relative z-10 drop-shadow-xl" />
+        <img src="/logo.svg" alt="Kandel Editor Logo" className="w-16 h-16 object-contain relative z-10 drop-shadow-xl" />
       </div>
       <div>
-        <h3 className="text-lg font-bold text-text-primary">Clypra</h3>
+        <h3 className="text-lg font-bold text-text-primary">Kandel Editor</h3>
         <p className="text-xs text-text-muted mt-1">Version {appVersion}</p>
       </div>
       <p className="text-xs text-text-muted max-w-70 leading-relaxed">A modern, native video editor built with Tauri, React, and FFmpeg. Designed for speed and creative freedom.</p>
@@ -720,7 +720,7 @@ function AboutTab() {
             <>
               {updateStatus === "idle" && (
                 <>
-                  <p className="text-[11px] text-text-muted mb-2">Keep Clypra running at peak performance.</p>
+                  <p className="text-[11px] text-text-muted mb-2">Keep Kandel Editor running at peak performance.</p>
                   <button onClick={handleCheckUpdate} className="flex items-center gap-1.5 px-4 py-2 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 text-text-primary rounded-xl text-xs font-semibold cursor-pointer shadow-sm transition-all duration-200 active:scale-95">
                     <RefreshCw className="w-3.5 h-3.5" />
                     Check for Updates
@@ -742,7 +742,7 @@ function AboutTab() {
                   <div className="w-8 h-8 rounded-full bg-green-500/10 border border-green-500/20 flex items-center justify-center">
                     <Check className="w-4 h-4 text-green-400" />
                   </div>
-                  <p className="text-xs text-green-400 font-medium">Clypra is up to date</p>
+                  <p className="text-xs text-green-400 font-medium">Kandel Editor is up to date</p>
                   <p className="text-[10px] text-text-muted">You are currently running the latest version.</p>
                   <button onClick={handleCheckUpdate} className="mt-2 text-[10px] text-text-muted hover:text-text-primary transition-colors hover:underline cursor-pointer">
                     Check again
@@ -807,7 +807,7 @@ function AboutTab() {
           <span className="text-xs font-semibold text-text-primary tracking-wide uppercase">Support the Project</span>
           <span className="text-[10px] text-text-muted">Free &amp; open-source ♥</span>
         </div>
-        <p className="text-[11px] text-text-muted text-center leading-relaxed">Clypra is built with love and released for free. If it saves you time, consider supporting its development.</p>
+        <p className="text-[11px] text-text-muted text-center leading-relaxed">Kandel Editor is built with love and released for free. If it saves you time, consider supporting its development.</p>
         <div className="flex flex-col gap-2.5 w-full">
           {/* GitHub Sponsors */}
           <button onClick={() => openExternalUrl("https://github.com/sponsors/AIEraDev")} className="group flex items-center gap-3 w-full px-4 py-3 rounded-xl text-white text-xs font-semibold cursor-pointer transition-all duration-200 active:scale-[0.98] shadow-md" style={{ background: "linear-gradient(135deg, #238636 0%, #1a6e2b 100%)" }}>

@@ -1,8 +1,8 @@
 {
-  "name": "clypra",
+  "name": "kandel-editor",
   "version": "1.4.2",
-  "description": "A modern, open-source video editor built with Tauri, React, and TypeScript",
-  "author": "Clypra Contributors",
+  "description": "Kandel Editor is a modern, open-source video editor built with Tauri, React, and TypeScript",
+  "author": "Kandel Editor Contributors",
   "license": "MIT",
   "repository": {
     "type": "git",
