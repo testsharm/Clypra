@@ -185,7 +185,7 @@ export const CaptionsTab: React.FC<TabProps> = ({ onAddToTimeline }) => {
   return (
     <div className="flex-1 flex flex-col min-h-0 bg-background overflow-hidden p-3 space-y-3">
       {/* Hidden file input */}
-      <input type="file" ref={fileInputRef} onChange={handleFileChange} accept=".srt,.vtt" className="hidden" />
+      <input type="file" ref={fileInputRef} onChange={handleFileChange} accept=".srt,.vtt,.ass" className="hidden" />
 
       {/* Primary Actions Grid */}
       <div className="grid grid-cols-2 gap-2">
