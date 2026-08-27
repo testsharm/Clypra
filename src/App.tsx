@@ -526,6 +526,7 @@ const App = () => {
           } finally {
             closingWindowRef.current = false;
           }
+          await win.close();
         });
       })
       .catch((error) => console.warn("[App] Failed to install native close handler:", error));
