@@ -16,8 +16,6 @@ import { lifecycleMonitor } from "@/core/monitoring/LifecycleMonitor";
 import { useRecordingStore } from "@/store/recordingStore";
 import { FloatingWidget } from "@/components/ui/FloatingWidget";
 import { ScreenRecordingPreviewModal } from "@/components/ui/ScreenRecordingPreviewModal";
-import { useAutoUpdater } from "@/hooks/useAutoUpdater";
-import { UpdateBanner } from "@/components/ui/UpdateBanner";
 import { Toaster } from "sonner";
 
 // const isExternalOrDataUrl = (value: string) => value.startsWith("data:") || value.startsWith("http") || value.startsWith("asset://");
@@ -32,7 +30,6 @@ const App = () => {
   const [projectNameBeforeClose, setProjectNameBeforeClose] = useState<string>("");
   const closingWindowRef = useRef(false);
   const { isRecording, previewRecording, setPreviewRecording } = useRecordingStore();
-  const autoUpdater = useAutoUpdater();
 
   useEffect(() => {
     const initializeApp = async () => {
@@ -586,7 +583,6 @@ const App = () => {
       <CrashRecoveryDialog isOpen={!!pendingRecovery && !project} snapshot={pendingRecovery} isRestoring={isRestoring} onRestore={handleRestoreSession} onDiscard={handleDiscardRecovery} />
 
       {/* ── Auto-Update Banner ───────────────────────────────────────────── */}
-      <UpdateBanner updater={autoUpdater} />
 
       {/* ── Global Toast Notifications ─────────────────────────────────── */}
       <Toaster

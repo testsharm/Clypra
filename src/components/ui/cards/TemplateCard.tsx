@@ -2,6 +2,7 @@ import React, { useRef, useState, useEffect } from "react";
 import { TemplateDefinition } from "@/features/text-templates/types";
 import { Star, Download, Plus } from "lucide-react";
 import { TemplatePreviewPlayer, type TemplatePreviewPlayerHandle } from "@/features/text-templates";
+import { getAssetUrl } from "@/lib/assets";
 
 interface TemplateCardProps {
   template: TemplateDefinition;
@@ -30,7 +31,7 @@ export const TemplateCard: React.FC<TemplateCardProps> = ({
   const resolvedThumbnailUrl =
     template.thumbnailUrl ||
     template.thumbnail ||
-    `https://raw.githubusercontent.com/AIEraDev/clypra-api/main/data/thumbnails/${template.id}.png`;
+    getAssetUrl(`thumbnails/${template.id}.png`);
 
   const handleMouseEnter = () => {
     setIsHovered(true);

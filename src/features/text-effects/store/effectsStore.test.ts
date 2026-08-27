@@ -19,7 +19,7 @@ const mockIndexItems = [
     category: "metallic",
     isPremium: false,
     previewType: "static",
-    thumbnailUrl: "https://raw.githubusercontent.com/AIEraDev/clypra-api/main/data/thumbnails/solaris-ink.png",
+    thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/thumbnails/solaris-ink.png",
   },
 ];
 
@@ -29,7 +29,7 @@ const mockFullDefinition = {
   category: "metallic",
   isPremium: false,
   previewType: "static",
-  thumbnailUrl: "https://raw.githubusercontent.com/AIEraDev/clypra-api/main/data/thumbnails/solaris-ink.png",
+  thumbnailUrl: "https://raw.githubusercontent.com/testsharm/Clypra/main/public/assets/thumbnails/solaris-ink.png",
   font: {
     family: "Montserrat",
     weight: 700,
@@ -102,7 +102,7 @@ describe("useEffectsStore", () => {
     expect(state.indexLoading).toBe(false);
     expect(state.indexError).toBeNull();
     expect(state.index["metallic"]).toEqual(mockIndexItems);
-    expect(fetchMock).toHaveBeenCalledWith("https://clypra-worker-api.abdulkabirmusa.com/text-effects/metallic", expect.any(Object));
+    expect(fetchMock).toHaveBeenCalledWith("/text-effects/metallic", expect.any(Object));
   });
 
   test("loadCategory - failure", async () => {
@@ -337,7 +337,7 @@ describe("useEffectsStore", () => {
 
     expect(def).toEqual(mockFullDefinition);
     // When an item is in the loaded index, getDefinitionById is called which fetches from API
-    expect(fetchMock).toHaveBeenCalledWith("https://clypra-worker-api.abdulkabirmusa.com/text-effects/metallic/solaris-ink", expect.any(Object));
+    expect(fetchMock).toHaveBeenCalledWith("/text-effects/metallic/solaris-ink", expect.any(Object));
   });
 
   test("fetchDefinitionOnlyById - falls back to category scanning if not in global index", async () => {

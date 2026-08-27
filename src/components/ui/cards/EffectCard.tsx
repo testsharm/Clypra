@@ -1,6 +1,7 @@
 import { useState, useCallback, useEffect } from "react";
 import { Download, Star, Plus } from "lucide-react";
 import { renderTextEffect } from "@/features/text-effects/renderer";
+import { getAssetUrl } from "@/lib/assets";
 import type { TextEffectDefinition } from "@/features/text-effects/types/types";
 
 interface EffectCardProps {
@@ -20,7 +21,7 @@ export const EffectCard: React.FC<EffectCardProps> = ({ effect, isFavorite, isDo
   }, []);
 
   const isTestOrCustom = !effect.id || effect.id.startsWith("effect-") || effect.id.startsWith("test-") || effect.id.startsWith("custom-") || effect.id.startsWith("user-");
-  const thumbnailUrl = effect.thumbnailUrl || effect.thumbnail || (isTestOrCustom ? "" : `https://raw.githubusercontent.com/AIEraDev/clypra-api/main/data/thumbnails/${effect.id}.png`);
+  const thumbnailUrl = effect.thumbnailUrl || effect.thumbnail || (isTestOrCustom ? "" : getAssetUrl(`thumbnails/${effect.id}.png`));
 
   useEffect(() => {
     // Only run canvas render if we don't have a static thumbnail url to draw

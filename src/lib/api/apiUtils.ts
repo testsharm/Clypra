@@ -3,7 +3,7 @@
  * Common functions used across all API clients
  */
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "https://clypra-worker-api.abdulkabirmusa.com";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "";
 const API_KEY = import.meta.env.VITE_CLYPRA_API_KEY || "";
 
 // Log API key status at module load (only shows if key exists, not the key itself)

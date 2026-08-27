@@ -801,46 +801,6 @@ function AboutTab() {
         </div>
       </div>
 
-      {/* Support the Project card */}
-      <div className="w-full max-w-85 bg-linear-to-b from-white/4 to-white/1 border border-white/10 rounded-2xl p-5 flex flex-col items-center gap-4 shadow-xl backdrop-blur-md">
-        <div className="flex items-center gap-2 w-full justify-between pb-3 border-b border-white/5">
-          <span className="text-xs font-semibold text-text-primary tracking-wide uppercase">Support the Project</span>
-          <span className="text-[10px] text-text-muted">Free &amp; open-source ♥</span>
-        </div>
-        <p className="text-[11px] text-text-muted text-center leading-relaxed">Kandel Editor is built with love and released for free. If it saves you time, consider supporting its development.</p>
-        <div className="flex flex-col gap-2.5 w-full">
-          {/* GitHub Sponsors */}
-          <button onClick={() => openExternalUrl("https://github.com/sponsors/AIEraDev")} className="group flex items-center gap-3 w-full px-4 py-3 rounded-xl text-white text-xs font-semibold cursor-pointer transition-all duration-200 active:scale-[0.98] shadow-md" style={{ background: "linear-gradient(135deg, #238636 0%, #1a6e2b 100%)" }}>
-            <GithubIcon className="w-4 h-4 shrink-0" />
-            <span className="flex-1 text-left">GitHub Sponsors</span>
-            <span className="text-white/60 text-[10px] font-normal">Tiered</span>
-          </button>
-          {/* Patreon */}
-          <button onClick={() => openExternalUrl("https://www.patreon.com/AIEraDev")} className="group flex items-center gap-3 w-full px-4 py-3 rounded-xl text-white text-xs font-semibold cursor-pointer transition-all duration-200 active:scale-[0.98] shadow-md" style={{ background: "linear-gradient(135deg, #FF424D 0%, #e8374a 100%)" }}>
-            <PatreonIcon className="w-4 h-4 shrink-0" />
-            <span className="flex-1 text-left">Support on Patreon</span>
-            <span className="text-white/60 text-[10px] font-normal">Monthly</span>
-          </button>
-          {/* Buy Me a Coffee */}
-          <button onClick={() => openExternalUrl("https://buymeacoffee.com/AIEraDev")} className="group flex items-center gap-3 w-full px-4 py-3 rounded-xl text-surface text-xs font-semibold cursor-pointer transition-all duration-200 active:scale-[0.98] shadow-md" style={{ background: "linear-gradient(135deg, #FFDD00 0%, #f5c800 100%)" }}>
-            <BuyMeCoffeeIcon className="w-4 h-4 shrink-0" />
-            <span className="flex-1 text-left">Buy Me a Coffee</span>
-            <span className="text-surface/50 text-[10px] font-normal">One-time</span>
-          </button>
-        </div>
-      </div>
-
-      <div className="flex items-center gap-4 mt-2">
-        <button onClick={() => openExternalUrl("https://github.com/AIEraDev/clypra")} className="text-xs font-medium text-text-muted hover:text-accent transition-colors flex items-center gap-1.5">
-          <GithubIcon className="w-3.5 h-3.5" />
-          GitHub
-        </button>
-        <button onClick={() => openExternalUrl("https://x.com/AIEraDev")} className="text-xs font-medium text-text-muted hover:text-accent transition-colors flex items-center gap-1.5">
-          <XIcon className="w-3.5 h-3.5" />
-          @AIEraDev
-        </button>
-      </div>
-
       <div className="flex gap-4 text-[10px] text-text-muted/60 mt-4 border-t border-white/5 pt-4">
         <span>Tauri 2.x</span>
         <span>•</span>

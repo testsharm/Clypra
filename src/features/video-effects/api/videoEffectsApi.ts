@@ -8,6 +8,7 @@
 
 import { VideoEffectManifest, VideoEffectItem, EffectPreset, VideoEffectCategory, EffectCategory } from "../types";
 import { getApiHeaders, getApiBaseUrl } from "@/lib/api";
+import { getAssetUrl } from "@/lib/assets";
 
 const BASE = getApiBaseUrl();
 
@@ -149,7 +150,7 @@ export class VideoEffectsApi {
       return this._blobCache.get(cacheKey)!;
     }
 
-    const res = await fetch(`https://raw.githubusercontent.com/AIEraDev/clypra-api/main/public/effect-previews/${category}/${effectId}.webm`, { headers: getApiHeaders() });
+    const res = await fetch(getAssetUrl(`effect-previews/${category}/${effectId}.webm`), { headers: getApiHeaders() });
 
     if (!res.ok) {
       throw new Error(`Failed to download preview for effect "${effectId}": ${res.statusText}`);
