@@ -64,10 +64,10 @@ export const useSettingsStore = create<SettingsStore>()(
       snapToGrid: true,
       autoSave: true,
       defaultFrameRate: 30,
-      previewQuality: "high",
+      previewQuality: "medium",
       // Performance
-      proxyEditingEnabled: false,
-      autoClearCacheOnProjectClose: false,
+      proxyEditingEnabled: true,
+      autoClearCacheOnProjectClose: true,
       // Layout — read legacy localStorage on first load, fall back to defaults
       layoutPreset: "tall-player-right",
       sidebarWidth: (() => {
