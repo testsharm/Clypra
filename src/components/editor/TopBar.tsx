@@ -1,6 +1,7 @@
 import React, { useState, lazy, Suspense, useRef } from "react";
 import { Upload, Home, Settings, Download, FolderOpen, Pencil } from "lucide-react";
 import { Button } from "../ui/Button";
+import { DiagnosticCloseButton } from "@/components/ui/DiagnosticCloseButton";
 import { useProjectStore } from "@/store/projectStore";
 import { useTimelineStore } from "@/store/timelineStore";
 import { useUIStore } from "@/store/uiStore";
@@ -166,6 +167,7 @@ const TopBarComponent: React.FC<TopBarProps> = ({ onRequestClose }) => {
           <Button variant="ghost" size="icon-sm" onClick={toggleSettingsModal} title="Settings" style={{ WebkitAppRegion: "no-drag", cursor: "pointer" } as any}>
             <Settings className="w-3.5 h-3.5" />
           </Button>
+          <DiagnosticCloseButton />
 
           <Button variant="default" size="sm" onClick={() => setShowExportDialog(true)} className="text-xs h-6 px-2.5" style={{ WebkitAppRegion: "no-drag", cursor: "pointer" } as any}>
             <Upload className="w-3.5 h-3.5 mr-1" />

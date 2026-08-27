@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { Film, Image as ImageIcon, Plus, Trash2, Pencil, MoreHorizontal, Clock, ChevronRight, Sparkles, Settings, Video, FolderOpen, LayoutTemplate, FileVideo, Play, Layers } from "lucide-react";
 import { Button } from "@/components/ui/Button";
+import { DiagnosticCloseButton } from "@/components/ui/DiagnosticCloseButton";
 import { WindowDragRegion } from "../ui/WindowControls";
 import { Modal } from "@/components/ui/Modal";
 import { useProjectStore } from "@/store/projectStore";
@@ -516,6 +517,7 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onProjectCreate, onP
             <Button variant="ghost" size="icon-sm" onClick={toggleSettingsModal} title="Settings" style={{ WebkitAppRegion: "no-drag", cursor: "pointer" } as React.CSSProperties}>
               <Settings className="w-3.5 h-3.5" />
             </Button>
+            <DiagnosticCloseButton />
           </div>
         </header>
 
