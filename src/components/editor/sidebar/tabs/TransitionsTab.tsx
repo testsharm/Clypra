@@ -159,8 +159,9 @@ const TransitionCard: React.FC<{ transition: TransitionAsset; onAddToTimeline: (
   const [isHovered, setIsHovered] = useState(false);
   const [imageError, setImageError] = useState(false);
   const [online] = useState(navigator.onLine);
+  const [shouldLoadPreview, setShouldLoadPreview] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
-  const remoteThumbnail = transition.thumbnail || (online ? getAssetUrl(`thumbnails/transitions/${transition.id}.png`) : "");
+  const remoteThumbnail = transition.thumbnail || (online ? getAssetUrl(`thumbnails/transitions/${transition.id}.svg`) : "");
 
   // Handle video playback on hover (only if not disabled)
   useEffect(() => {
@@ -191,7 +192,7 @@ const TransitionCard: React.FC<{ transition: TransitionAsset; onAddToTimeline: (
   };
 
   const cardContent = (
-    <div onMouseEnter={() => !disabled && setIsHovered(true)} onMouseLeave={() => setIsHovered(false)} className={`w-full aspect-square bg-surface-raised/40 border border-border/40 rounded-xl relative overflow-hidden flex flex-col justify-between p-1 transition-all duration-300 group shadow-[0_4px_16px_rgba(0,0,0,0.3)] ${disabled ? "opacity-50 cursor-not-allowed" : "hover:bg-surface-raised/80 hover:border-accent/40 cursor-pointer"}`}>
+    <div onMouseEnter={() => { if (!disabled) { setIsHovered(true); setShouldLoadPreview(true); } }} onMouseLeave={() => setIsHovered(false)} className={`w-full aspect-square bg-surface-raised/40 border border-border/40 rounded-xl relative overflow-hidden flex flex-col justify-between p-1 transition-all duration-300 group shadow-[0_4px_16px_rgba(0,0,0,0.3)] ${disabled ? "opacity-50 cursor-not-allowed" : "hover:bg-surface-raised/80 hover:border-accent/40 cursor-pointer"}`}>
       {/* Premium Badge - top-left, appears on hover */}
       {transition.isPremium && !disabled && (
         <button className={`absolute top-1 left-1 p-1 rounded-full bg-surface/40 hover:bg-surface/60 border border-border/50 transition-all duration-200 z-10 ${isHovered ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"}`}>
@@ -203,7 +204,7 @@ const TransitionCard: React.FC<{ transition: TransitionAsset; onAddToTimeline: (
       <div className={`flex-1 flex items-center justify-center w-full select-none relative overflow-hidden transition-transform duration-500 ease-out ${!disabled && "group-hover:scale-[1.05]"}`}>
         {transition.preview && !disabled ? (
           <video ref={videoRef} src={transition.preview} loop muted playsInline preload="auto" controls={false} disablePictureInPicture style={{ pointerEvents: "none" }} className={`max-w-full max-h-full object-contain drop-shadow-[0_4px_8px_rgba(0,0,0,0.5)] select-none transition-opacity duration-300 absolute inset-0 m-auto ${isHovered ? "opacity-100 z-10" : "opacity-0 z-0"}`} />
-        ) : transition.thumbnail && !imageError ? (
+        ) : shouldLoadPreview && transition.thumbnail && !imageError ? (
           <img src={remoteThumbnail} alt={transition.name} className={`max-w-full max-h-full object-contain drop-shadow-[0_4px_8px_rgba(0,0,0,0.5)] select-none pointer-events-none transition-opacity duration-300 absolute inset-0 m-auto ${isHovered && !disabled ? "opacity-0 z-0" : "opacity-100 z-10"}`} onError={() => setImageError(true)} />
         ) : (
           <div className="absolute inset-0 m-auto flex items-center justify-center overflow-hidden rounded-lg bg-surface">

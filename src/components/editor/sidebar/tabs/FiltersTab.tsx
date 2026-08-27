@@ -173,7 +173,8 @@ interface FilterCardProps {
 const FilterCard: React.FC<FilterCardProps> = ({ filter, isFavorite, onFavorite, onAddToTimeline }) => {
   const Icon = FILTER_ICONS[filter.id] || DEFAULT_ICON;
   const [online] = React.useState(navigator.onLine);
-  const previewSrc = filter.thumbnail || (online ? getAssetUrl(`thumbnails/filters/${filter.id}.png`) : "");
+  const [shouldLoadPreview, setShouldLoadPreview] = useState(false);
+  const previewSrc = filter.thumbnail || (online ? getAssetUrl(`thumbnails/filters/${filter.id}.svg`) : "");
   const isReady = true; // All filters are ready (status field is just for UI labeling)
   const [isDownloading, setIsDownloading] = useState(false);
   const [isDownloaded, setIsDownloaded] = useState(false);
@@ -240,7 +241,7 @@ const FilterCard: React.FC<FilterCardProps> = ({ filter, isFavorite, onFavorite,
   };
 
   return (
-    <div onClick={handleAddToTimeline} onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)} className="w-full aspect-square bg-surface-raised/40 hover:bg-surface-raised/80 border border-border/40 hover:border-accent/40 rounded-xl relative overflow-hidden flex flex-col justify-between p-1 transition-all duration-300 group cursor-pointer shadow-[0_4px_16px_rgba(0,0,0,0.3)]">
+    <div onClick={handleAddToTimeline} onMouseEnter={() => { setIsHovered(true); setShouldLoadPreview(true); }} onMouseLeave={() => setIsHovered(false)} className="w-full aspect-square bg-surface-raised/40 hover:bg-surface-raised/80 border border-border/40 hover:border-accent/40 rounded-xl relative overflow-hidden flex flex-col justify-between p-1 transition-all duration-300 group cursor-pointer shadow-[0_4px_16px_rgba(0,0,0,0.3)]">
       {/* Downloading Overlay */}
       {isDownloading && (
         <div className="absolute inset-0 bg-black/60 backdrop-blur-[2px] flex items-center justify-center z-20 pointer-events-none">
@@ -260,7 +261,7 @@ const FilterCard: React.FC<FilterCardProps> = ({ filter, isFavorite, onFavorite,
 
       {/* Preview Area / Lightweight CSS Gradient Swatch */}
       <div className="flex-1 flex items-center justify-center w-full select-none relative overflow-hidden rounded-lg bg-surface">
-        {previewSrc ? (
+        {shouldLoadPreview && previewSrc ? (
           <img
             src={previewSrc}
             alt={`${filter.name} preview`}

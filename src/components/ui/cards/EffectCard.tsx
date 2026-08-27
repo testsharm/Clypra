@@ -16,12 +16,13 @@ interface EffectCardProps {
 
 export const EffectCard: React.FC<EffectCardProps> = ({ effect, isFavorite, isDownloading, isDownloaded = false, onFavorite, onApply, onPreview }) => {
   const [canvas, setCanvas] = useState<HTMLCanvasElement | null>(null);
+  const [shouldLoadPreview, setShouldLoadPreview] = useState(false);
   const canvasRef = useCallback((node: HTMLCanvasElement | null) => {
     setCanvas(node);
   }, []);
 
   const isTestOrCustom = !effect.id || effect.id.startsWith("effect-") || effect.id.startsWith("test-") || effect.id.startsWith("custom-") || effect.id.startsWith("user-");
-  const thumbnailUrl = effect.thumbnailUrl || effect.thumbnail || (isTestOrCustom ? "" : getAssetUrl(`thumbnails/${effect.id}.png`));
+  const thumbnailUrl = effect.thumbnailUrl || effect.thumbnail || (isTestOrCustom ? "" : getAssetUrl(`thumbnails/${effect.id}.svg`));
 
   useEffect(() => {
     // Only run canvas render if we don't have a static thumbnail url to draw
@@ -39,7 +40,7 @@ export const EffectCard: React.FC<EffectCardProps> = ({ effect, isFavorite, isDo
   }, [canvas, effect, thumbnailUrl]);
 
   return (
-    <div onClick={onPreview} className="w-full aspect-square bg-surface-raised/40 hover:bg-surface-raised/80 border border-border/40 hover:border-accent/40 rounded-xl relative overflow-hidden flex flex-col justify-between p-1 transition-all duration-300 group cursor-pointer shadow-[0_4px_16px_rgba(0,0,0,0.3)]">
+    <div onClick={onPreview} onMouseEnter={() => setShouldLoadPreview(true)} className="w-full aspect-square bg-surface-raised/40 hover:bg-surface-raised/80 border border-border/40 hover:border-accent/40 rounded-xl relative overflow-hidden flex flex-col justify-between p-1 transition-all duration-300 group cursor-pointer shadow-[0_4px_16px_rgba(0,0,0,0.3)]">
       {/* Downloading Overlay */}
       {isDownloading && (
         <div className="absolute inset-0 bg-black/60 backdrop-blur-[2px] flex items-center justify-center z-20 pointer-events-none">
@@ -57,7 +58,7 @@ export const EffectCard: React.FC<EffectCardProps> = ({ effect, isFavorite, isDo
 
       {/* Preview Content: Image Thumbnail or Canvas Fallback */}
       <div className="flex-1 flex items-center justify-center w-full select-none relative overflow-hidden transition-transform duration-500 ease-out group-hover:scale-[1.05]">
-        {thumbnailUrl ? (
+        {shouldLoadPreview && thumbnailUrl ? (
           <img
             src={thumbnailUrl}
             alt={effect.name}
