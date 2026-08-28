@@ -151,61 +151,19 @@ class AudioCacheManager {
   /**
    * Download audio file to cache
    */
-  async downloadAudio(item: AudioLibraryItem, onProgress?: (progress: DownloadProgress) => void): Promise<CachedAudioFile> {
+  async downloadAudio(item: AudioLibraryItem, _onProgress?: (progress: DownloadProgress) => void): Promise<CachedAudioFile> {
     await this.initialize();
 
     if (!this.cacheDir) {
       throw new Error("Cache directory not initialized");
     }
 
-    // Check if already cached
-    if (this.isCached(item.id)) {
-      const cached = this.cacheIndex.get(item.id)!;
-      return cached;
-    }
+    const cached = this.cacheIndex.get(item.id);
+    if (cached) return cached;
 
-    try {
-      // Generate filename
-      const ext = getFileExtension(item.audioUrl);
-      const sanitizedName = sanitizeFileName(item.name);
-      const fileName = `${item.id}_${sanitizedName}.${ext}`;
-
-      // Use relative path for storage (just CACHE_DIR/filename)
-      const relativePath = `${CACHE_DIR}/${fileName}`;
-
-      // Local-only audio library: no remote fetch allowed.
-      throw new Error("Audio library is local only; no remote download available");
-      await writeFile(relativePath, fileData, { baseDir: BaseDirectory.AppCache });
-
-      // Create cache entry with relative path
-      const cachedFile: CachedAudioFile = {
-        id: item.id,
-        localPath: relativePath, // Store relative path, not absolute
-        originalUrl: item.audioUrl,
-        fileName,
-        size: loaded,
-        downloadedAt: Date.now(),
-        metadata: {
-          duration: item.duration,
-          format: ext,
-          bitrate: undefined,
-        },
-      };
-
-      // Update index
-      this.cacheIndex.set(item.id, cachedFile);
-      await this.saveIndex();
-
-      return cachedFile;
-    } catch (error) {
-      console.error("[AudioCache] Download failed:", error);
-      throw new Error(`Failed to download audio: ${error instanceof Error ? error.message : "Unknown error"}`);
-    }
+    throw new Error("Audio library is local only; no remote download available");
   }
 
-  /**
-   * Ensure audio is downloaded (convenience method)
-   */
   async ensureDownloaded(item: AudioLibraryItem, onProgress?: (progress: DownloadProgress) => void): Promise<CachedAudioFile> {
     await this.initialize();
 
