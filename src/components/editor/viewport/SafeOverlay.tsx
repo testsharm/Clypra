@@ -65,6 +65,48 @@ export const SafeOverlay: React.FC<SafeOverlayProps> = ({
         </span>
       </div>
 
+      {/* Full Horizontal Center Line */}
+      <div
+        className="absolute h-px w-full bg-accent/25"
+        style={{
+          left: displayOffset.x,
+          top: displayOffset.y + displayHeight / 2,
+        }}
+      />
+
+      {/* Full Vertical Center Line */}
+      <div
+        className="absolute w-px h-full bg-accent/25"
+        style={{
+          left: displayOffset.x + displayWidth / 2,
+          top: displayOffset.y,
+        }}
+      />
+
+      {/* Rule of Thirds: Vertical Lines */}
+      {[1/3, 2/3].map((ratio) => (
+        <div
+          key={`v-${ratio}`}
+          className="absolute w-px h-full bg-white/10"
+          style={{
+            left: displayOffset.x + displayWidth * ratio,
+            top: displayOffset.y,
+          }}
+        />
+      ))}
+
+      {/* Rule of Thirds: Horizontal Lines */}
+      {[1/3, 2/3].map((ratio) => (
+        <div
+          key={`h-${ratio}`}
+          className="absolute h-px w-full bg-white/10"
+          style={{
+            left: displayOffset.x,
+            top: displayOffset.y + displayHeight * ratio,
+          }}
+        />
+      ))}
+
       {/* Center Crosshair Marker */}
       <div
         className="absolute w-4 h-px bg-accent/40"
