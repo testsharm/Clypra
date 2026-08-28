@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Sparkles } from "lucide-react";
+import { Sparkles, Snowflake } from "lucide-react";
 import { useUIStore } from "@/store/uiStore";
 import { useTimelineStore } from "@/store/timelineStore";
 import {
@@ -818,6 +818,12 @@ const ClipInner: React.FC<ClipProps> = ({
             <div className="shrink-0 text-[10px] font-medium text-timeline-clip-duration">
               {formatDuration(clip.duration)}
             </div>
+            {clip.freezeFrameTime !== undefined && (
+              <div className="shrink-0 flex items-center gap-1 rounded px-1 py-0.5 bg-sky-400/20 border border-sky-300/30 pointer-events-none">
+                <Snowflake className="w-3 h-3 text-sky-300" />
+                <span className="text-[9px] font-semibold text-sky-200">Freeze</span>
+              </div>
+            )}
           </div>
           {mediaAsset &&
           (mediaAsset.type === "video" || mediaAsset.type === "image") ? (
