@@ -1,6 +1,7 @@
 import React, { useState, useRef } from "react";
 import { useTimelineStore } from "@/store/timelineStore";
 import { useHistoryStore } from "@/store/historyStore";
+import { useTransportControls } from "@/hooks/usePlaybackClock";
 import { TransformClipCommand } from "@/core/history/commands/TransformCommand";
 import type { Clip } from "@/types";
 import { timeToPixel, pixelToTime } from "@/lib/timeline/timelineViewport";

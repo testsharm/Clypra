@@ -26,6 +26,7 @@ import {
   FlipVertical2,
   Crosshair,
   Snowflake,
+  Gauge,
 } from "lucide-react";
 import type { ClipCommand, ClipCommandContext } from "./types";
 import { clipboardService } from "@/core/clipboard/clipboardService";
