@@ -299,7 +299,7 @@ export const AudioEnvelopeEditor: React.FC<AudioEnvelopeEditorProps> = ({
                 e.stopPropagation();
                 seek(clip.startTime + kf.time);
               }}
-              title={`Drag: adjust time/volume — Double-click to seek — Right-click to remove`}
+              title={`Time: ${kf.time.toFixed(2)}s  Volume: ${(kf.gain * 100).toFixed(0)}%  — Drag to adjust — Double-click to seek — Right-click to remove`}
             />
           );
         })}

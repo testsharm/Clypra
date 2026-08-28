@@ -446,6 +446,14 @@ export const TransformSection: React.FC<TransformSectionProps> = ({ selectedClip
               </button>
             </div>
             {speedKeyframes.length > 0 && (
+              <button
+                onClick={() => handleUpdate("speedKeyframes", [])}
+                className="text-[9px] font-semibold text-text-muted hover:text-red-400 transition-colors cursor-pointer mb-1"
+              >
+                Clear Ramp Points
+              </button>
+            )}
+            {speedKeyframes.length > 0 && (
               <div className="flex flex-wrap gap-1.5">
                 {speedKeyframes.map((kf: any) => (
                   <span key={kf.id} className="inline-flex items-center gap-1 rounded bg-surface-raised border border-border/50 px-1.5 py-0.5 text-[9px] font-mono text-text-muted">

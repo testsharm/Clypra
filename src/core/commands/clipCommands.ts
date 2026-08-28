@@ -448,6 +448,55 @@ export const clipCommands: ClipCommand[] = [
     },
   },
   {
+    id: "clip.removeAllModifications",
+    label: "Remove All Modifications",
+    icon: Eraser,
+    group: "organize",
+    isVisible: (ctx) => getTargetClipIds(ctx).length > 0,
+    isEnabled: (ctx) => {
+      const ids = getTargetClipIds(ctx);
+      if (ids.length === 0) return false;
+      return ids.some((id) => {
+        const c = ctx.clips.find((clip) => clip.id === id);
+        return c && !ctx.tracks.find((t) => t.id === c.trackId)?.locked;
+      });
+    },
+    disabledReason: () => "Selected clips are on a locked track",
+    execute: (ctx) => {
+      const ids = getTargetClipIds(ctx);
+      const store = useTimelineStore.getState();
+      const project = useProjectStore.getState().project;
+      const cw = project?.canvasWidth ?? 1920;
+      const ch = project?.canvasHeight ?? 1080;
+      store.withBatch(() => {
+        ids.forEach((id) => {
+          const clip = store.clips.find((c) => c.id === id);
+          if (!clip) return;
+          store.updateClip(id, {
+            x: Math.round((cw - Math.abs(clip.width)) / 2),
+            y: Math.round((ch - Math.abs(clip.height)) / 2),
+            rotation: 0,
+            opacity: 1,
+            width: Math.abs(clip.width),
+            height: Math.abs(clip.height),
+            speed: 1,
+            speedKeyframes: [],
+            freezeFrameTime: undefined,
+            visualKeyframes: {},
+            volume: 1,
+            fadeIn: 0,
+            fadeOut: 0,
+            volumeKeyframes: [],
+            effects: [],
+            overlays: [],
+            fitMode: "contain",
+          });
+        });
+      });
+      toast.success(`Removed all modifications on ${ids.length} clip${ids.length > 1 ? "s" : ""}`);
+    },
+  },
+  {
     id: "clip.resetTransform",
     label: "Reset Transform",
     icon: Crosshair,
