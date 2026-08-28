@@ -45,6 +45,9 @@ export type EffectRenderer =
   | "particles"
   | "dust_particles"
 
+  // Keying effects
+  | "chroma_key"
+
   // Time effects
   | "speed_ramp"
   | "freeze_frame"
@@ -156,6 +159,11 @@ export interface EffectParameters {
   particleColor?: string;
   driftSpeed?: number;
   fadeEffect?: boolean;
+
+  // Chroma key
+  keyColor?: string;
+  threshold?: number;
+  spillSuppression?: number;
 
   // Generic
   [key: string]: any;

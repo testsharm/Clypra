@@ -77,6 +77,9 @@ export class EffectRenderer {
       echo: this.renderEcho,
       strobe: this.renderStrobe,
 
+      // Keying effects
+      chroma_key: this.renderChromaKey,
+
       // Body effects are handled in the canonical rasterizer where source
       // frame pixels are available for mask generation.
       "body-segmentation-glow": this.renderBodyEffectNoop,
@@ -518,6 +521,44 @@ export class EffectRenderer {
     const g = parseInt(hex.slice(3, 5), 16);
     const b = parseInt(hex.slice(5, 7), 16);
     return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+  }
+
+  // ============================================================================
+  // KEYING EFFECTS
+  // ============================================================================
+
+  private static renderChromaKey(ctx: CanvasRenderingContext2D, params: EffectParameters, intensity: number, _time: number): void {
+    const width = ctx.canvas.width;
+    const height = ctx.canvas.height;
+    if (width === 0 || height === 0) return;
+
+    const keyColor = params.keyColor || "#00ff00";
+    const threshold = (params.threshold ?? 0.3) * intensity;
+    const spillSuppression = params.spillSuppression ?? 0.5;
+
+    const r = parseInt(keyColor.slice(1, 3), 16);
+    const g = parseInt(keyColor.slice(3, 5), 16);
+    const b = parseInt(keyColor.slice(5, 7), 16);
+
+    const imageData = ctx.getImageData(0, 0, width, height);
+    const data = imageData.data;
+
+    for (let i = 0; i < data.length; i += 4) {
+      const pr = data[i];
+      const pg = data[i + 1];
+      const pb = data[i + 2];
+
+      const dist = Math.sqrt((pr - r) ** 2 + (pg - g) ** 2 + (pb - b) ** 2) / Math.sqrt(255 * 255 * 3);
+
+      if (dist < threshold) {
+        data[i + 3] = 0;
+      } else if (spillSuppression > 0 && dist < threshold * 2) {
+        const spill = spillSuppression * (1 - dist / (threshold * 2));
+        data[i + 1] = Math.min(255, Math.max(0, pg - spill * 100));
+      }
+    }
+
+    ctx.putImageData(imageData, 0, 0);
   }
 
   // ============================================================================

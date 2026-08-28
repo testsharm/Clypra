@@ -36,7 +36,20 @@ export function RendererEffectsBrowser({ onEffectSelect, onAddToTimeline, showAp
   const loadEffects = async () => {
     setLoading(true);
     try {
-      const categoryEffects = getLocalEffectsByCategory(selectedCategory as any) as EffectMetadata[];
+      const localExtraEffects: EffectMetadata[] = [
+        {
+          id: "chroma_key",
+          name: "Chroma Key",
+          category: "essentials",
+          description: "Remove green/blue screen",
+          tags: ["keying", "green screen", "blue screen"],
+          defaultParams: { keyColor: "#00ff00", threshold: 0.3, spillSuppression: 0.5 },
+        },
+      ] as any;
+
+      const categoryEffects = (getLocalEffectsByCategory(selectedCategory as any) as EffectMetadata[]).concat(
+        selectedCategory === "essentials" ? localExtraEffects : []
+      );
       if (categoryEffects && categoryEffects.length > 0) {
         setEffects(categoryEffects);
       } else {
