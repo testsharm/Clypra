@@ -236,6 +236,8 @@ export interface Clip {
   rotation: number;
   /** Playback speed multiplier (1.0 = normal) */
   speed?: number;
+  /** Local clip time (seconds) to hold for freeze-frame; undefined = no freeze */
+  freezeFrameTime?: number;
   // Transform constraints
   aspectRatioLocked?: boolean; // Default true for video/images
   sourceAspectRatio?: number; // Original aspect ratio (width/height)

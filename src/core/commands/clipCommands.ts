@@ -25,6 +25,7 @@ import {
   FlipHorizontal2,
   FlipVertical2,
   Crosshair,
+  Snowflake,
 } from "lucide-react";
 import type { ClipCommand, ClipCommandContext } from "./types";
 import { clipboardService } from "@/core/clipboard/clipboardService";
@@ -230,6 +231,36 @@ export const clipCommands: ClipCommand[] = [
         });
       });
       toast.success(`Centered ${ids.length} clip${ids.length > 1 ? "s" : ""}`);
+    },
+  },
+
+  {
+    id: "clip.freezeFrame",
+    label: "Freeze Frame at Playhead",
+    icon: Snowflake,
+    group: "organize",
+    isVisible: (ctx) => getTargetClipIds(ctx).length > 0,
+    isEnabled: (ctx) => {
+      const ids = getTargetClipIds(ctx);
+      if (ids.length === 0) return false;
+      return ids.some((id) => {
+        const c = ctx.clips.find((clip) => clip.id === id);
+        return c && !ctx.tracks.find((t) => t.id === c.trackId)?.locked && ctx.playheadTime > c.startTime && ctx.playheadTime < c.startTime + c.duration;
+      });
+    },
+    disabledReason: () => "Playhead is outside clip bounds or clip locked",
+    execute: (ctx) => {
+      const ids = getTargetClipIds(ctx);
+      const store = useTimelineStore.getState();
+      store.withBatch(() => {
+        ids.forEach((id) => {
+          const clip = store.clips.find((c) => c.id === id);
+          if (!clip) return;
+          const localTime = Math.max(0, Math.min(clip.duration, ctx.playheadTime - clip.startTime));
+          store.updateClip(id, { freezeFrameTime: localTime });
+        });
+      });
+      toast.success(`Freeze frame applied to ${ids.length} clip${ids.length > 1 ? "s" : ""}`);
     },
   },
 

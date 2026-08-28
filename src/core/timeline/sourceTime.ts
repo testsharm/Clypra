@@ -9,12 +9,20 @@ export interface SourceTimeResolution {
 const clamp = (value: number, min: number, max: number): number => Math.max(min, Math.min(max, value));
 
 export function resolveClipSourceTime(
-  clip: Pick<Clip, "startTime" | "duration" | "trimIn" | "trimOut"> & { speed?: number },
+  clip: Pick<Clip, "startTime" | "duration" | "trimIn" | "trimOut"> & { speed?: number; freezeFrameTime?: number },
   timelineTime: number,
   options?: { clampToRange?: boolean; frameRate?: number }
 ): SourceTimeResolution {
   const localTime = timelineTime - clip.startTime;
   const active = localTime >= 0 && localTime < clip.duration;
+
+  if (typeof clip.freezeFrameTime === "number" && clip.freezeFrameTime >= 0) {
+    const frozenSourceTime = clip.trimIn + clip.freezeFrameTime;
+    const safeTrimOut = clip.trimOut ?? clip.trimIn + clip.duration;
+    const sourceTime = Math.max(clip.trimIn, Math.min(frozenSourceTime, safeTrimOut));
+    return { localTime, sourceTime, active };
+  }
+
   const speed = typeof clip.speed === "number" && clip.speed > 0 ? clip.speed : 1;
   const rawSourceTime = clip.trimIn + localTime * speed;
 
