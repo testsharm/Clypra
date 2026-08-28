@@ -643,6 +643,15 @@ export const TextStyleSection: React.FC<TextStyleSectionProps> = ({ textClip, pr
                     triggerClassName="w-16 h-7.5 bg-surface-raised border-border/60 hover:border-border shrink-0"
                     popoverClassName="right-0 left-auto mt-1 z-[100]"
                   />
+                  {!isGradient && (
+                    <input
+                      type="text"
+                      value={textClip.color || "#ffffff"}
+                      onChange={(e) => handleCustomStyleUpdate("color", e.target.value)}
+                      aria-label="Hex color"
+                      className="w-20 bg-surface-raised border border-border/60 rounded px-1.5 py-1 text-[10px] text-text-primary outline-none focus:border-accent font-mono"
+                    />
+                  )}
                 </div>
               </div>
 
