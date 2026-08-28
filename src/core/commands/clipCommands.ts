@@ -24,11 +24,13 @@ import {
   RotateCw,
   FlipHorizontal2,
   FlipVertical2,
+  Crosshair,
 } from "lucide-react";
 import type { ClipCommand, ClipCommandContext } from "./types";
 import { clipboardService } from "@/core/clipboard/clipboardService";
 import { EditingActions } from "@/core/interactions";
 import { useTimelineStore } from "@/store/timelineStore";
+import { useProjectStore } from "@/store/projectStore";
 import { useUIStore } from "@/store/uiStore";
 import { toast } from "@/lib/toast";
 
@@ -194,6 +196,40 @@ export const clipCommands: ClipCommand[] = [
         });
       });
       toast.success(`Flipped ${ids.length} clip${ids.length > 1 ? "s" : ""}`);
+    },
+  },
+  {
+    id: "clip.centerOnCanvas",
+    label: "Center on Canvas",
+    icon: Crosshair,
+    group: "organize",
+    isVisible: (ctx) => getTargetClipIds(ctx).length > 0,
+    isEnabled: (ctx) => {
+      const ids = getTargetClipIds(ctx);
+      if (ids.length === 0) return false;
+      return ids.some((id) => {
+        const c = ctx.clips.find((clip) => clip.id === id);
+        return c && !ctx.tracks.find((t) => t.id === c.trackId)?.locked;
+      });
+    },
+    disabledReason: () => "Selected clips are on a locked track",
+    execute: (ctx) => {
+      const ids = getTargetClipIds(ctx);
+      const store = useTimelineStore.getState();
+      const project = useProjectStore.getState().project;
+      const cw = project?.canvasWidth ?? 1920;
+      const ch = project?.canvasHeight ?? 1080;
+      store.withBatch(() => {
+        ids.forEach((id) => {
+          const clip = store.clips.find((c) => c.id === id);
+          if (!clip) return;
+          store.updateClip(id, {
+            x: Math.round((cw - Math.abs(clip.width)) / 2),
+            y: Math.round((ch - Math.abs(clip.height)) / 2),
+          });
+        });
+      });
+      toast.success(`Centered ${ids.length} clip${ids.length > 1 ? "s" : ""}`);
     },
   },
 
