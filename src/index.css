@@ -980,3 +980,417 @@ body.playing-mode .timeline-panel {
   transform: translateZ(0);
   will-change: transform;
 }
+
+/* ============================================================================
+   KANDEL EDITOR — FULL CAPCUT PREMIUM UI SYSTEM
+   Applied globally, no component changes needed
+   ============================================================================ */
+
+/* ---------- Root palette ---------- */
+:root {
+  --kc-bg: #0b0b10;
+  --kc-surface: #14141c;
+  --kc-surface-2: #1b1b25;
+  --kc-surface-3: #23232f;
+  --kc-border: rgba(255,255,255,0.08);
+  --kc-border-strong: rgba(255,255,255,0.14);
+  --kc-accent: #00d5ff;
+  --kc-accent-2: #7c3aed;
+  --kc-accent-soft: rgba(0,213,255,0.14);
+  --kc-text: #f5f5f7;
+  --kc-text-muted: #9b9ba8;
+  --kc-danger: #ff4d4f;
+  --kc-radius-sm: 8px;
+  --kc-radius-md: 12px;
+  --kc-radius-lg: 16px;
+  --kc-radius-xl: 20px;
+  --kc-shadow-sm: 0 2px 6px rgba(0,0,0,0.25);
+  --kc-shadow-md: 0 6px 18px rgba(0,0,0,0.35);
+  --kc-shadow-lg: 0 12px 32px rgba(0,0,0,0.5);
+  --kc-transition: 0.16s cubic-bezier(0.2,0.7,0.3,1);
+}
+
+/* ---------- Base ---------- */
+body, #root, .app-root, .editor-root, .workspace, .editor-shell {
+  background: var(--kc-bg) !important;
+  color: var(--kc-text) !important;
+  font-family: "Inter", system-ui, -apple-system, sans-serif !important;
+  letter-spacing: 0.01em !important;
+}
+
+* {
+  box-sizing: border-box !important;
+}
+
+/* ---------- Top bar ---------- */
+[data-tauri-drag-region],
+.topbar, .titlebar,
+[class*="TopBar"],
+[class*="topbar"],
+[class*="titlebar"] {
+  background: rgba(11,11,16,0.9) !important;
+  backdrop-filter: blur(18px) !important;
+  border-bottom: 1px solid var(--kc-border) !important;
+  height: 48px !important;
+  min-height: 48px !important;
+  padding: 0 14px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3) !important;
+}
+
+/* ---------- Main layout ---------- */
+.workspace, .editor-shell, .editor-layout,
+[class*="EditorLayout"],
+[class*="workspace"] {
+  display: flex !important;
+  flex-direction: column !important;
+  height: 100% !important;
+  padding: 10px !important;
+  gap: 10px !important;
+  background: var(--kc-bg) !important;
+}
+
+.editor-main-row {
+  display: flex !important;
+  flex: 1 !important;
+  min-height: 0 !important;
+  gap: 10px !important;
+}
+
+/* ---------- Left sidebar ---------- */
+.sidebar, .media-panel, .assets-panel,
+[class*="Sidebar"], [class*="sidebar"],
+[class*="media-panel"] {
+  width: 270px !important;
+  min-width: 250px !important;
+  max-width: 300px !important;
+  background: var(--kc-surface) !important;
+  border: 1px solid var(--kc-border) !important;
+  border-radius: var(--kc-radius-lg) !important;
+  overflow: hidden !important;
+  box-shadow: var(--kc-shadow-md) !important;
+}
+
+/* Sidebar header */
+.sidebar-header, .media-header,
+[class*="sidebar-header"] {
+  background: var(--kc-surface-2) !important;
+  padding: 12px 14px !important;
+  border-bottom: 1px solid var(--kc-border) !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  color: var(--kc-text) !important;
+}
+
+/* Sidebar tabs */
+.sidebar-tab, .media-tab,
+[class*="sidebar-tab"] {
+  background: transparent !important;
+  color: var(--kc-text-muted) !important;
+  border-radius: var(--kc-radius-sm) !important;
+  font-size: 11px !important;
+  font-weight: 500 !important;
+  padding: 8px 10px !important;
+  transition: var(--kc-transition) !important;
+}
+
+.sidebar-tab:hover, .media-tab:hover,
+[class*="sidebar-tab"]:hover {
+  background: rgba(255,255,255,0.06) !important;
+  color: var(--kc-text) !important;
+}
+
+.sidebar-tab.active, .media-tab.active,
+[class*="sidebar-tab"].active {
+  background: var(--kc-accent-soft) !important;
+  color: var(--kc-accent) !important;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15) !important;
+}
+
+/* ---------- Right properties panel ---------- */
+.properties-panel, .inspector-panel,
+[class*="PropertiesPanel"],
+[class*="properties-panel"] {
+  width: 320px !important;
+  min-width: 290px !important;
+  max-width: 340px !important;
+  background: var(--kc-surface) !important;
+  border: 1px solid var(--kc-border) !important;
+  border-radius: var(--kc-radius-lg) !important;
+  overflow: hidden !important;
+  box-shadow: var(--kc-shadow-md) !important;
+}
+
+.properties-header, .inspector-header {
+  background: var(--kc-surface-2) !important;
+  padding: 12px 14px !important;
+  border-bottom: 1px solid var(--kc-border) !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+}
+
+/* Property sections */
+.property-section {
+  margin: 10px 0 !important;
+  padding: 0 12px !important;
+}
+
+.property-section-title {
+  font-size: 10px !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.06em !important;
+  color: var(--kc-text-muted) !important;
+  margin-bottom: 8px !important;
+}
+
+/* ---------- Center preview ---------- */
+.preview-space, .program-preview, .canvas-container,
+[data-preview-space="program"],
+[class*="Preview"],
+[class*="preview"] {
+  background: #000 !important;
+  border-radius: var(--kc-radius-xl) !important;
+  border: 1px solid var(--kc-border) !important;
+  box-shadow: var(--kc-shadow-lg) !important;
+  overflow: hidden !important;
+  position: relative !important;
+  flex: 1 !important;
+  min-height: 0 !important;
+}
+
+/* Transport controls inside preview */
+.preview-controls, .transport-controls,
+[class*="transport"],
+[class*="Transport"] {
+  background: rgba(20,20,28,0.85) !important;
+  backdrop-filter: blur(10px) !important;
+  border-top: 1px solid var(--kc-border) !important;
+  padding: 8px 12px !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  height: 44px !important;
+}
+
+.play-button, .pause-button,
+[class*="PlayButton"] {
+  width: 34px !important;
+  height: 34px !important;
+  border-radius: 50% !important;
+  background: var(--kc-accent) !important;
+  color: #000 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  box-shadow: 0 4px 10px rgba(0,213,255,0.35) !important;
+  transition: var(--kc-transition) !important;
+}
+
+.play-button:hover, .pause-button:hover {
+  transform: scale(1.05) !important;
+}
+
+/* Timecode */
+.timecode, [class*="Timecode"], [class*="timecode"] {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace !important;
+  font-size: 11px !important;
+  color: var(--kc-text-muted) !important;
+}
+
+/* ---------- Timeline ---------- */
+.timeline, .timeline-panel, .timeline-container,
+[class*="Timeline"],
+[class*="timeline"] {
+  background: var(--kc-surface) !important;
+  border: 1px solid var(--kc-border) !important;
+  border-radius: var(--kc-radius-lg) !important;
+  box-shadow: var(--kc-shadow-md) !important;
+  height: 190px !important;
+  min-height: 170px !important;
+  overflow: hidden !important;
+}
+
+/* Timeline ruler */
+.timeline-ruler, .ruler,
+[class*="Ruler"] {
+  background: var(--kc-surface-2) !important;
+  height: 28px !important;
+  border-bottom: 1px solid var(--kc-border) !important;
+  font-size: 10px !important;
+  color: var(--kc-text-muted) !important;
+}
+
+/* Timeline clips */
+.clip, .timeline-clip, .clip-card,
+[class*="Clip"] {
+  border-radius: var(--kc-radius-sm) !important;
+  background: var(--kc-surface-3) !important;
+  border: 1px solid var(--kc-border) !important;
+  box-shadow: var(--kc-shadow-sm) !important;
+  transition: var(--kc-transition) !important;
+  overflow: hidden !important;
+}
+
+.clip:hover, .timeline-clip:hover,
+[class*="Clip"]:hover {
+  border-color: var(--kc-accent) !important;
+  box-shadow: 0 0 0 1px var(--kc-accent-soft), var(--kc-shadow-sm) !important;
+}
+
+.clip.selected, .timeline-clip.selected,
+[class*="Clip"].selected {
+  border-color: var(--kc-accent) !important;
+  box-shadow: 0 0 0 2px var(--kc-accent-soft) !important;
+}
+
+/* Playhead */
+.playhead, .playhead-line,
+[class*="Playhead"] {
+  background: var(--kc-accent) !important;
+  width: 2px !important;
+  box-shadow: 0 0 8px rgba(0,213,255,0.6) !important;
+}
+
+/* ---------- Buttons global ---------- */
+button,
+[role="button"] {
+  border-radius: var(--kc-radius-sm) !important;
+  font-weight: 500 !important;
+  font-size: 11px !important;
+  color: var(--kc-text) !important;
+  background: var(--kc-surface-2) !important;
+  border: 1px solid var(--kc-border) !important;
+  transition: var(--kc-transition) !important;
+  padding: 6px 10px !important;
+  cursor: pointer !important;
+}
+
+button:hover,
+[role="button"]:hover {
+  background: var(--kc-surface-3) !important;
+  border-color: var(--kc-border-strong) !important;
+}
+
+button:active,
+[role="button"]:active {
+  transform: scale(0.98) !important;
+}
+
+button.primary,
+[class*="PrimaryButton"] {
+  background: var(--kc-accent) !important;
+  color: #000 !important;
+  border: none !important;
+  box-shadow: 0 4px 12px rgba(0,213,255,0.35) !important;
+}
+
+button.primary:hover {
+  background: #33e0ff !important;
+}
+
+/* ---------- Inputs ---------- */
+input, select, textarea {
+  background: var(--kc-surface-3) !important;
+  border: 1px solid var(--kc-border) !important;
+  border-radius: var(--kc-radius-sm) !important;
+  color: var(--kc-text) !important;
+  padding: 6px 10px !important;
+  font-size: 11px !important;
+  transition: var(--kc-transition) !important;
+}
+
+input:focus, select:focus, textarea:focus {
+  border-color: var(--kc-accent) !important;
+  box-shadow: 0 0 0 2px var(--kc-accent-soft) !important;
+}
+
+/* ---------- Cards / grids ---------- */
+.card, .effect-card, .filter-card, .sticker-card, .transition-card,
+[class*="Card"] {
+  background: var(--kc-surface-2) !important;
+  border: 1px solid var(--kc-border) !important;
+  border-radius: var(--kc-radius-md) !important;
+  overflow: hidden !important;
+  transition: var(--kc-transition) !important;
+}
+
+.card:hover, .effect-card:hover, .filter-card:hover,
+.sticker-card:hover, .transition-card:hover,
+[class*="Card"]:hover {
+  border-color: var(--kc-accent) !important;
+  box-shadow: var(--kc-shadow-md) !important;
+  transform: translateY(-2px) !important;
+}
+
+/* ---------- Modals ---------- */
+.modal, [class*="Modal"] {
+  background: var(--kc-surface) !important;
+  border: 1px solid var(--kc-border-strong) !important;
+  border-radius: var(--kc-radius-xl) !important;
+  box-shadow: var(--kc-shadow-lg) !important;
+  padding: 18px !important;
+}
+
+.modal-title {
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  margin-bottom: 12px !important;
+}
+
+/* ---------- Tooltips ---------- */
+.tooltip, [class*="Tooltip"] {
+  background: var(--kc-surface-3) !important;
+  border: 1px solid var(--kc-border) !important;
+  border-radius: var(--kc-radius-sm) !important;
+  padding: 6px 8px !important;
+  font-size: 10px !important;
+  box-shadow: var(--kc-shadow-sm) !important;
+}
+
+/* ---------- Scrollbars ---------- */
+::-webkit-scrollbar {
+  width: 6px !important;
+  height: 6px !important;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent !important;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.15) !important;
+  border-radius: 999px !important;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255,255,255,0.25) !important;
+}
+
+/* ---------- Playing mode performance ---------- */
+body.playing-mode *,
+body.playing-mode *::before,
+body.playing-mode *::after {
+  box-shadow: none !important;
+  text-shadow: none !important;
+  backdrop-filter: none !important;
+  filter: none !important;
+  animation: none !important;
+  transition: none !important;
+}
+
+.preview-space,
+[data-preview-space="program"],
+.timeline-clip,
+.clip,
+[class*="Clip"] {
+  will-change: transform;
+  transform: translateZ(0);
+}
+
+/* ---------- Subtle animations for idle mode ---------- */
+body:not(.playing-mode) .card:hover,
+body:not(.playing-mode) [class*="Card"]:hover {
+  transition: var(--kc-transition) !important;
+}
