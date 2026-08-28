@@ -1406,3 +1406,20 @@ img {
   content-visibility: auto;
   contain-intrinsic-size: auto 80px;
 }
+
+/* Extra UI polish for focused interactions */
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid var(--capcut-accent, #00e0ff) !important;
+  outline-offset: 1px;
+}
+
+.card,
+.effect-card,
+.filter-card,
+.sticker-card,
+.transition-card {
+  will-change: transform, box-shadow;
+}
