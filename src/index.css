@@ -662,3 +662,175 @@ button, [role="button"] {
 }
 .tab-button:hover { background: rgba(255,255,255,0.08); }
 .tab-button.active { background: rgba(255,255,255,0.15); color: var(--color-accent); }
+
+/* ============================================================================
+   KANDEL EDITOR — CAPCUT PREMIUM UI OVERRIDE
+   Dark, compact, rounded, smooth — replaces the old visual language.
+   ============================================================================ */
+
+:root {
+  --capcut-bg: #0d0d12;
+  --capcut-surface: #16161f;
+  --capcut-surface-raised: #1f1f2b;
+  --capcut-border: rgba(255,255,255,0.08);
+  --capcut-accent: #00e0ff;
+  --capcut-accent-soft: rgba(0,224,255,0.15);
+  --capcut-text: #f4f4f6;
+  --capcut-text-muted: #9a9aa8;
+}
+
+body, #root, .app-root, .editor-root {
+  background: var(--capcut-bg) !important;
+  color: var(--capcut-text) !important;
+}
+
+/* Top bar / window controls area */
+[data-tauri-drag-region], .topbar, .titlebar {
+  background: rgba(13,13,18,0.85) !important;
+  backdrop-filter: blur(16px) !important;
+  border-bottom: 1px solid var(--capcut-border) !important;
+  height: 44px !important;
+}
+
+/* Left media panel / sidebar */
+.sidebar, .sidebar-panel, .media-panel, .assets-panel,
+[class*="Sidebar"], [class*="sidebar"] {
+  background: var(--capcut-surface) !important;
+  border-right: 1px solid var(--capcut-border) !important;
+  border-radius: 0 16px 16px 0 !important;
+  width: 280px !important;
+  min-width: 260px !important;
+}
+
+/* Right properties panel */
+.properties-panel, .inspector-panel, .props-panel,
+[class*="PropertiesPanel"], [class*="properties"] {
+  background: var(--capcut-surface) !important;
+  border-left: 1px solid var(--capcut-border) !important;
+  border-radius: 16px 0 0 16px !important;
+  width: 320px !important;
+  min-width: 300px !important;
+}
+
+/* Center preview area */
+.preview-space, .program-preview, .canvas-container,
+[data-preview-space="program"] {
+  background: #000 !important;
+  border-radius: 20px !important;
+  border: 1px solid var(--capcut-border) !important;
+  overflow: hidden !important;
+  box-shadow: 0 12px 36px rgba(0,0,0,0.55) !important;
+}
+
+/* Timeline panel */
+.timeline, .timeline-panel, .timeline-container,
+[class*="Timeline"] {
+  background: var(--capcut-surface) !important;
+  border-top: 1px solid var(--capcut-border) !important;
+  border-radius: 16px 16px 0 0 !important;
+  height: 200px !important;
+  min-height: 170px !important;
+}
+
+/* Individual clips */
+.clip, .timeline-clip, .clip-card, [class*="Clip"] {
+  border-radius: 10px !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.35) !important;
+  background: #2a2a38 !important;
+  border: 1px solid rgba(255,255,255,0.06) !important;
+}
+
+/* All buttons */
+button, [role="button"] {
+  border-radius: 8px !important;
+  font-weight: 500 !important;
+  transition: background 0.15s, color 0.15s, transform 0.15s !important;
+}
+
+button:hover {
+  transform: translateY(-1px) !important;
+}
+
+/* Active tab / selected category */
+.tab-active, .active, .selected {
+  background: var(--capcut-accent-soft) !important;
+  color: var(--capcut-accent) !important;
+}
+
+/* Inputs, selects, textareas */
+input, select, textarea {
+  background: #1f1f2b !important;
+  border: 1px solid var(--capcut-border) !important;
+  border-radius: 8px !important;
+  color: var(--capcut-text) !important;
+  padding: 6px 10px !important;
+}
+
+/* Scrollbars */
+::-webkit-scrollbar {
+  width: 6px !important;
+  height: 6px !important;
+}
+::-webkit-scrollbar-track {
+  background: transparent !important;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.12) !important;
+  border-radius: 999px !important;
+}
+
+/* Card grids (filters, effects, stickers, transitions) */
+.grid {
+  gap: 8px !important;
+}
+
+.card, .effect-card, .filter-card, .sticker-card, .transition-card {
+  background: var(--capcut-surface-raised) !important;
+  border: 1px solid var(--capcut-border) !important;
+  border-radius: 12px !important;
+  overflow: hidden !important;
+  transition: transform 0.15s, box-shadow 0.15s !important;
+}
+
+.card:hover, .effect-card:hover, .filter-card:hover, .sticker-card:hover, .transition-card:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.45) !important;
+}
+
+/* Playhead / ruler */
+.ruler, .playhead, [class*="Ruler"], [class*="Playhead"] {
+  background: transparent !important;
+  color: var(--capcut-text-muted) !important;
+  font-size: 10px !important;
+}
+
+.playhead-line {
+  background: var(--capcut-accent) !important;
+  width: 2px !important;
+}
+
+/* Tooltips */
+.tooltip, [class*="Tooltip"] {
+  background: #22222e !important;
+  border: 1px solid var(--capcut-border) !important;
+  border-radius: 8px !important;
+  font-size: 11px !important;
+}
+
+/* Modals / dialogs */
+.modal, [class*="Modal"] {
+  background: var(--capcut-surface) !important;
+  border: 1px solid var(--capcut-border) !important;
+  border-radius: 20px !important;
+  box-shadow: 0 24px 48px rgba(0,0,0,0.6) !important;
+}
+
+/* Make the whole editor feel lighter and more responsive */
+* {
+  outline: none !important;
+}
+
+.editor-shell, .workspace, .editor-layout {
+  padding: 8px !important;
+  gap: 8px !important;
+}
