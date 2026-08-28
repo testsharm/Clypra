@@ -10,7 +10,6 @@ import { useProjectStore } from "@/store/projectStore";
 import { useTimelineStore } from "@/store/timelineStore";
 import { useUIStore } from "@/store/uiStore";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/Tooltip";
-import { TransitionsApi } from "@/features/transitions/api/transitionsApi";
 import { LOCAL_TRANSITIONS } from "@/features/transitions/localTransitions";
 import type { TransitionAsset } from "@/features/transitions/types";
 import { getPlaybackClock } from "@/hooks/usePlaybackClock";
@@ -19,20 +18,18 @@ import { getAssetUrl } from "@/lib/assets";
 // Hardcoded transition categories for instant UI rendering
 // Matches GPU transition categories from Transition Lab Console
 const TRANSITION_CATEGORIES = [
-  { id: "basic", label: "Basic" },
-  { id: "geometric", label: "Geometric" },
-  { id: "optical-distortion", label: "Optical Distortion" },
-  { id: "temporal", label: "Temporal" },
-  { id: "particle-dissolve", label: "Particle Dissolve" },
-  { id: "light-based", label: "Light Based" },
-  { id: "depth-based", label: "Depth Based" },
-  { id: "physics-simulated", label: "Physics Simulated" },
+  { id: "fade", label: "Fade" },
+  { id: "dissolve", label: "Dissolve" },
+  { id: "slide", label: "Slide" },
+  { id: "wipe", label: "Wipe" },
+  { id: "zoom", label: "Zoom" },
+  { id: "creative", label: "Creative" },
 ] as const;
 
 type TransitionCategory = (typeof TRANSITION_CATEGORIES)[number]["id"];
 
 export const TransitionsTab: React.FC<TabProps> = ({ onAddToTimeline }) => {
-  const [activeCategory, setActiveCategory] = useState<TransitionCategory>("basic");
+  const [activeCategory, setActiveCategory] = useState<TransitionCategory>("fade");
   const [transitions, setTransitions] = useState<TransitionAsset[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -49,17 +46,12 @@ export const TransitionsTab: React.FC<TabProps> = ({ onAddToTimeline }) => {
       setError(null);
 
       try {
-        const data = await TransitionsApi.getByCategory(activeCategory);
-        setTransitions(data);
-      } catch (err) {
-        console.warn(`[TransitionsTab] API unavailable for ${activeCategory}, using local transitions`);
-        const categoryItems: TransitionAsset[] = LOCAL_TRANSITIONS.map((item, index) => ({
-          ...item,
-          id: `${item.id}-${activeCategory}`,
-          category: activeCategory,
-        }));
+        const categoryItems = LOCAL_TRANSITIONS.filter((item) => item.category === activeCategory);
         setTransitions(categoryItems);
         setError(null);
+      } catch (err) {
+        console.warn(`[TransitionsTab] Failed to load transitions for ${activeCategory}`, err);
+        setError("Failed to load transitions");
       } finally {
         setLoading(false);
       }
