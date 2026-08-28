@@ -130,6 +130,28 @@ export const StickersTab: React.FC<TabProps> = ({ onAddToTimeline }) => {
 };
 
 // StickerCard Component - Lottie-only with .webm preview on hover
+const STICKER_EMOJI_BY_CATEGORY: Record<string, string> = {
+  emoji: "😀",
+  text: "💬",
+  gaming: "🎮",
+  sports: "⚽",
+  animals: "🐾",
+  love: "❤️",
+  mood: "😊",
+  food: "🍕",
+  travel: "✈️",
+  birthday: "🎉",
+  frames: "🖼️",
+  shapes: "🔷",
+  fashion: "🕶️",
+  retro: "📼",
+  illustration: "🎨",
+};
+
+function getStickerPlaceholder(sticker: StickerItem): string {
+  return STICKER_EMOJI_BY_CATEGORY[sticker.category] ?? "✨";
+}
+
 const StickerCard: React.FC<{ sticker: StickerItem; onAddToTimeline?: (item: any, type: any) => void }> = ({ sticker, onAddToTimeline }) => {
   const [imageError, setImageError] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
@@ -238,7 +260,7 @@ const StickerCard: React.FC<{ sticker: StickerItem; onAddToTimeline?: (item: any
           <img src={sticker.thumbnailUrl} alt={sticker.name} className={`max-w-full max-h-full object-contain drop-shadow-[0_4px_8px_rgba(0,0,0,0.5)] select-none pointer-events-none transition-opacity duration-300 absolute inset-0 m-auto ${isHovered ? "opacity-0 z-0" : "opacity-100 z-10"}`} onError={() => setImageError(true)} />
         ) : (
           <div className="flex flex-col items-center justify-center gap-1 text-text-muted">
-            <span className="text-2xl">🎨</span>
+            <span className="text-2xl">{getStickerPlaceholder(sticker)}</span>
             <span className="text-[9px] font-medium">{sticker.name}</span>
           </div>
         )}
