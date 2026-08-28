@@ -280,6 +280,21 @@ pub fn run() {
                 {
                     _window.app_handle().exit(0);
                 }
+
+                // Safety net (all platforms, most relevant on Windows): the
+                // frontend does its own save/cleanup then calls win.close().
+                // If that chain ever hangs or silently fails, force the app
+                // closed after a grace period instead of leaving a zombie
+                // process/window. Normal closes finish well under this and
+                // are unaffected.
+                let handle = _window.app_handle().clone();
+                tauri::async_runtime::spawn(async move {
+                    tokio::time::sleep(std::time::Duration::from_secs(6)).await;
+                    if handle.webview_windows().len() > 0 {
+                        log::warn!("[close-fallback] Window still open after 6s post-CloseRequested; forcing exit");
+                        handle.exit(0);
+                    }
+                });
             }
         })
         .run(tauri::generate_context!())
