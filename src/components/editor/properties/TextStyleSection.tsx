@@ -28,6 +28,10 @@ const SYSTEM_FONTS = [
   { value: "Palatino", label: "Palatino" },
 ];
 
+const CUSTOM_FONTS = [
+  { value: "Lemon Milk", label: "Lemon Milk" },
+];
+
 const GOOGLE_FONTS = [
   { value: "Inter Variable", label: "Inter" },
   { value: "Geist Variable", label: "Geist" },
@@ -512,6 +516,13 @@ export const TextStyleSection: React.FC<TextStyleSectionProps> = ({ textClip, pr
                 </optgroup>
                 <optgroup label="Google Web Fonts">
                   {GOOGLE_FONTS.map((f) => (
+                    <option key={f.value} value={f.value}>
+                      {f.label}
+                    </option>
+                  ))}
+                </optgroup>
+                <optgroup label="Custom Fonts">
+                  {CUSTOM_FONTS.map((f) => (
                     <option key={f.value} value={f.value}>
                       {f.label}
                     </option>
