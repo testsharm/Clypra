@@ -509,7 +509,7 @@ const App = () => {
             console.warn("[App] Failed to close native preview surface:", closeErr);
           }
           try {
-            await win.close();
+            await win.destroy();
           } catch (closeErr) {
             console.error("[App] win.close() failed:", closeErr);
             closingWindowRef.current = false; // allow retry after failure

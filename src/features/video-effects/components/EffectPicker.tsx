@@ -27,8 +27,7 @@ export function EffectPicker({ onSelect }: EffectPickerProps) {
     setLoading(true);
     setError(null);
     try {
-      const bodyEffects = await VideoEffectsApi.getBodyEffects();
-      setEffects(bodyEffects);
+      setEffects([]);
     } catch (err) {
       const message = err instanceof Error ? err.message : "Failed to load body effects";
       setError(message);

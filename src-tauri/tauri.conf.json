@@ -20,7 +20,7 @@
         "minimizable": true,
         "maximizable": true,
         "dragDropEnabled": false,
-        "decorations": true,
+        "decorations": false,
         "transparent": false,
         "shadow": true,
         "devtools": true,

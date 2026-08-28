@@ -2,9 +2,8 @@ import React, { useMemo, useState, useEffect } from "react";
 import { Filter, Grid3X3, Plus, Search, SlidersHorizontal, Sparkles, Sun, Palette, Droplets, Camera, AlertCircle, Download, Loader2, Star, type LucideIcon } from "lucide-react";
 import type { TabProps } from "../types";
 import { useProjectStore } from "@/store/projectStore";
-import { FiltersApi } from "@/features/filters/api/filtersApi";
-import { filterCacheManager } from "@/features/filters/cache/filterCache";
 import type { FilterAsset } from "@/features/filters/types";
+import { LOCAL_FILTER_CATEGORIES, LOCAL_FILTERS } from "@/features/filters/localFilters";
 import { useFavoritesStore } from "@/store/favoritesStore";
 import { getAssetUrl } from "@/lib/assets";
 
@@ -54,22 +53,9 @@ export const FiltersTab: React.FC<TabProps> = ({ onAddToTimeline }) => {
 
   const { favorites, toggleFavorite } = useFavoritesStore();
 
-  // Initialize cache on mount
-  useEffect(() => {
-    filterCacheManager.initialize();
-  }, []);
-
   // Load categories from API (falls back to defaults)
   useEffect(() => {
-    void FiltersApi.getCategories()
-      .then((data) => {
-        if (data.length > 0) {
-          setCategories(data.map((c) => ({ id: c.id, name: c.name })));
-        }
-      })
-      .catch(() => {
-        /* use DEFAULT_FILTER_CATEGORIES */
-      });
+    setCategories(LOCAL_FILTER_CATEGORIES.map((c) => ({ id: c.id, name: c.name })));
   }, []);
 
   // Fetch filters when category changes
@@ -80,7 +66,7 @@ export const FiltersTab: React.FC<TabProps> = ({ onAddToTimeline }) => {
       setError(null);
 
       try {
-        const data = await FiltersApi.getByCategory(activeCategory);
+        const data = activeCategory === "all" ? LOCAL_FILTERS : LOCAL_FILTERS.filter((f) => f.category === activeCategory);
         setFilters(data);
       } catch (err) {
         console.error(`[FiltersTab] Failed to load category ${activeCategory}:`, err);
@@ -206,10 +192,7 @@ const FilterCard: React.FC<FilterCardProps> = ({ filter, isFavorite, onFavorite,
 
   // Check if filter is cached on mount
   useEffect(() => {
-    filterCacheManager.initialize().then(() => {
-      const cached = filterCacheManager.isCached(filter.id);
-      setIsDownloaded(cached);
-    });
+    setIsDownloaded(true);
   }, [filter.id]);
 
   // Apply CSS filter approximation based on filter ID for preview
@@ -243,18 +226,9 @@ const FilterCard: React.FC<FilterCardProps> = ({ filter, isFavorite, onFavorite,
 
     try {
       setIsDownloading(true);
-
-      // Download filter JSON with minimum delay for visual feedback
-      const downloadPromise = filterCacheManager.ensureDownloaded(filter);
-      const delayPromise = new Promise((resolve) => setTimeout(resolve, 300));
-
-      const [cachedFilter] = await Promise.all([downloadPromise, delayPromise]);
+      await new Promise((resolve) => setTimeout(resolve, 200));
       setIsDownloaded(true);
-
-      // Add to timeline
       onAddToTimeline(e);
-
-      // Show success feedback
       useProjectStore.getState().showToast(`Added ${filter.name} filter`);
     } catch (error) {
       console.error("[FilterCard] Add to timeline failed:", error);

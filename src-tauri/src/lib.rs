@@ -289,7 +289,7 @@ pub fn run() {
                 // are unaffected.
                 let handle = _window.app_handle().clone();
                 tauri::async_runtime::spawn(async move {
-                    tokio::time::sleep(std::time::Duration::from_secs(6)).await;
+                    tokio::time::sleep(std::time::Duration::from_secs(2)).await;
                     if handle.webview_windows().len() > 0 {
                         log::warn!("[close-fallback] Window still open after 6s post-CloseRequested; forcing exit");
                         handle.exit(0);
