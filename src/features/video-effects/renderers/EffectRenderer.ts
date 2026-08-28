@@ -66,6 +66,10 @@ export class EffectRenderer {
       vignette: this.renderVignette,
       glow: this.renderGlow,
       light_leak: this.renderLightLeak,
+      light_leak_2: this.renderLightLeak2,
+      fire: this.renderFire,
+      particles: this.renderParticles,
+      dust_particles: this.renderDustParticles,
 
       // Time effects
       speed_ramp: this.renderSpeedRamp,
@@ -221,25 +225,166 @@ export class EffectRenderer {
   // ============================================================================
 
   private static renderWave(ctx: CanvasRenderingContext2D, params: EffectParameters, intensity: number, time: number): void {
-    // Wave distortion requires pixel manipulation
-    // Simplified placeholder
-    console.warn("Wave effect requires WebGL shader implementation");
+    const width = ctx.canvas.width;
+    const height = ctx.canvas.height;
+    const amplitude = (params.amplitude || 10) * intensity;
+    const frequency = (params.frequency || 0.02) * (params.frequency ?? 1);
+    const speed = params.speed || 2;
+    const src = ctx.getImageData(0, 0, width, height);
+    const dst = ctx.createImageData(width, height);
+    const srcData = src.data;
+    const dstData = dst.data;
+    for (let y = 0; y < height; y++) {
+      const offset = Math.sin(y * frequency + time * speed) * amplitude;
+      for (let x = 0; x < width; x++) {
+        const srcX = Math.round(x - offset);
+        const clampedX = Math.min(width - 1, Math.max(0, srcX));
+        const srcIdx = (y * width + clampedX) * 4;
+        const dstIdx = (y * width + x) * 4;
+        dstData[dstIdx] = srcData[srcIdx];
+        dstData[dstIdx + 1] = srcData[srcIdx + 1];
+        dstData[dstIdx + 2] = srcData[srcIdx + 2];
+        dstData[dstIdx + 3] = srcData[srcIdx + 3];
+      }
+    }
+    ctx.putImageData(dst, 0, 0);
   }
 
   private static renderRipple(ctx: CanvasRenderingContext2D, params: EffectParameters, intensity: number, time: number): void {
-    console.warn("Ripple effect requires WebGL shader implementation");
+    const width = ctx.canvas.width;
+    const height = ctx.canvas.height;
+    const centerX = width / 2;
+    const centerY = height / 2;
+    const maxR = Math.sqrt(centerX * centerX + centerY * centerY);
+    const amplitude = (params.amplitude || 10) * intensity;
+    const frequency = (params.frequency || 0.05) * (params.frequency ?? 1);
+    const speed = params.speed || 3;
+    const src = ctx.getImageData(0, 0, width, height);
+    const dst = ctx.createImageData(width, height);
+    const srcData = src.data;
+    const dstData = dst.data;
+    for (let y = 0; y < height; y++) {
+      for (let x = 0; x < width; x++) {
+        const dx = x - centerX;
+        const dy = y - centerY;
+        const r = Math.sqrt(dx * dx + dy * dy);
+        const phase = r * frequency - time * speed;
+        const offset = Math.sin(phase) * amplitude * (r / maxR);
+        const srcR = Math.max(0, r + offset);
+        const scale = srcR / (r || 1);
+        const srcX = Math.round(centerX + dx * scale);
+        const srcY = Math.round(centerY + dy * scale);
+        const clampedX = Math.min(width - 1, Math.max(0, srcX));
+        const clampedY = Math.min(height - 1, Math.max(0, srcY));
+        const srcIdx = (clampedY * width + clampedX) * 4;
+        const dstIdx = (y * width + x) * 4;
+        dstData[dstIdx] = srcData[srcIdx];
+        dstData[dstIdx + 1] = srcData[srcIdx + 1];
+        dstData[dstIdx + 2] = srcData[srcIdx + 2];
+        dstData[dstIdx + 3] = srcData[srcIdx + 3];
+      }
+    }
+    ctx.putImageData(dst, 0, 0);
   }
 
   private static renderBulge(ctx: CanvasRenderingContext2D, params: EffectParameters, intensity: number, time: number): void {
-    console.warn("Bulge effect requires WebGL shader implementation");
+    const width = ctx.canvas.width;
+    const height = ctx.canvas.height;
+    const centerX = width / 2;
+    const centerY = height / 2;
+    const maxR = Math.sqrt(centerX * centerX + centerY * centerY);
+    const strength = (params.strength ?? 0.5) * intensity;
+    const src = ctx.getImageData(0, 0, width, height);
+    const dst = ctx.createImageData(width, height);
+    const srcData = src.data;
+    const dstData = dst.data;
+    for (let y = 0; y < height; y++) {
+      for (let x = 0; x < width; x++) {
+        const dx = x - centerX;
+        const dy = y - centerY;
+        const r = Math.sqrt(dx * dx + dy * dy);
+        const factor = 1 - strength * (1 - r / maxR);
+        const srcR = r / Math.max(0.001, factor);
+        const scale = srcR / (r || 1);
+        const srcX = Math.round(centerX + dx * scale);
+        const srcY = Math.round(centerY + dy * scale);
+        const clampedX = Math.min(width - 1, Math.max(0, srcX));
+        const clampedY = Math.min(height - 1, Math.max(0, srcY));
+        const srcIdx = (clampedY * width + clampedX) * 4;
+        const dstIdx = (y * width + x) * 4;
+        dstData[dstIdx] = srcData[srcIdx];
+        dstData[dstIdx + 1] = srcData[srcIdx + 1];
+        dstData[dstIdx + 2] = srcData[srcIdx + 2];
+        dstData[dstIdx + 3] = srcData[srcIdx + 3];
+      }
+    }
+    ctx.putImageData(dst, 0, 0);
   }
 
   private static renderTwist(ctx: CanvasRenderingContext2D, params: EffectParameters, intensity: number, time: number): void {
-    console.warn("Twist effect requires WebGL shader implementation");
+    const width = ctx.canvas.width;
+    const height = ctx.canvas.height;
+    const centerX = width / 2;
+    const centerY = height / 2;
+    const maxR = Math.sqrt(centerX * centerX + centerY * centerY);
+    const angle = ((params.angle ?? 0.5) * intensity) * (time * 0.5);
+    const src = ctx.getImageData(0, 0, width, height);
+    const dst = ctx.createImageData(width, height);
+    const srcData = src.data;
+    const dstData = dst.data;
+    for (let y = 0; y < height; y++) {
+      for (let x = 0; x < width; x++) {
+        const dx = x - centerX;
+        const dy = y - centerY;
+        const r = Math.sqrt(dx * dx + dy * dy);
+        const currentAngle = Math.atan2(dy, dx) - angle * (r / maxR);
+        const srcX = Math.round(centerX + Math.cos(currentAngle) * r);
+        const srcY = Math.round(centerY + Math.sin(currentAngle) * r);
+        const clampedX = Math.min(width - 1, Math.max(0, srcX));
+        const clampedY = Math.min(height - 1, Math.max(0, srcY));
+        const srcIdx = (clampedY * width + clampedX) * 4;
+        const dstIdx = (y * width + x) * 4;
+        dstData[dstIdx] = srcData[srcIdx];
+        dstData[dstIdx + 1] = srcData[srcIdx + 1];
+        dstData[dstIdx + 2] = srcData[srcIdx + 2];
+        dstData[dstIdx + 3] = srcData[srcIdx + 3];
+      }
+    }
+    ctx.putImageData(dst, 0, 0);
   }
 
   private static renderFisheye(ctx: CanvasRenderingContext2D, params: EffectParameters, intensity: number, time: number): void {
-    console.warn("Fisheye effect requires WebGL shader implementation");
+    const width = ctx.canvas.width;
+    const height = ctx.canvas.height;
+    const centerX = width / 2;
+    const centerY = height / 2;
+    const maxR = Math.sqrt(centerX * centerX + centerY * centerY);
+    const strength = (params.strength ?? 0.6) * intensity;
+    const src = ctx.getImageData(0, 0, width, height);
+    const dst = ctx.createImageData(width, height);
+    const srcData = src.data;
+    const dstData = dst.data;
+    for (let y = 0; y < height; y++) {
+      for (let x = 0; x < width; x++) {
+        const dx = x - centerX;
+        const dy = y - centerY;
+        const r = Math.sqrt(dx * dx + dy * dy);
+        const factor = 1 - strength * Math.pow(r / maxR, 2);
+        const srcR = r / Math.max(0.001, factor);
+        const scale = srcR / (r || 1);
+        const srcX = Math.round(centerX + dx * scale);
+        const srcY = Math.round(centerY + dy * scale);
+        const clampedX = Math.min(width - 1, Math.max(0, srcX));
+        const clampedY = Math.min(height - 1, Math.max(0, srcY));
+        const srcIdx = (clampedY * width + clampedX) * 4;
+        const dstIdx = (y * width + x) * 4;
+        dstData[dstIdx] = srcData[srcIdx];
+        dstData[dstIdx + 1] = srcData[srcIdx + 1];
+        dstData[dstIdx + 2] = srcData[srcIdx + 2];
+        dstData[dstIdx + 3] = srcData[srcIdx + 3];
+      }
+    }
+    ctx.putImageData(dst, 0, 0);
   }
 
   // ============================================================================
@@ -295,6 +440,84 @@ export class EffectRenderer {
     ctx.fillStyle = gradient;
     ctx.fillRect(0, 0, width, height);
     ctx.globalCompositeOperation = "source-over";
+  }
+
+  private static renderLightLeak2(ctx: CanvasRenderingContext2D, params: EffectParameters, intensity: number, time: number): void {
+    const width = ctx.canvas.width;
+    const height = ctx.canvas.height;
+    const gradient = ctx.createLinearGradient(width, 0, 0, height);
+    gradient.addColorStop(0, `rgba(255, 150, 50, ${intensity * 0.35})`);
+    gradient.addColorStop(1, "rgba(255, 100, 150, 0)");
+    ctx.globalCompositeOperation = "screen";
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, width, height);
+    ctx.globalCompositeOperation = "source-over";
+  }
+
+  private static renderFire(ctx: CanvasRenderingContext2D, params: EffectParameters, intensity: number, time: number): void {
+    const width = ctx.canvas.width;
+    const height = ctx.canvas.height;
+    const c1 = params.fireColor1 || "#ff4500";
+    const c2 = params.fireColor2 || "#ff8c00";
+    const c3 = params.fireColor3 || "#ffd700";
+    const alpha = intensity * 0.5 * (0.7 + 0.3 * Math.sin(time * 10));
+    const gradient = ctx.createLinearGradient(0, height, 0, height * 0.4);
+    gradient.addColorStop(0, this.hexToRgba(c1, alpha));
+    gradient.addColorStop(0.5, this.hexToRgba(c2, alpha * 0.8));
+    gradient.addColorStop(1, this.hexToRgba(c3, 0));
+    ctx.globalCompositeOperation = "screen";
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, width, height);
+    ctx.globalCompositeOperation = "source-over";
+  }
+
+  private static renderParticles(ctx: CanvasRenderingContext2D, params: EffectParameters, intensity: number, time: number): void {
+    const width = ctx.canvas.width;
+    const height = ctx.canvas.height;
+    const count = Math.floor((params.particleCount || 30) * intensity);
+    const size = (params.particleSize || 3) * intensity;
+    const color = params.particleColor || "#ffffff";
+    const speed = params.driftSpeed || 20;
+    ctx.save();
+    ctx.fillStyle = color;
+    ctx.globalAlpha = intensity;
+    for (let i = 0; i < count; i++) {
+      const seed = ((i * 37 + time * speed) % 1000) / 1000;
+      const x = (seed * 131) % width;
+      const y = (seed * 257) % height;
+      ctx.beginPath();
+      ctx.arc(x, y, size * (0.5 + seed), 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.restore();
+  }
+
+  private static renderDustParticles(ctx: CanvasRenderingContext2D, params: EffectParameters, intensity: number, time: number): void {
+    const width = ctx.canvas.width;
+    const height = ctx.canvas.height;
+    const count = Math.floor((params.particleCount || 50) * intensity);
+    const size = (params.particleSize || 1.5) * intensity;
+    const color = params.particleColor || "#ffffff";
+    const speed = params.driftSpeed || 8;
+    ctx.save();
+    ctx.fillStyle = color;
+    ctx.globalAlpha = intensity * 0.6;
+    for (let i = 0; i < count; i++) {
+      const seed = ((i * 53 + time * speed) % 1000) / 1000;
+      const x = (seed * 191) % width;
+      const y = (seed * 311) % height;
+      ctx.beginPath();
+      ctx.arc(x, y, size * (0.4 + seed * 0.6), 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.restore();
+  }
+
+  private static hexToRgba(hex: string, alpha: number): string {
+    const r = parseInt(hex.slice(1, 3), 16);
+    const g = parseInt(hex.slice(3, 5), 16);
+    const b = parseInt(hex.slice(5, 7), 16);
+    return `rgba(${r}, ${g}, ${b}, ${alpha})`;
   }
 
   // ============================================================================
