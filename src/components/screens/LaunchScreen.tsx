@@ -725,10 +725,10 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onProjectCreate, onP
                     </div>
 
                     {/* Info */}
-                    <div className="px-3.5 py-3.5">
+                    <div className="px-4 py-3">
                       <h4 className="text-sm font-semibold text-text-primary truncate group-hover:text-accent-soft transition-colors">{project.name}</h4>
-                      <div className="flex items-center justify-between mt-1.5">
-                        <span className="text-xs text-text-muted">{formatDate(project.createdAt)}</span>
+                      <div className="flex items-center justify-between mt-1">
+                        <span className="text-[11px] text-text-muted">{formatDate(project.createdAt)}</span>
                         <ChevronRight className="w-3.5 h-3.5 text-text-muted/30 group-hover:text-accent/60 transition-colors duration-200" />
                       </div>
                     </div>
