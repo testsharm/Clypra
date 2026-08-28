@@ -17,6 +17,7 @@ import { useRecordingStore } from "@/store/recordingStore";
 import { FloatingWidget } from "@/components/ui/FloatingWidget";
 import { ScreenRecordingPreviewModal } from "@/components/ui/ScreenRecordingPreviewModal";
 import { Toaster } from "sonner";
+import { registerTimelineShortcuts } from "@/features/timeline-actions/globalShortcuts";
 
 // const isExternalOrDataUrl = (value: string) => value.startsWith("data:") || value.startsWith("http") || value.startsWith("asset://");
 
@@ -30,6 +31,11 @@ const App = () => {
   const [projectNameBeforeClose, setProjectNameBeforeClose] = useState<string>("");
   const closingWindowRef = useRef(false);
   const { isRecording, previewRecording, setPreviewRecording } = useRecordingStore();
+
+  useEffect(() => {
+    const unregister = registerTimelineShortcuts();
+    return () => unregister();
+  }, []);
 
   useEffect(() => {
     const initializeApp = async () => {

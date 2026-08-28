@@ -21,6 +21,8 @@ import { StickerSettingsSection } from "./properties/StickerSettingsSection";
 import { TimelineEffectSection } from "./properties/TimelineEffectSection";
 import { AdjustmentsSection } from "./properties/AdjustmentsSection";
 import { ChromaKeySection } from "./properties/ChromaKeySection";
+import { AdvancedToolsSection } from "@/features/advanced-tools/AdvancedToolsSection";
+
 
 export interface PropertiesPanelProps {
   width?: number;
@@ -360,7 +362,12 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
         {(isVisualClip || (isTextClip && activePropertyTab === "transform")) && <TransformSection selectedClip={selectedClip} isVisualClip={isVisualClip} handleUpdate={handleUpdate} handleUpdateMultiple={handleUpdateMultiple} handleApplyFit={handleApplyFit} canvasWidth={canvasWidth} canvasHeight={canvasHeight} />}
 
         {/* Color Adjustments */}
-        {isVisualClip && <AdjustmentsSection selectedClip={selectedClip} handleUpdate={handleUpdate} />}
+        {isVisualClip && (
+              <>
+                <AdvancedToolsSection />
+                <AdjustmentsSection selectedClip={selectedClip} handleUpdate={handleUpdate} />
+              </>
+        )}
 
         {/* UltraKey (Chroma Key) */}
         {isVisualClip && <ChromaKeySection selectedClip={selectedClip} />}
