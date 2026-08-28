@@ -1066,6 +1066,8 @@ export const NativeProgramPreview: React.FC = () => {
       const renderWidth = Math.max(2, Math.min(state.canvasWidth, Math.floor(renderProfile.maxWidth)));
       const renderHeight = Math.max(2, Math.min(state.canvasHeight, Math.floor(renderProfile.maxHeight)));
       const isPlayingNow = playbackState === "playing";
+      if (isPlayingNow) state.previewQuality = "low";
+      else state.previewQuality = "medium";
       const maxRenderWidth = isPlayingNow ? 1280 : Math.min(state.canvasWidth, 1920);
       const maxRenderHeight = isPlayingNow ? 720 : Math.min(state.canvasHeight, 1080);
       const safeRenderWidth = Math.min(renderWidth - (renderWidth % 2), maxRenderWidth);
@@ -1149,7 +1151,7 @@ export const NativeProgramPreview: React.FC = () => {
       let nativePlaybackRequest = nativeRequest;
       if (isPlaying && nativeRequest && nativePresentationLatencyMs > 0) {
         const leadFrames = Math.min(
-          6,
+          3,
           Math.max(0, Math.round((nativePresentationLatencyMs * frameRate) / 1000)),
         );
         if (leadFrames > 0) {

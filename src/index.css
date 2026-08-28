@@ -881,3 +881,43 @@ input, select, textarea {
   contain: strict;
   transform: translateZ(0);
 }
+
+/* ============================================================
+   ULTRA PERFORMANCE — remove every expensive visual effect
+   ============================================================ */
+*, *::before, *::after {
+  box-shadow: none !important;
+  text-shadow: none !important;
+  animation-duration: 0.01s !important;
+  transition-duration: 0.05s !important;
+  backdrop-filter: none !important;
+  filter: none !important;
+}
+
+/* Layout containment for off-screen panels */
+.sidebar-panel, .properties-panel, .timeline-panel,
+[class*="Sidebar"], [class*="PropertiesPanel"], [class*="Timeline"] {
+  contain: layout style paint;
+}
+
+/* GPU-accelerate only the most interactive areas */
+.preview-space, [data-preview-space="program"],
+.timeline-clip, .clip, [class*="Clip"] {
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+/* Kill all hover lifts and shadows to save paint */
+button:hover, [role="button"]:hover,
+.card:hover, .effect-card:hover, .filter-card:hover,
+.sticker-card:hover, .transition-card:hover {
+  transform: none !important;
+  box-shadow: none !important;
+  filter: none !important;
+}
+
+/* Smaller UI on low-power screens */
+@media (max-width: 1400px) {
+  .sidebar, [class*="Sidebar"] { width: 240px !important; }
+  .properties-panel, [class*="PropertiesPanel"] { width: 280px !important; }
+}
