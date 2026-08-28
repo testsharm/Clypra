@@ -19,6 +19,7 @@ export const AudioEnvelopeEditor: React.FC<AudioEnvelopeEditorProps> = ({
 }) => {
   const updateClip = useTimelineStore((s) => s.updateClip);
   const { execute } = useHistoryStore();
+  const { seek } = useTransportControls();
 
   const containerRef = useRef<HTMLDivElement>(null);
   const volumeLaneRef = useRef<HTMLDivElement>(null);
@@ -293,7 +294,11 @@ export const AudioEnvelopeEditor: React.FC<AudioEnvelopeEditorProps> = ({
                 e.stopPropagation();
                 removeAudioKeyframe(clip.id, kf.id);
               }}
-              title={`Drag: adjust time/volume — Right-click to remove`}
+              onDoubleClick={(e) => {
+                e.stopPropagation();
+                seek(clip.startTime + kf.time);
+              }}
+              title={`Drag: adjust time/volume — Double-click to seek — Right-click to remove`}
             />
           );
         })}
