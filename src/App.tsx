@@ -101,33 +101,9 @@ const App = () => {
   }, []);
   // ───────────────────────────────────────────────────────────────────────────
 
-  useEffect(() => {
-    if (import.meta.env.DEV || !platform.isTauri()) return;
-
-    const onContextMenu = (event: MouseEvent) => {
-      event.preventDefault();
-    };
-
-    const onKeyDown = (event: KeyboardEvent) => {
-      const key = event.key.toLowerCase();
-      const isMetaOrCtrl = event.metaKey || event.ctrlKey;
-      const isDevtoolsCombo = isMetaOrCtrl && event.shiftKey && (key === "i" || key === "j" || key === "c");
-      const isInspectorKey = key === "f12";
-
-      if (isDevtoolsCombo || isInspectorKey) {
-        event.preventDefault();
-        event.stopPropagation();
-      }
-    };
-
-    window.addEventListener("contextmenu", onContextMenu, true);
-    window.addEventListener("keydown", onKeyDown, true);
-
-    return () => {
-      window.removeEventListener("contextmenu", onContextMenu, true);
-      window.removeEventListener("keydown", onKeyDown, true);
-    };
-  }, []);
+  // NOTE: DevTools/right-click blocking effect removed (Bug fix — was preventing
+  // F12 / Ctrl+Shift+I / right-click from ever reaching the webview, even with
+  // the Cargo `devtools` feature enabled).
 
   const handleCreateProject = (
     name: string,
