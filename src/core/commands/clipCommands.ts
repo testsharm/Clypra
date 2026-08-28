@@ -21,6 +21,7 @@ import {
   SlidersHorizontal,
   ChevronLeft,
   ChevronRight,
+  RotateCw,
 } from "lucide-react";
 import type { ClipCommand, ClipCommandContext } from "./types";
 import { clipboardService } from "@/core/clipboard/clipboardService";
@@ -107,6 +108,34 @@ export const clipCommands: ClipCommand[] = [
     execute: (ctx) => {
       const ids = getTargetClipIds(ctx);
       clipboardService.duplicateClips(ids);
+    },
+  },
+  {
+    id: "clip.rotate90",
+    label: "Rotate 90°",
+    icon: RotateCw,
+    group: "organize",
+    isVisible: (ctx) => getTargetClipIds(ctx).length > 0,
+    isEnabled: (ctx) => {
+      const ids = getTargetClipIds(ctx);
+      if (ids.length === 0) return false;
+      return ids.some((id) => {
+        const c = ctx.clips.find((clip) => clip.id === id);
+        return c && !ctx.tracks.find((t) => t.id === c.trackId)?.locked;
+      });
+    },
+    disabledReason: () => "Selected clips are on a locked track",
+    execute: (ctx) => {
+      const ids = getTargetClipIds(ctx);
+      const store = useTimelineStore.getState();
+      store.withBatch(() => {
+        ids.forEach((id) => {
+          const clip = store.clips.find((c) => c.id === id);
+          if (!clip) return;
+          store.updateClip(id, { rotation: (clip.rotation || 0) + 90 });
+        });
+      });
+      toast.success(`Rotated ${ids.length} clip${ids.length > 1 ? "s" : ""}`);
     },
   },
 
