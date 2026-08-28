@@ -80,6 +80,16 @@ const COLOR_PALETTE = [
   { label: "Pink", value: "#ffb6c1" },
   { label: "Cyber", value: "#00ff00" },
   { label: "Elegant", value: "#000000" },
+  { label: "Lemon Milk", value: "#F5F5DC" },
+  { label: "Crimson", value: "#DC143C" },
+  { label: "Royal Blue", value: "#4169E1" },
+  { label: "Emerald", value: "#50C878" },
+  { label: "Amber", value: "#FFBF00" },
+  { label: "Violet", value: "#8F00FF" },
+  { label: "Coral", value: "#FF7F50" },
+  { label: "Teal", value: "#008080" },
+  { label: "Magenta", value: "#FF00FF" },
+  { label: "Silver", value: "#C0C0C0" },
 ];
 
 const FONT_WEIGHTS = [

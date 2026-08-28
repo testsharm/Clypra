@@ -7,6 +7,8 @@ import type { VisualPropertyKey, VisualPropertyKeyframe } from "@/types";
 const PROPERTIES: Array<{ key: VisualPropertyKey; label: string; min: number; max: number; step: number }> = [
   { key: "x", label: "X Position", min: -4000, max: 4000, step: 1 },
   { key: "y", label: "Y Position", min: -4000, max: 4000, step: 1 },
+  { key: "width", label: "Width", min: 1, max: 4000, step: 1 },
+  { key: "height", label: "Height", min: 1, max: 4000, step: 1 },
   { key: "opacity", label: "Opacity", min: 0, max: 1, step: 0.01 },
   { key: "rotation", label: "Rotation", min: -360, max: 360, step: 1 },
 ];
