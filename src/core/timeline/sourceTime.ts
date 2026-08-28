@@ -1,4 +1,5 @@
-import type { Clip, TimelineSourceRange } from "@/types";
+import type { Clip, TimelineSourceRange, SpeedKeyframe } from "@/types";
+import { SpeedRampTimeline } from "./speedRamp";
 
 export interface SourceTimeResolution {
   localTime: number;
@@ -9,7 +10,7 @@ export interface SourceTimeResolution {
 const clamp = (value: number, min: number, max: number): number => Math.max(min, Math.min(max, value));
 
 export function resolveClipSourceTime(
-  clip: Pick<Clip, "startTime" | "duration" | "trimIn" | "trimOut"> & { speed?: number; freezeFrameTime?: number },
+  clip: Pick<Clip, "startTime" | "duration" | "trimIn" | "trimOut"> & { speed?: number; freezeFrameTime?: number; speedKeyframes?: SpeedKeyframe[] },
   timelineTime: number,
   options?: { clampToRange?: boolean; frameRate?: number }
 ): SourceTimeResolution {
@@ -24,7 +25,21 @@ export function resolveClipSourceTime(
   }
 
   const speed = typeof clip.speed === "number" && clip.speed > 0 ? clip.speed : 1;
-  const rawSourceTime = clip.trimIn + localTime * speed;
+
+  let rawSourceTime: number;
+  if (clip.speedKeyframes && clip.speedKeyframes.length > 0) {
+    const ramp = new SpeedRampTimeline(
+      clip.speedKeyframes.map((kf) => ({
+        time: kf.time,
+        speed: kf.speed,
+        easing: kf.easing,
+        controlPoints: kf.controlPoints,
+      })),
+    );
+    rawSourceTime = clip.trimIn + ramp.timelineToSourceTime(localTime, 0);
+  } else {
+    rawSourceTime = clip.trimIn + localTime * speed;
+  }
 
   if (options?.clampToRange) {
     // Enforce trimOut as required
