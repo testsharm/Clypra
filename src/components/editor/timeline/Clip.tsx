@@ -86,7 +86,7 @@ const ClipInner: React.FC<ClipProps> = ({
   const snapEnabled = useTimelineStore((s) => s.snapEnabled);
   const setSnapGuides = useTimelineStore((s) => s.setSnapGuides);
   const clearSnapGuides = useTimelineStore((s) => s.clearSnapGuides);
-  const { pause } = useTransportControls();
+  const { pause, seek } = useTransportControls();
 
   const [isResizing, setIsResizing] = useState<"left" | "right" | null>(null);
   const [isHovered, setIsHovered] = useState(false);
@@ -888,9 +888,15 @@ const ClipInner: React.FC<ClipProps> = ({
                 return (
                   <div
                     key={`${prop}-${kf.id}`}
-                    className="absolute h-2 w-2 rotate-45 rounded-[1px] border border-white/90 bg-accent shadow-[0_0_4px_rgba(0,0,0,0.4)]"
-                    style={{ left: `${xPx - 4}px`, top: "3px" }}
-                    title={`${prop}: ${kf.value}`}
+                    className="pointer-events-auto absolute h-2.5 w-2.5 rotate-45 rounded-[1px] border border-white/90 bg-accent shadow-[0_0_4px_rgba(0,0,0,0.4)] cursor-pointer hover:scale-125 transition-transform"
+                    style={{ left: `${xPx - 5}px`, top: "3px" }}
+                    title={`${prop}: ${kf.value} — click to seek`}
+                    onPointerDown={(e) => e.stopPropagation()}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      e.preventDefault();
+                      seek(clip.startTime + kf.time);
+                    }}
                   />
                 );
               }),
