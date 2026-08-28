@@ -965,8 +965,8 @@ export const NativeProgramPreview: React.FC = () => {
     };
 
     const nativePreviewScheduler = new NativePreviewFrameScheduler({
-      maxCacheEntries: 12,
-      maxInFlight: 2,
+      maxCacheEntries: 24,
+      maxInFlight: 3,
       load: async (request) => {
         const render = () => renderNativeFrame(request);
         let rgba: ArrayBuffer;
@@ -1065,8 +1065,11 @@ export const NativeProgramPreview: React.FC = () => {
       };
       const renderWidth = Math.max(2, Math.min(state.canvasWidth, Math.floor(renderProfile.maxWidth)));
       const renderHeight = Math.max(2, Math.min(state.canvasHeight, Math.floor(renderProfile.maxHeight)));
-      const safeRenderWidth = Math.min(renderWidth - (renderWidth % 2), 1280);
-      const safeRenderHeight = Math.min(renderHeight - (renderHeight % 2), 720);
+      const isPlayingNow = playbackState === "playing";
+      const maxRenderWidth = isPlayingNow ? 1280 : Math.min(state.canvasWidth, 1920);
+      const maxRenderHeight = isPlayingNow ? 720 : Math.min(state.canvasHeight, 1080);
+      const safeRenderWidth = Math.min(renderWidth - (renderWidth % 2), maxRenderWidth);
+      const safeRenderHeight = Math.min(renderHeight - (renderHeight % 2), maxRenderHeight);
       const previewScaleX = state.canvasWidth > 0 ? safeRenderWidth / state.canvasWidth : 1;
       const previewScaleY = state.canvasHeight > 0 ? safeRenderHeight / state.canvasHeight : 1;
       const fullFrameBytes = state.canvasWidth * state.canvasHeight * 4;

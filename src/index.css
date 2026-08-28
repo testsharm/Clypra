@@ -865,3 +865,19 @@ input, select, textarea {
   content-visibility: auto;
   contain-intrinsic-size: auto 80px;
 }
+
+/* Smooth timeline motion */
+.timeline-clip,
+.clip,
+[class*="Clip"] {
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* Prevent main thread jank during playback */
+.preview-space,
+[data-preview-space="program"] {
+  contain: strict;
+  transform: translateZ(0);
+}
