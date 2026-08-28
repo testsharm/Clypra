@@ -593,3 +593,23 @@ input[type="range"]:focus-visible {
   cursor: row-resize !important;
   pointer-events: auto;
 }
+
+/* CapCut-like premium simple UI */
+.sidebar-panel, .properties-panel, .timeline-panel {
+  border-radius: 16px !important;
+  background: rgba(18, 18, 26, 0.72) !important;
+  backdrop-filter: blur(14px);
+  box-shadow: 0 8px 28px rgba(0,0,0,0.22);
+}
+
+.timeline-clip, .clip-card, [class*="Clip"] {
+  border-radius: 12px !important;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.16);
+}
+
+button, [role="button"] {
+  transition: all 0.18s ease !important;
+}
+
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.16); border-radius: 999px; }
