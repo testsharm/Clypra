@@ -170,6 +170,30 @@ interface FilterCardProps {
   onAddToTimeline: (e: React.MouseEvent) => void;
 }
 
+function getFilterGradientStyle(filter: FilterAsset): string {
+  const params = (filter.gradingParams ?? {}) as Record<string, any>;
+  if (params.grayscale) {
+    const contrast = params.contrast ?? 0.1;
+    return `linear-gradient(135deg, rgba(0,0,0,${Math.min(1, Math.max(0.3, 0.4 + contrast))}), rgba(255,255,255,${Math.min(1, Math.max(0.3, 0.4 + contrast))}))`;
+  }
+  if (params.sepia) {
+    const amount = params.sepia ?? 0.3;
+    return `linear-gradient(135deg, rgba(112,66,20,${Math.min(1, 0.5 + amount)}), rgba(197,140,90,${Math.min(1, 0.5 + amount)}))`;
+  }
+  const temp = typeof params.temperature === 'number' ? params.temperature : 0;
+  const sat = typeof params.saturation === 'number' ? params.saturation : 0;
+  if (temp > 0.05) {
+    return `linear-gradient(135deg, rgba(255,159,67,${Math.min(1, 0.6 + sat)}), rgba(240,147,43,${Math.min(1, 0.6 + sat)}))`;
+  }
+  if (temp < -0.05) {
+    return `linear-gradient(135deg, rgba(30,144,255,${Math.min(1, 0.6 + sat)}), rgba(116,185,255,${Math.min(1, 0.6 + sat)}))`;
+  }
+  if (sat > 0.2) {
+    return `linear-gradient(135deg, rgba(46,213,115,${Math.min(1, 0.5 + sat)}), rgba(255,107,129,${Math.min(1, 0.5 + sat)}))`;
+  }
+  return `linear-gradient(135deg, rgba(108,99,255,0.6), rgba(0,210,211,0.6))`;
+}
+
 const FilterCard: React.FC<FilterCardProps> = ({ filter, isFavorite, onFavorite, onAddToTimeline }) => {
   const Icon = FILTER_ICONS[filter.id] || DEFAULT_ICON;
   const [online] = React.useState(navigator.onLine);
@@ -274,7 +298,7 @@ const FilterCard: React.FC<FilterCardProps> = ({ filter, isFavorite, onFavorite,
             }}
           />
         ) : (
-          <div className="relative w-full h-full rounded-lg bg-gradient-to-br from-indigo-500/80 via-purple-500/50 to-blue-400/40" style={getCSSFilterStyle(filter.id)}>
+          <div className="relative w-full h-full rounded-lg" style={{ background: getFilterGradientStyle(filter), ...getCSSFilterStyle(filter.id) }}>
             <span className="absolute inset-0 flex items-center justify-center text-white/90 text-[8px] font-semibold uppercase tracking-wider drop-shadow">
               {filter.name}
             </span>
