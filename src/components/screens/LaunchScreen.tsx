@@ -675,8 +675,8 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onProjectCreate, onP
                     <div className="h-[170px] bg-bg flex items-center justify-center relative overflow-hidden group/stage">
                       {thumbnail ? (
                         <>
-                          <img src={thumbnail} alt="" className="absolute inset-0 h-full w-full scale-110 object-cover opacity-30 blur-2xl transition-transform duration-500 group-hover:scale-125" draggable={false} />
-                          <div className="absolute inset-2 flex items-center justify-center overflow-hidden rounded-lg bg-black/40 backdrop-blur-xs border border-white/6 shadow-inner">
+                          <img src={thumbnail} alt="" className="absolute inset-0 h-full w-full object-cover opacity-20" draggable={false} />
+                          <div className="absolute inset-2 flex items-center justify-center overflow-hidden rounded-lg bg-black/40 border border-white/6 shadow-inner">
                             <img src={thumbnail} alt="" className="max-h-full max-w-full object-contain opacity-98 shadow-[0_12px_28px_rgba(0,0,0,0.45)] transition-all duration-300 group-hover:scale-[1.03]" draggable={false} />
                           </div>
                         </>
@@ -694,7 +694,7 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onProjectCreate, onP
                       <div className="absolute inset-0 bg-gradient-to-t from-bg/70 via-transparent to-bg/25 pointer-events-none" />
 
                       {/* Play Hover Action Overlay */}
-                      <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black/20 backdrop-blur-[1px]">
+                      <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black/20">
                         <div className="w-11 h-11 rounded-full bg-accent/90 text-white flex items-center justify-center shadow-xl shadow-accent/30 transform scale-90 group-hover:scale-100 transition-transform duration-300 pl-0.5">
                           <Play className="w-5 h-5 fill-current" />
                         </div>
@@ -735,7 +735,7 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onProjectCreate, onP
 
                     {/* More options button */}
                     <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                      <div onClick={(e) => handleToggleMenu(e, project.id)} className="p-1.5 rounded-lg bg-bg/80 backdrop-blur-sm border border-white/4 hover:bg-surface-raised hover:border-white/8 cursor-pointer transition-colors" title="More options">
+                      <div onClick={(e) => handleToggleMenu(e, project.id)} className="p-1.5 rounded-lg bg-bg/80 border border-white/4 hover:bg-surface-raised hover:border-white/8 cursor-pointer transition-colors" title="More options">
                         <MoreHorizontal className="w-3.5 h-3.5 text-text-muted" />
                       </div>
 
