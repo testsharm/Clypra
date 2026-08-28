@@ -122,6 +122,32 @@ export const SafeOverlay: React.FC<SafeOverlayProps> = ({
           top: displayOffset.y + displayHeight / 2 - 8,
         }}
       />
+
+      {/* YouTube Caption Safe Zone */}
+      <div
+        className="absolute border border-green-400/20 bg-green-400/5"
+        style={{
+          left: displayOffset.x + displayWidth * 0.05,
+          top: displayOffset.y + displayHeight * 0.75,
+          width: displayWidth * 0.90,
+          height: displayHeight * 0.20,
+        }}
+      >
+        <span className="absolute top-0 left-1 text-[8px] font-mono text-green-400/60 select-none">YouTube Safe</span>
+      </div>
+
+      {/* Shorts/TikTok Caption Safe Zone */}
+      <div
+        className="absolute border border-pink-400/20 bg-pink-400/5"
+        style={{
+          left: displayOffset.x + displayWidth * 0.05,
+          top: displayOffset.y + displayHeight * 0.78,
+          width: displayWidth * 0.90,
+          height: displayHeight * 0.18,
+        }}
+      >
+        <span className="absolute top-0 left-1 text-[8px] font-mono text-pink-400/60 select-none">Shorts/TikTok Safe</span>
+      </div>
     </div>
   );
 };
