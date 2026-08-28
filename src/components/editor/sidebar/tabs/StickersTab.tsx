@@ -448,8 +448,118 @@ const STICKERS: StickerDef[] = [
       </svg>
     ),
   },
+  {
+    id: "extra-arrow-pulse",
+    name: "Arrow Pulse",
+    render: () => (
+      <svg viewBox="0 0 64 64" className="w-full h-full">
+        <path d="M8 32h44M40 14l18 18-18 18" stroke="#00e0ff" strokeWidth="5" fill="none" strokeLinecap="round" strokeLinejoin="round">
+          <animateTransform attributeName="transform" type="translate" values="0 0; 6 0; 0 0" dur="0.7s" repeatCount="indefinite" />
+        </path>
+      </svg>
+    ),
+  },
+  {
+    id: "extra-circle-rotate",
+    name: "Circle Rotate",
+    render: () => (
+      <svg viewBox="0 0 64 64" className="w-full h-full">
+        <circle cx="32" cy="32" r="22" fill="none" stroke="#ff69b4" strokeWidth="4" strokeDasharray="8 6">
+          <animateTransform attributeName="transform" type="rotate" from="0 32 32" to="360 32 32" dur="3s" repeatCount="indefinite" />
+        </circle>
+      </svg>
+    ),
+  },
+  {
+    id: "extra-star-burst",
+    name: "Star Burst",
+    render: () => (
+      <svg viewBox="0 0 64 64" className="w-full h-full">
+        <path d="M32 8l7 18h18l-14 10 5 18-16-12-16 12 5-18L8 26h18z" fill="#facc15">
+          <animate attributeName="opacity" values="1;0.2;1" dur="0.5s" repeatCount="indefinite" />
+        </path>
+      </svg>
+    ),
+  },
+  {
+    id: "extra-heart-beat",
+    name: "Heart Beat",
+    render: () => (
+      <svg viewBox="0 0 64 64" className="w-full h-full">
+        <path d="M32 50S10 38 10 24a10 10 0 0 1 20-2 10 10 0 0 1 20 2C50 38 32 50 32 50z" fill="#ff2d55">
+          <animateTransform attributeName="transform" type="scale" values="1;1.2;1" dur="0.6s" repeatCount="indefinite" />
+        </path>
+      </svg>
+    ),
+  },
+  {
+    id: "extra-fire-flicker",
+    name: "Fire Flicker",
+    render: () => (
+      <svg viewBox="0 0 64 64" className="w-full h-full">
+        <path d="M32 8c4 8 10 12 10 22a10 10 0 0 1-20 0c0-10 6-14 10-22z" fill="#f97316">
+          <animateTransform attributeName="transform" type="scale" values="1;1.1;0.9;1" dur="0.4s" repeatCount="indefinite" />
+        </path>
+      </svg>
+    ),
+  },
+  {
+    id: "extra-lightning",
+    name: "Lightning",
+    render: () => (
+      <svg viewBox="0 0 64 64" className="w-full h-full">
+        <path d="M36 8L16 34h12l-4 22 20-28H32z" fill="#facc15">
+          <animate attributeName="opacity" values="1;0.1;1" dur="0.3s" repeatCount="indefinite" />
+        </path>
+      </svg>
+    ),
+  },
+  {
+    id: "extra-music",
+    name: "Music",
+    render: () => (
+      <svg viewBox="0 0 64 64" className="w-full h-full">
+        <path d="M20 48V16l24-4v32" stroke="#00e0ff" strokeWidth="5" fill="none" />
+        <circle cx="16" cy="48" r="6" fill="#ff2d55" />
+        <circle cx="40" cy="44" r="6" fill="#ff2d55" />
+      </svg>
+    ),
+  },
+  {
+    id: "extra-gift",
+    name: "Gift",
+    render: () => (
+      <svg viewBox="0 0 64 64" className="w-full h-full">
+        <rect x="8" y="24" width="48" height="24" rx="4" fill="#ff2d55" />
+        <rect x="28" y="20" width="8" height="32" fill="#facc15" />
+        <path d="M32 20c-4-6 4-8 6-2 1 3-2 4-6 6 4 2 7 3 6 6-2 6-10 4-6-2" fill="#facc15" />
+      </svg>
+    ),
+  },
+  {
+    id: "extra-balloon",
+    name: "Balloon",
+    render: () => (
+      <svg viewBox="0 0 64 64" className="w-full h-full">
+        <ellipse cx="32" cy="24" rx="16" ry="20" fill="#a855f7">
+          <animateTransform attributeName="transform" type="translate" values="0 0;0 -6;0 0" dur="1.5s" repeatCount="indefinite" />
+        </ellipse>
+        <path d="M32 44v12M28 56h8" stroke="#fff" strokeWidth="3" />
+      </svg>
+    ),
+  },
+  {
+    id: "extra-sparkle",
+    name: "Sparkle",
+    render: () => (
+      <svg viewBox="0 0 64 64" className="w-full h-full">
+        <path d="M32 8l4 12 12 4-12 4-4 12-4-12-12-4 12-4z" fill="#facc15">
+          <animate attributeName="opacity" values="1;0.4;1" dur="0.7s" repeatCount="indefinite" />
+        </path>
+      </svg>
+    ),
+  }
 ];
-
 function StickerCard({ sticker, onAdd }: { sticker: StickerDef; onAdd: () => void }) {
   return (
     <button
