@@ -1718,18 +1718,7 @@ export const NativeProgramPreview: React.FC = () => {
           </div>
         </div>
 
-        {isTauriRuntime() && NATIVE_PREVIEW_ONLY && nativeOnlyBlocked && (
-          <div className="absolute inset-0 z-30 flex items-center justify-center pointer-events-none">
-            <div className="rounded-lg border border-accent/30 bg-black/80 px-4 py-3 text-center shadow-xl">
-              <div className="text-sm font-semibold text-text-primary">Native-only proof mode</div>
-              <div className="mt-1 max-w-xs text-xs text-text-muted">
-                {nativeOnlyBlockers.length > 0 ? nativeOnlyBlockers.map((blocker) => (
-                  <div key={blocker}>• {blocker}</div>
-                )) : "This scene is waiting for a native wgpu surface or contains a graph feature not migrated yet."}
-              </div>
-            </div>
-          </div>
-        )}
+
 
         {clips.length === 0 && (
           <div className="absolute inset-0 flex items-center justify-center z-20 pointer-events-none mx-auto" style={{ width: displayWidth, height: displayHeight }}>

@@ -23,22 +23,12 @@ export const AudioTab: React.FC<TabProps> = ({ onAddToTimeline }) => {
     setError(null);
     setIsNetworkError(false);
 
-    AudioLibraryApi.getAudioByCategory(activeCategory)
-      .then((nextItems: AudioLibraryItem[]) => {
-        if (!cancelled) setItems(nextItems);
-      })
-      .catch((err: unknown) => {
-        if (!cancelled) {
-          const errorMessage = err instanceof Error ? err.message : "Failed to load audio library";
-          setError(errorMessage);
-          // Detect network errors
-          const isNetwork = errorMessage.toLowerCase().includes("network") || errorMessage.toLowerCase().includes("fetch") || errorMessage.toLowerCase().includes("connection") || errorMessage.toLowerCase().includes("offline");
-          setIsNetworkError(isNetwork);
-        }
-      })
-      .finally(() => {
-        if (!cancelled) setLoading(false);
-      });
+    // Local audio library is intentionally empty for now.
+    // Do not hit removed third-party API; avoids JSON parse errors.
+    if (!cancelled) {
+      setItems([]);
+      setLoading(false);
+    }
 
     return () => {
       cancelled = true;
