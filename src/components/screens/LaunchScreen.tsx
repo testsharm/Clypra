@@ -523,11 +523,11 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onProjectCreate, onP
         {/* ── Hero / New Project ────────────────────────────────── */}
         <section className="mb-6">
           <div
-            className="relative rounded-2xl overflow-hidden p-6 md:p-8 flex flex-col items-center text-center"
+            className="relative rounded-[1.25rem] overflow-hidden p-8 md:p-10 flex flex-col items-center text-center"
             style={{
-              background: "linear-gradient(135deg, var(--color-surface, #1a1a1a) 0%, var(--color-bg, #0f0f0f) 100%)",
-              border: "1px solid rgba(255,255,255,0.06)",
-              boxShadow: "inset 0 1px 0 rgba(255,255,255,0.06), 0 1px 24px rgba(0,0,0,0.18)",
+              background: "radial-gradient(120% 140% at 50% 0%, var(--color-surface, #1a1a1a) 0%, var(--color-bg, #0f0f0f) 100%)",
+              border: "1px solid rgba(255,255,255,0.07)",
+              boxShadow: "0 12px 32px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.07)",
             }}
           >
             {/* Primary accent glow */}
@@ -550,8 +550,8 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onProjectCreate, onP
             />
 
             <div className="relative z-10">
-              <h2 className="text-2xl md:text-3xl font-bold text-text-primary mb-2 tracking-tight">Start Creating</h2>
-              <p className="text-sm text-text-muted mb-6 max-w-md">Create a new project or open an existing one.</p>
+              <h2 className="text-3xl md:text-4xl font-bold text-text-primary mb-3 tracking-tight">Start Creating</h2>
+              <p className="text-sm text-text-muted mb-7 max-w-md">Create a new project or continue where you left off.</p>
               <div className="flex flex-col sm:flex-row items-center gap-3">
                 <Button variant="default" size="lg" onClick={handleStartNewProject} className="py-2 px-5 text-base font-semibold rounded-xl transition-all cursor-pointer shadow-lg shadow-accent/20">
                   <Plus className="mr-1" />
@@ -568,11 +568,11 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onProjectCreate, onP
 
         {/* ── Quick Actions ─────────────────────────────────────── */}
         <section className="mb-10">
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-2 gap-4">
             {/* Import Media */}
             <button
               onClick={handleImportMedia}
-              className="group flex flex-col items-start gap-2 p-4 rounded-xl border border-white/5 bg-surface hover:bg-surface-raised hover:border-white/10 hover:shadow-lg hover:shadow-black/20 transition-all duration-200 cursor-pointer text-left"
+              className="group flex flex-col items-start gap-3 p-5 rounded-2xl border border-white/6 bg-surface/70 hover:bg-surface-raised hover:border-white/10 hover:shadow-xl hover:shadow-black/25 transition-all duration-200 cursor-pointer text-left backdrop-blur-sm"
             >
               <div className="w-8 h-8 rounded-lg bg-accent/10 border border-accent/20 flex items-center justify-center group-hover:bg-accent/15 transition-colors">
                 <FolderOpen className="w-4 h-4 text-accent" />
@@ -586,7 +586,7 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onProjectCreate, onP
             {/* Open File */}
             <button
               onClick={handleOpenProjectFile}
-              className="group flex flex-col items-start gap-2 p-4 rounded-xl border border-white/5 bg-surface hover:bg-surface-raised hover:border-white/10 hover:shadow-lg hover:shadow-black/20 transition-all duration-200 cursor-pointer text-left"
+              className="group flex flex-col items-start gap-3 p-5 rounded-2xl border border-white/6 bg-surface/70 hover:bg-surface-raised hover:border-white/10 hover:shadow-xl hover:shadow-black/25 transition-all duration-200 cursor-pointer text-left backdrop-blur-sm"
             >
               <div className="w-8 h-8 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center group-hover:bg-emerald-500/15 transition-colors">
                 <FileVideo className="w-4 h-4 text-emerald-400" />
