@@ -42,6 +42,17 @@ function TransitionCard({ transition, onAdd }: TransitionCardProps) {
 }
 
 export const TransitionsTab: React.FC<TabProps> = ({ onAddToTimeline }) => {
+  const [customTransitions, setCustomTransitions] = React.useState<any[]>([]);
+  const handleImportJson = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    try {
+      const text = await file.text();
+      const data = JSON.parse(text);
+      const arr = Array.isArray(data) ? data : data.transitions || [];
+      setCustomTransitions(arr.filter((t: any) => t.id && t.name));
+    } catch {}
+  };
   const handleAddTransition = (transition: any) => {
     onAddToTimeline?.(
       {
@@ -55,8 +66,12 @@ export const TransitionsTab: React.FC<TabProps> = ({ onAddToTimeline }) => {
 
   return (
     <div className="flex-1 min-h-0 overflow-y-auto p-2 scrollbar-thin">
+      <label className="mb-2 px-2 py-1 rounded text-[11px] font-semibold bg-accent/10 text-accent cursor-pointer inline-block">
+        Import JSON
+        <input type="file" accept=".json" className="hidden" onChange={handleImportJson} />
+      </label>
       <div className="grid grid-cols-3 gap-2">
-        {LOCAL_TRANSITIONS.map((transition) => (
+        {[...LOCAL_TRANSITIONS, ...customTransitions].map((transition) => (
           <TransitionCard
             key={transition.id}
             transition={transition}

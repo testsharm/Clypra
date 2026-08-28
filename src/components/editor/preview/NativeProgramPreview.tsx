@@ -1722,6 +1722,18 @@ export const NativeProgramPreview: React.FC = () => {
         <button onClick={() => setShowSafeOverlay((s) => !s)} className={cn("ml-auto px-2 h-6 rounded text-[10px] font-medium transition-colors cursor-pointer", showSafeOverlay ? "bg-accent/20 text-accent" : "text-text-muted hover:text-text-primary hover:bg-white/6")}>
           Safe Zones
         </button>
+        <select
+          className="ml-1 h-6 rounded text-[10px] bg-surface-raised border border-border/60 px-1"
+          defaultValue="youtube"
+          onChange={(e) => {
+            (window as any).__kandelSafeZonePreset = e.target.value;
+          }}
+        >
+          <option value="youtube">YouTube</option>
+          <option value="tiktok">TikTok</option>
+          <option value="instagram">Instagram</option>
+          <option value="none">None</option>
+        </select>
       </div>
 
       <div className="flex-1 flex items-center justify-center overflow-hidden bg-[#06080a] relative">

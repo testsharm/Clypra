@@ -506,6 +506,27 @@ export const TextStyleSection: React.FC<TextStyleSectionProps> = ({ textClip, pr
             {/* Font Family */}
             <div>
               <label className="text-[10px] font-medium text-text-muted block mb-1 select-none">Font Family</label>
+              <div className="flex items-center gap-2 mb-1">
+                <input
+                  type="file"
+                  accept=".ttf,.otf,.woff,.woff2"
+                  className="hidden"
+                  id="custom-font-upload"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (!file) return;
+                    const url = URL.createObjectURL(file);
+                    const name = file.name.replace(/\.[^/.]+$/, "");
+                    const style = document.createElement("style");
+                    style.textContent = `@font-face { font-family: "${name}"; src: url("${url}") format("${file.name.endsWith(".ttf") ? "truetype" : file.name.endsWith(".otf") ? "opentype" : file.name.endsWith(".woff2") ? "woff2" : "woff"}"); font-weight: 100 900; font-style: normal; }`;
+                    document.head.appendChild(style);
+                    handleCustomStyleUpdate("fontFamily", name);
+                  }}
+                />
+                <label htmlFor="custom-font-upload" className="px-2 py-1 rounded-md bg-surface-raised border border-border/60 text-[10px] text-text-muted hover:text-text-primary cursor-pointer">
+                  Import Font
+                </label>
+              </div>
               <select value={normalizeFontFamily(textClip.fontFamily || effectFont?.family || "Inter Variable")} onChange={(e) => handleCustomStyleUpdate("fontFamily", e.target.value)} className="w-full bg-surface-raised border border-border/60 rounded-md px-2.5 py-1.5 text-xs text-text-primary outline-none focus:border-accent focus:ring-1 focus:ring-accent/20 cursor-pointer appearance-none bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2212%22%20height%3D%2212%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23888%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22m6%209%206%206%206-6%22%2F%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[right_8px_center] pr-7">
                 <optgroup label="System Fonts">
                   {SYSTEM_FONTS.map((f) => (

@@ -52,6 +52,24 @@ export const FiltersTab: React.FC<TabProps> = ({ onAddToTimeline }) => {
   const [error, setError] = useState<string | null>(null);
 
   const { favorites, toggleFavorite } = useFavoritesStore();
+  const [importError, setImportError] = useState<string | null>(null);
+
+  const handleImportJson = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    try {
+      const text = await file.text();
+      const data = JSON.parse(text);
+      if (Array.isArray(data)) {
+        setFilters((prev) => [...data.filter((f: any) => f.id && f.name), ...prev]);
+      } else if (data.filters) {
+        setFilters((prev) => [...data.filters.filter((f: any) => f.id && f.name), ...prev]);
+      }
+      setImportError(null);
+    } catch (err) {
+      setImportError("Invalid filter JSON");
+    }
+  };
 
   // Load categories from API (falls back to defaults)
   useEffect(() => {
@@ -91,6 +109,10 @@ export const FiltersTab: React.FC<TabProps> = ({ onAddToTimeline }) => {
   return (
     <div className="flex-1 min-h-0 flex flex-col overflow-hidden bg-surface/5 select-none">
       <div className="flex items-center gap-2.5 p-1 border-b border-border/50 shrink-0 bg-surface/10">
+        <label className="px-2 py-1 rounded text-[11px] font-semibold bg-accent/10 text-accent cursor-pointer">
+          Import JSON
+          <input type="file" accept=".json" className="hidden" onChange={handleImportJson} />
+        </label>
         <div className="grow overflow-x-auto flex items-center gap-0.5 pb-0.5 whitespace-nowrap" style={{ scrollbarWidth: "none" }}>
           {categories.map((category) => (
             <button key={category.id} onClick={() => setActiveCategory(category.id)} className={`px-2 py-1 rounded text-xs font-semibold transition-all cursor-pointer shrink-0 text-[11px] hover:bg-accent/10 hover:text-accent ${activeCategory === category.id ? "bg-accent/10 text-accent" : "text-text-muted"}`}>
