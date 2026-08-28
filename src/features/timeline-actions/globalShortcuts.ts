@@ -6,6 +6,47 @@ export function registerTimelineShortcuts(): () => void {
   const handler = (e: KeyboardEvent) => {
     if (!e.ctrlKey && !e.metaKey) return;
     const key = e.key.toLowerCase();
+
+    // SRT / ASS import shortcuts
+    if (e.altKey && key === "s") {
+      e.preventDefault();
+      const input = document.createElement("input");
+      input.type = "file";
+      input.accept = ".srt";
+      input.onchange = async () => {
+        const file = input.files?.[0];
+        if (!file) return;
+        try {
+          const { importSrtFile } = await import("@/features/srt-import/importSrt");
+          const result = await importSrtFile(file);
+          console.info(`[SRT Import] ${result.count} captions added`);
+        } catch (err) {
+          console.error("[SRT Import] failed:", err);
+        }
+      };
+      input.click();
+      return;
+    }
+
+    if (e.altKey && key === "a") {
+      e.preventDefault();
+      const input = document.createElement("input");
+      input.type = "file";
+      input.accept = ".ass";
+      input.onchange = async () => {
+        const file = input.files?.[0];
+        if (!file) return;
+        try {
+          const { importAssFile } = await import("@/features/srt-import/importAss");
+          const result = await importAssFile(file);
+          console.info(`[ASS Import] ${result.count} captions added`);
+        } catch (err) {
+          console.error("[ASS Import] failed:", err);
+        }
+      };
+      input.click();
+      return;
+    }
     const store = useTimelineStore.getState();
     const ui = useUIStore.getState();
     const selected = ui.selectedClipIds;
