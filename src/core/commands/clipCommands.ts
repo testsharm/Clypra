@@ -200,6 +200,72 @@ export const clipCommands: ClipCommand[] = [
     },
   },
   {
+    id: "clip.resetSpeed",
+    label: "Reset Speed",
+    icon: Gauge,
+    group: "speed",
+    isVisible: (ctx) => getTargetClipIds(ctx).length > 0,
+    isEnabled: (ctx) => {
+      const ids = getTargetClipIds(ctx);
+      if (ids.length === 0) return false;
+      return ids.some((id) => {
+        const c = ctx.clips.find((clip) => clip.id === id);
+        return c && (c.speed !== undefined || (c.speedKeyframes && c.speedKeyframes.length > 0)) && !ctx.tracks.find((t) => t.id === c.trackId)?.locked;
+      });
+    },
+    disabledReason: () => "No speed change on selected clips or clip locked",
+    execute: (ctx) => {
+      const ids = getTargetClipIds(ctx);
+      const store = useTimelineStore.getState();
+      store.withBatch(() => {
+        ids.forEach((id) => {
+          const clip = store.clips.find((c) => c.id === id);
+          if (!clip) return;
+          store.updateClip(id, { speed: 1, speedKeyframes: [], duration: clip.trimOut - clip.trimIn });
+        });
+      });
+      toast.success(`Reset speed on ${ids.length} clip${ids.length > 1 ? "s" : ""}`);
+    },
+  },
+  {
+    id: "clip.resetTransform",
+    label: "Reset Transform",
+    icon: Crosshair,
+    group: "organize",
+    isVisible: (ctx) => getTargetClipIds(ctx).length > 0,
+    isEnabled: (ctx) => {
+      const ids = getTargetClipIds(ctx);
+      if (ids.length === 0) return false;
+      return ids.some((id) => {
+        const c = ctx.clips.find((clip) => clip.id === id);
+        return c && !ctx.tracks.find((t) => t.id === c.trackId)?.locked;
+      });
+    },
+    disabledReason: () => "Selected clips are on a locked track",
+    execute: (ctx) => {
+      const ids = getTargetClipIds(ctx);
+      const store = useTimelineStore.getState();
+      const project = useProjectStore.getState().project;
+      const cw = project?.canvasWidth ?? 1920;
+      const ch = project?.canvasHeight ?? 1080;
+      store.withBatch(() => {
+        ids.forEach((id) => {
+          const clip = store.clips.find((c) => c.id === id);
+          if (!clip) return;
+          store.updateClip(id, {
+            x: Math.round((cw - Math.abs(clip.width)) / 2),
+            y: Math.round((ch - Math.abs(clip.height)) / 2),
+            rotation: 0,
+            opacity: 1,
+            width: Math.abs(clip.width),
+            height: Math.abs(clip.height),
+          });
+        });
+      });
+      toast.success(`Reset transform on ${ids.length} clip${ids.length > 1 ? "s" : ""}`);
+    },
+  },
+  {
     id: "clip.centerOnCanvas",
     label: "Center on Canvas",
     icon: Crosshair,
