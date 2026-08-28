@@ -696,6 +696,31 @@ pub async fn write_export_frame(
     Ok(())
 }
 
+/// If a stdin write to FFmpeg fails (e.g. "pipe is being closed" / OS error 232),
+/// FFmpeg has almost always already exited with a real error on stderr. This helper
+/// removes the dead session, reaps the process, and surfaces FFmpeg's actual stderr
+/// message instead of the generic pipe-closed error, so the true cause (bad codec,
+/// unsupported resolution, disk full, etc.) reaches the UI.
+async fn drain_ffmpeg_failure(session_arc: &Arc<Mutex<ExportSession>>, session_id: &str) -> Option<String> {
+    let removed = {
+        let mut sessions = EXPORT_SESSIONS.lock().await;
+        sessions.remove(session_id)
+    };
+    let removed = removed.unwrap_or_else(|| session_arc.clone());
+    let session = Arc::try_unwrap(removed).ok()?.into_inner();
+    let ExportSession { process, temp_output_path, .. } = session;
+    let output = process.wait_with_output().await.ok()?;
+    let _ = tokio::fs::remove_file(&temp_output_path).await;
+    super::native_export::release_export_slot();
+    if output.status.success() {
+        None
+    } else {
+        let stderr = String::from_utf8_lossy(&output.stderr);
+        eprintln!("[drain_ffmpeg_failure] Session {}: FFmpeg stderr:\n{}", session_id, stderr);
+        Some(format!("FFmpeg failed: {}", stderr.trim()))
+    }
+}
+
 /// Write multiple frames in a single batch to the export session.
 ///
 /// PERFORMANCE OPTIMIZATION: Reduces IPC overhead by 90% compared to single-frame writes.
@@ -770,18 +795,18 @@ pub async fn write_export_frames_batch(
     // Write all frames in batch
     let write_start = std::time::Instant::now();
     
-    session
-        .stdin
-        .write_all(batch_data)
-        .await
-        .map_err(|e| format!("Failed to write batch: {}", e))?;
-    
+    if let Err(e) = session.stdin.write_all(batch_data).await {
+        drop(session);
+        let real_error = drain_ffmpeg_failure(&session_arc, &session_id).await;
+        return Err(real_error.unwrap_or_else(|| format!("Failed to write batch: {}", e)));
+    }
+
     // Flush after batch (not per frame - reduces syscalls)
-    session
-        .stdin
-        .flush()
-        .await
-        .map_err(|e| format!("Failed to flush batch: {}", e))?;
+    if let Err(e) = session.stdin.flush().await {
+        drop(session);
+        let real_error = drain_ffmpeg_failure(&session_arc, &session_id).await;
+        return Err(real_error.unwrap_or_else(|| format!("Failed to flush batch: {}", e)));
+    }
     
     let write_duration = write_start.elapsed().as_secs_f64() * 1000.0; // ms
     let per_frame_ms = write_duration / frame_count as f64;
