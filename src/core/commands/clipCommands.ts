@@ -263,6 +263,30 @@ export const clipCommands: ClipCommand[] = [
       toast.success(`Freeze frame applied to ${ids.length} clip${ids.length > 1 ? "s" : ""}`);
     },
   },
+  {
+    id: "clip.clearFreezeFrame",
+    label: "Clear Freeze Frame",
+    icon: Snowflake,
+    group: "organize",
+    isVisible: (ctx) => getTargetClipIds(ctx).length > 0,
+    isEnabled: (ctx) => {
+      const ids = getTargetClipIds(ctx);
+      if (ids.length === 0) return false;
+      return ids.some((id) => {
+        const c = ctx.clips.find((clip) => clip.id === id);
+        return c && c.freezeFrameTime !== undefined && !ctx.tracks.find((t) => t.id === c.trackId)?.locked;
+      });
+    },
+    disabledReason: () => "No freeze frame on selected clips or clip locked",
+    execute: (ctx) => {
+      const ids = getTargetClipIds(ctx);
+      const store = useTimelineStore.getState();
+      store.withBatch(() => {
+        ids.forEach((id) => store.updateClip(id, { freezeFrameTime: undefined }));
+      });
+      toast.success(`Cleared freeze frame on ${ids.length} clip${ids.length > 1 ? "s" : ""}`);
+    },
+  },
 
   // ─── Trim & Split ───────────────────────────────────────────────────────────
   {
