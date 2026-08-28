@@ -1,5 +1,5 @@
 import React, { useCallback } from "react";
-import { Move, Timer, RotateCcw, FlipHorizontal2, FlipVertical2, Lock, Unlock, Crosshair } from "lucide-react";
+import { Move, Timer, RotateCcw, FlipHorizontal2, FlipVertical2, Lock, Unlock, Crosshair, Gauge } from "lucide-react";
 import { getPlaybackClock } from "@/hooks/usePlaybackClock";
 import type { Clip } from "@/types";
 import { type ClipFitModeExtended } from "@/lib/timeline/timelineClip";
@@ -37,6 +37,7 @@ export const TransformSection: React.FC<TransformSectionProps> = ({ selectedClip
   const isFlippedH = selectedClip.width < 0;
   const isFlippedV = selectedClip.height < 0;
   const opacityPercent = getOpacityPercent(selectedClip.opacity);
+  const speedValue = Number.isFinite(selectedClip.speed) && selectedClip.speed ? selectedClip.speed : 1;
 
   const isRotationKeyframed = (selectedClip.visualKeyframes?.rotation?.length || 0) > 0;
   const isOpacityKeyframed = (selectedClip.visualKeyframes?.opacity?.length || 0) > 0;
@@ -352,6 +353,66 @@ export const TransformSection: React.FC<TransformSectionProps> = ({ selectedClip
             keyframeActive={isOpacityKeyframed}
             onToggleKeyframe={() => handleToggleVisualKeyframe("opacity", opacityPercent / 100)}
           />
+
+          {/* Speed */}
+          <div className="border-t border-border/40 pt-3 mt-1">
+            <div className="flex items-center justify-between mb-1.5">
+              <span className="text-[10px] font-medium text-text-muted select-none">Speed</span>
+              <div className="flex items-center gap-1">
+                <input
+                  type="number"
+                  value={speedValue}
+                  step={0.1}
+                  min={0.1}
+                  max={10}
+                  onChange={(e) => {
+                    const raw = Number(e.target.value);
+                    const nextSpeed = Math.min(10, Math.max(0.1, raw));
+                    const sourceDuration = (selectedClip.trimOut - selectedClip.trimIn) / speedValue;
+                    handleUpdateMultiple({
+                      speed: nextSpeed,
+                      duration: sourceDuration / nextSpeed,
+                    });
+                  }}
+                  className="w-16 bg-surface-raised border border-border/60 rounded-md px-2 py-1 text-xs text-text-primary outline-none focus:border-accent tabular-nums selectable"
+                />
+                <span className="text-[10px] text-text-muted">x</span>
+              </div>
+            </div>
+            <PropertySlider
+              label="Speed"
+              value={speedValue}
+              min={0.1}
+              max={10}
+              step={0.1}
+              suffix="x"
+              onChange={(v) => {
+                const nextSpeed = Math.min(10, Math.max(0.1, v));
+                const sourceDuration = (selectedClip.trimOut - selectedClip.trimIn) / speedValue;
+                handleUpdateMultiple({
+                  speed: nextSpeed,
+                  duration: sourceDuration / nextSpeed,
+                });
+              }}
+            />
+            <div className="flex gap-1 mt-2">
+              {[0.25, 0.5, 1, 2, 4, 10].map((preset) => (
+                <button
+                  key={preset}
+                  onClick={() => {
+                    const sourceDuration = (selectedClip.trimOut - selectedClip.trimIn) / speedValue;
+                    handleUpdateMultiple({
+                      speed: preset,
+                      duration: sourceDuration / preset,
+                    });
+                  }}
+                  className={`px-2 py-1 rounded-md border text-[10px] font-semibold transition-all cursor-pointer ${speedValue === preset ? "bg-accent/15 text-accent border-accent" : "bg-surface-raised text-text-muted border-border/60 hover:text-text-primary hover:border-accent/40"}`}
+                >
+                  {preset}x
+                </button>
+              ))}
+            </div>
+          </div>
 
           {/* Flip buttons */}
           <div>

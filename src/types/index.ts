@@ -234,6 +234,8 @@ export interface Clip {
   height: number;
   opacity: number;
   rotation: number;
+  /** Playback speed multiplier (1.0 = normal) */
+  speed?: number;
   // Transform constraints
   aspectRatioLocked?: boolean; // Default true for video/images
   sourceAspectRatio?: number; // Original aspect ratio (width/height)
