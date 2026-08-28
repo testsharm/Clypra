@@ -11,6 +11,7 @@ import { useTimelineStore } from "@/store/timelineStore";
 import { useUIStore } from "@/store/uiStore";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/Tooltip";
 import { TransitionsApi } from "@/features/transitions/api/transitionsApi";
+import { LOCAL_TRANSITIONS } from "@/features/transitions/localTransitions";
 import type { TransitionAsset } from "@/features/transitions/types";
 import { getPlaybackClock } from "@/hooks/usePlaybackClock";
 import { getAssetUrl } from "@/lib/assets";
@@ -51,8 +52,14 @@ export const TransitionsTab: React.FC<TabProps> = ({ onAddToTimeline }) => {
         const data = await TransitionsApi.getByCategory(activeCategory);
         setTransitions(data);
       } catch (err) {
-        console.error(`[TransitionsTab] Failed to load category ${activeCategory}:`, err);
-        setError(err instanceof Error ? err.message : "Failed to load transitions");
+        console.warn(`[TransitionsTab] API unavailable for ${activeCategory}, using local transitions`);
+        const categoryItems: TransitionAsset[] = LOCAL_TRANSITIONS.map((item, index) => ({
+          ...item,
+          id: `${item.id}-${activeCategory}`,
+          category: activeCategory,
+        }));
+        setTransitions(categoryItems);
+        setError(null);
       } finally {
         setLoading(false);
       }
