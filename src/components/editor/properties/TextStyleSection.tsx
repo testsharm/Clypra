@@ -1,5 +1,5 @@
 import React from "react";
-import { Type, Palette, AlignLeft, AlignCenter, AlignRight, AlignStartVertical, AlignCenterVertical, AlignEndVertical, Save, Trash2, PaintBucket, Layers, Layout } from "lucide-react";
+import { Type, Palette, AlignLeft, AlignCenter, AlignRight, AlignStartVertical, AlignCenterVertical, AlignEndVertical, Save, Trash2, PaintBucket, Layers, Layout, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { normalizeFontFamily } from "@/core/evaluation/evaluator";
 import type { TextEffectDefinition } from "@/features/text-effects/types/types";
@@ -7,6 +7,7 @@ import type { TextClip } from "@/types";
 import { PropertySlider } from "./primitives/PropertySlider";
 import { PropertySection } from "./primitives/PropertySection";
 import { useTemplateStore } from "@/features/text-templates/templateStore";
+import { applyTextAnimation } from "@/features/text-effects/animationPresets";
 import { useTimelineStore } from "@/store/timelineStore";
 import { useEffectsStore } from "@/features/text-effects/store/effectsStore";
 import { TextModeSelector } from "./TextModeSelector";
@@ -333,6 +334,11 @@ export const TextStyleSection: React.FC<TextStyleSectionProps> = ({ textClip, pr
   const effectiveFontStyle = textClip.fontStyle || effectFont?.style || "normal";
   const effectiveLetterSpacing = textClip.letterSpacing ?? effectFont?.letterSpacing ?? 0;
   const effectiveLineHeight = textClip.lineHeight ?? effectFont?.lineHeight ?? 1.2;
+
+  const handleApplyTextAnimation = (presetId: string) => {
+    const updated = applyTextAnimation(textClip, presetId);
+    handleUpdateMultiple({ visualKeyframes: updated.visualKeyframes });
+  };
 
   const handleCustomStyleUpdate = (key: string, value: any) => {
     const updates: Record<string, any> = { [key]: value };
@@ -896,6 +902,23 @@ export const TextStyleSection: React.FC<TextStyleSectionProps> = ({ textClip, pr
                 </div>
               )}
             </div>
+          </div>
+        </PropertySection>
+      )}
+
+      {/* Text Animation Presets */}
+      {mode !== "template" && (
+        <PropertySection title="Animation" icon={<Sparkles className="w-3.5 h-3.5 text-accent-soft" />} defaultCollapsed>
+          <div className="flex flex-wrap gap-2">
+            {["fade-in", "fade-out", "slide-up", "slide-down", "slide-left", "slide-right", "bounce", "pulse"].map((id) => (
+              <button
+                key={id}
+                onClick={() => handleApplyTextAnimation(id)}
+                className="px-2 py-1 rounded-md bg-surface-raised hover:bg-surface-raised/80 border border-border/60 hover:border-accent text-[10px] font-semibold text-text-muted hover:text-text-primary transition-all cursor-pointer"
+              >
+                {id.replace(/-/g, " ")}
+              </button>
+            ))}
           </div>
         </PropertySection>
       )}
