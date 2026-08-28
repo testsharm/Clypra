@@ -88,6 +88,10 @@ const ClipInner: React.FC<ClipProps> = ({
   const clearSnapGuides = useTimelineStore((s) => s.clearSnapGuides);
   const { pause, seek } = useTransportControls();
 
+  const visualKeyframeLabels: Record<string, string> = {
+    x: "X", y: "Y", width: "Width", height: "Height", rotation: "Rotation", opacity: "Opacity"
+  };
+
   const [isResizing, setIsResizing] = useState<"left" | "right" | null>(null);
   const [isHovered, setIsHovered] = useState(false);
   const resizeStartRef = useRef<{
@@ -696,7 +700,7 @@ const ClipInner: React.FC<ClipProps> = ({
       onPointerEnter={() => setIsHovered(true)}
       onPointerLeave={() => setIsHovered(false)}
       onContextMenu={handleContextMenu}
-      className={`absolute rounded-sm h-full overflow-hidden border ${selected ? "border-white" : ""} ${isResizing ? (isRippleResize ? "ring-2 ring-yellow-500" : "ring-2 ring-cyan-500") : ""} ${locked ? "cursor-not-allowed" : isDragging ? (isInvalidPosition ? "cursor-not-allowed" : "cursor-grabbing") : "cursor-default"} ${getClipStyle()} ${isDragging || isResizing || isBeingShifted ? "transition-none" : "transition-[left] duration-150 ease-out"}`}
+      className={`absolute rounded-md h-full overflow-hidden border ${selected ? "border-white" : ""} ${isResizing ? (isRippleResize ? "ring-2 ring-yellow-500" : "ring-2 ring-cyan-500") : ""} ${locked ? "cursor-not-allowed" : isDragging ? (isInvalidPosition ? "cursor-not-allowed" : "cursor-grabbing") : "cursor-default"} ${getClipStyle()} ${isDragging || isResizing || isBeingShifted ? "transition-none" : "transition-[left] duration-150 ease-out"}`}
       style={{
         left: `${displayLeft}px`,
         width: `${width}px`,
@@ -904,7 +908,7 @@ const ClipInner: React.FC<ClipProps> = ({
                     key={`${prop}-${kf.id}`}
                     className="pointer-events-auto absolute h-2.5 w-2.5 rotate-45 rounded-[1px] border border-white/90 bg-accent shadow-[0_0_4px_rgba(0,0,0,0.4)] cursor-pointer hover:scale-125 transition-transform"
                     style={{ left: `${xPx - 5}px`, top: "3px" }}
-                    title={`${prop}: ${kf.value} — click to seek`}
+                    title={`${visualKeyframeLabels[prop] || prop}: ${kf.value} — click to seek`}
                     onPointerDown={(e) => e.stopPropagation()}
                     onClick={(e) => {
                       e.stopPropagation();

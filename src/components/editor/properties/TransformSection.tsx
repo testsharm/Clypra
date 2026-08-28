@@ -449,7 +449,20 @@ export const TransformSection: React.FC<TransformSectionProps> = ({ selectedClip
               <div className="flex flex-wrap gap-1.5">
                 {speedKeyframes.map((kf: any) => (
                   <span key={kf.id} className="inline-flex items-center gap-1 rounded bg-surface-raised border border-border/50 px-1.5 py-0.5 text-[9px] font-mono text-text-muted">
-                    {kf.time.toFixed(1)}s ·
+                    <input
+                      type="number"
+                      value={kf.time}
+                      step={0.1}
+                      min={0}
+                      max={selectedClip.duration}
+                      onChange={(e) => {
+                        const val = Math.min(selectedClip.duration, Math.max(0, Number(e.target.value)));
+                        const nextKfs = speedKeyframes.map((item) => item.id === kf.id ? { ...item, time: val } : item).sort((a,b)=>a.time-b.time);
+                        handleUpdate("speedKeyframes", nextKfs);
+                      }}
+                      className="w-10 bg-bg border border-border/60 rounded px-1 py-0.5 text-[9px] text-text-primary outline-none focus:border-accent tabular-nums selectable"
+                    />
+                    s
                     <input
                       type="number"
                       value={kf.speed}

@@ -229,6 +229,30 @@ export const clipCommands: ClipCommand[] = [
     },
   },
   {
+    id: "clip.removeSpeedRamp",
+    label: "Remove Speed Ramp",
+    icon: Gauge,
+    group: "speed",
+    isVisible: (ctx) => getTargetClipIds(ctx).length > 0,
+    isEnabled: (ctx) => {
+      const ids = getTargetClipIds(ctx);
+      if (ids.length === 0) return false;
+      return ids.some((id) => {
+        const c = ctx.clips.find((clip) => clip.id === id);
+        return c && c.speedKeyframes && c.speedKeyframes.length > 0 && !ctx.tracks.find((t) => t.id === c.trackId)?.locked;
+      });
+    },
+    disabledReason: () => "No speed ramp on selected clips or clip locked",
+    execute: (ctx) => {
+      const ids = getTargetClipIds(ctx);
+      const store = useTimelineStore.getState();
+      store.withBatch(() => {
+        ids.forEach((id) => store.updateClip(id, { speedKeyframes: [] }));
+      });
+      toast.success(`Removed speed ramp on ${ids.length} clip${ids.length > 1 ? "s" : ""}`);
+    },
+  },
+  {
     id: "clip.resetTransform",
     label: "Reset Transform",
     icon: Crosshair,

@@ -663,7 +663,7 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onProjectCreate, onP
                         onProjectOpen(project);
                       }
                     }}
-                    className="group relative text-left rounded-xl border border-white/4 bg-surface hover:bg-surface-raised transition-all duration-300 hover:-translate-y-1 hover:border-white/10 hover:shadow-xl hover:shadow-black/25 overflow-hidden cursor-pointer"
+                    className="group relative text-left rounded-xl border border-white/4 bg-surface hover:bg-surface-raised transition-all duration-300 hover:-translate-y-0.5 hover:border-white/10 hover:shadow-xl hover:shadow-black/25 overflow-hidden cursor-pointer"
                   >
                     {/* Aspect-ratio colour glow on hover */}
                     <div
