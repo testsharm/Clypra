@@ -101,6 +101,37 @@ const App = () => {
   }, []);
   // ───────────────────────────────────────────────────────────────────────────
 
+  // JSON full-edit import/export shortcuts
+  useEffect(() => {
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.ctrlKey && e.altKey && e.key.toLowerCase() === "i") {
+        e.preventDefault();
+        const input = document.createElement("input");
+        input.type = "file";
+        input.accept = ".json";
+        input.onchange = async () => {
+          const file = input.files?.[0];
+          if (!file) return;
+          try {
+            const text = await file.text();
+            const json = JSON.parse(text);
+            const { applyEditJson } = await import("@/features/json-editor/applyEditJson");
+            const result = applyEditJson(json);
+            console.info(`[JSON Import] ${result.added} clips added`, result.errors);
+          } catch (err) {
+            console.error("[JSON Import] failed:", err);
+          }
+        };
+        input.click();
+      } else if (e.ctrlKey && e.altKey && e.key.toLowerCase() === "e") {
+        e.preventDefault();
+        import("@/features/json-editor/exportEditJson").then(({ downloadEditJson }) => downloadEditJson());
+      }
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, []);
+
   // NOTE: DevTools/right-click blocking effect removed (Bug fix — was preventing
   // F12 / Ctrl+Shift+I / right-click from ever reaching the webview, even with
   // the Cargo `devtools` feature enabled).
