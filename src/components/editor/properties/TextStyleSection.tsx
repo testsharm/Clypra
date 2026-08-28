@@ -12,6 +12,7 @@ import { useTimelineStore } from "@/store/timelineStore";
 import { useEffectsStore } from "@/features/text-effects/store/effectsStore";
 import { TextModeSelector } from "./TextModeSelector";
 import { EffectStylePanel } from "./EffectStylePanel";
+import { KaraokeCaptionEditor } from "@/features/karaoke-captions/KaraokeCaptionEditor";
 import { TemplateLayerEditor } from "./TemplateLayerEditor";
 import { ClypraColorPicker } from "@clypra/ui-color-picker";
 
@@ -931,6 +932,11 @@ export const TextStyleSection: React.FC<TextStyleSectionProps> = ({ textClip, pr
             ))}
           </div>
         </PropertySection>
+      )}
+
+      {/* Karaoke Caption Editor (captions only) */}
+      {textClip.textRole === "caption" && (
+        <KaraokeCaptionEditor textClip={textClip} handleUpdateMultiple={handleUpdateMultiple} />
       )}
 
       {/* Section E: Quick Presets (Plain & Effect mode) OR Template Gallery (Template mode) */}
