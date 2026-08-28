@@ -7,7 +7,7 @@
 import { useState, useEffect, useMemo, useRef } from "react";
 import { Download, Plus, Loader2, Smile, Star } from "lucide-react";
 import { VideoEffectsApi } from "../api/videoEffectsApi";
-import { type EffectMetadata } from "@clypra-studio/engine";
+import { type EffectMetadata, getEffectsByCategory as getLocalEffectsByCategory } from "@clypra-studio/engine";
 import type { EffectRenderer as EffectRendererType } from "@clypra-studio/engine";
 import type { TabType } from "@/components/editor/sidebar";
 import { useFavoritesStore } from "@/store/favoritesStore";
@@ -36,32 +36,16 @@ export function RendererEffectsBrowser({ onEffectSelect, onAddToTimeline, showAp
   const loadEffects = async () => {
     setLoading(true);
     try {
-      // Load effects from API by category
-      const categoryEffects = await VideoEffectsApi.getRendererEffectsByCategory(selectedCategory);
-
-      // Convert API format to EffectMetadata format
-      const metadata: EffectMetadata[] = categoryEffects.map((effect: any) => ({
-        id: effect.renderer,
-        name: effect.name,
-        category: effect.category,
-        description: effect.description,
-        defaultParams: effect.params,
-        parameterSchema: effect.parameterSchema,
-        tags: effect.tags,
-        premium: effect.isPremium,
-      }));
-
-      setEffects(metadata);
-    } catch (error) {
-      console.error("Failed to load effects:", error);
-      // Fallback to local registry if API fails
-      try {
-        const { getEffectsByCategory } = await import("@clypra-studio/engine");
-        const categoryEffects = getEffectsByCategory(selectedCategory as any);
+      const categoryEffects = getLocalEffectsByCategory(selectedCategory as any) as EffectMetadata[];
+      if (categoryEffects && categoryEffects.length > 0) {
         setEffects(categoryEffects);
-      } catch (fallbackError) {
-        console.error("Failed to load from local registry:", fallbackError);
+      } else {
+        console.warn(`[RendererEffectsBrowser] No local effects for category ${selectedCategory}`);
+        setEffects([]);
       }
+    } catch (error) {
+      console.error("Failed to load local effects:", error);
+      setEffects([]);
     } finally {
       setLoading(false);
     }
