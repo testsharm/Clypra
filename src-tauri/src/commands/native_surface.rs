@@ -350,10 +350,10 @@ pub fn hide_native_surface(app: AppHandle) -> Result<(), String> {
     let runtime = app
         .try_state::<Arc<Mutex<NativeSurfaceRuntime>>>()
         .ok_or_else(|| "Native surface runtime is not initialized".to_string())?;
-    runtime
+    let guard = runtime
         .lock()
-        .map_err(|_| "Native surface runtime lock is poisoned".to_string())?
-        .hide_surface()
+        .map_err(|_| "Native surface runtime lock is poisoned".to_string())?;
+    guard.hide_surface()
 }
 
 #[tauri::command]
@@ -361,10 +361,10 @@ pub fn close_native_preview_surface(app: AppHandle) -> Result<(), String> {
     let runtime = app
         .try_state::<Arc<Mutex<NativeSurfaceRuntime>>>()
         .ok_or_else(|| "Native surface runtime is not initialized".to_string())?;
-    runtime
+    let mut guard = runtime
         .lock()
-        .map_err(|_| "Native surface runtime lock is poisoned".to_string())?
-        .close_surface()
+        .map_err(|_| "Native surface runtime lock is poisoned".to_string())?;
+    guard.close_surface()
 }
 
 /// Return the last successfully configured native surface. Keeping this
