@@ -25,6 +25,11 @@ export const CaptionsTab: React.FC<TabProps> = ({ onAddToTimeline }) => {
   const [isGenerating, setIsGenerating] = useState(false);
   const [captionColor, setCaptionColor] = useState("#ffffff");
   const [captionFont, setCaptionFont] = useState("Outfit Variable");
+  const [captionBackground, setCaptionBackground] = useState("#000000");
+  const [captionStrokeColor, setCaptionStrokeColor] = useState("#000000");
+  const [captionStrokeWidth, setCaptionStrokeWidth] = useState(0);
+  const [captionBold, setCaptionBold] = useState(false);
+  const [captionFontSize, setCaptionFontSize] = useState(32);
 
   const mediaAssets = project?.mediaAssets || [];
 
@@ -62,7 +67,7 @@ export const CaptionsTab: React.FC<TabProps> = ({ onAddToTimeline }) => {
       const blocks = parseSubtitles(text);
 
       if (blocks.length === 0) {
-        throw new Error("No subtitle blocks found. Please ensure the file is valid SRT or WebVTT.");
+        throw new Error("No subtitle blocks found. Please ensure the file is valid SRT, WebVTT, or ASS.");
       }
 
       const trackId = ensureCaptionTrackId();
@@ -178,6 +183,11 @@ export const CaptionsTab: React.FC<TabProps> = ({ onAddToTimeline }) => {
       updateClip(clip.id, {
         fillColor: captionColor,
         fontFamily: captionFont,
+        backgroundColor: captionBackground,
+        strokeColor: captionStrokeColor,
+        strokeWidth: captionStrokeWidth,
+        bold: captionBold,
+        fontSize: captionFontSize,
       } as any);
     });
   };
@@ -227,9 +237,23 @@ export const CaptionsTab: React.FC<TabProps> = ({ onAddToTimeline }) => {
           <div className="flex items-center justify-between text-[10px] text-text-muted font-medium">
             <span>Custom Caption Style</span>
           </div>
-          <div className="flex items-center gap-2">
-            <label className="text-[10px] text-text-muted">Text Color</label>
-            <input type="color" value={captionColor} onChange={(e) => setCaptionColor(e.target.value)} className="w-7 h-7 rounded cursor-pointer bg-transparent" />
+          <div className="grid grid-cols-2 gap-1.5">
+            <div className="flex items-center gap-2">
+              <label className="text-[10px] text-text-muted">Text</label>
+              <input type="color" value={captionColor} onChange={(e) => setCaptionColor(e.target.value)} className="w-7 h-7 rounded cursor-pointer bg-transparent" />
+            </div>
+            <div className="flex items-center gap-2">
+              <label className="text-[10px] text-text-muted">BG</label>
+              <input type="color" value={captionBackground} onChange={(e) => setCaptionBackground(e.target.value)} className="w-7 h-7 rounded cursor-pointer bg-transparent" />
+            </div>
+            <div className="flex items-center gap-2">
+              <label className="text-[10px] text-text-muted">Stroke</label>
+              <input type="color" value={captionStrokeColor} onChange={(e) => setCaptionStrokeColor(e.target.value)} className="w-7 h-7 rounded cursor-pointer bg-transparent" />
+            </div>
+            <div className="flex items-center gap-2">
+              <label className="text-[10px] text-text-muted">Width</label>
+              <input type="number" min={0} max={10} step={1} value={captionStrokeWidth} onChange={(e) => setCaptionStrokeWidth(Number(e.target.value))} className="w-full bg-surface border border-white/10 rounded px-1 py-1 text-[10px] text-text-primary focus:outline-none focus:border-accent" />
+            </div>
           </div>
           <div className="flex items-center gap-2">
             <label className="text-[10px] text-text-muted">Font</label>
@@ -238,6 +262,14 @@ export const CaptionsTab: React.FC<TabProps> = ({ onAddToTimeline }) => {
                 <option key={f} value={f}>{f}</option>
               ))}
             </select>
+          </div>
+          <div className="flex items-center justify-between gap-2">
+            <label className="text-[10px] text-text-muted">Size</label>
+            <input type="number" min={8} max={120} step={1} value={captionFontSize} onChange={(e) => setCaptionFontSize(Number(e.target.value))} className="w-20 bg-surface border border-white/10 rounded px-1 py-1 text-[10px] text-text-primary focus:outline-none focus:border-accent" />
+            <label className="flex items-center gap-1 text-[10px] text-text-muted">
+              <input type="checkbox" checked={captionBold} onChange={(e) => setCaptionBold(e.target.checked)} />
+              Bold
+            </label>
           </div>
           <button onClick={handleApplyCustomCaptionStyle} className="w-full px-2 py-1 text-[10px] font-semibold rounded bg-accent/15 hover:bg-accent/25 text-accent transition-all cursor-pointer">Apply to Captions</button>
         </div>
