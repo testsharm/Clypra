@@ -38,6 +38,15 @@ export const AudioEnvelopeEditor: React.FC<AudioEnvelopeEditorProps> = ({
     clipHeight: number;
   } | null>(null);
 
+  const kfDragRef = useRef<{
+    id: string;
+    startX: number;
+    startY: number;
+    initialTime: number;
+    initialGain: number;
+    laneHeight: number;
+  } | null>(null);
+
   const volume = clip.volume ?? 1.0;
   const fadeIn = clip.fadeIn ?? 0;
   const fadeOut = clip.fadeOut ?? 0;
@@ -155,6 +164,7 @@ export const AudioEnvelopeEditor: React.FC<AudioEnvelopeEditorProps> = ({
 
   const addAudioKeyframe = useTimelineStore((s) => s.addAudioKeyframe);
   const removeAudioKeyframe = useTimelineStore((s) => s.removeAudioKeyframe);
+  const updateAudioKeyframe = useTimelineStore((s) => s.updateAudioKeyframe);
   const keyframes = clip.volumeKeyframes || [];
 
   function getTooltipPoint(x: number, y: number, rect: DOMRect) {
@@ -184,6 +194,44 @@ export const AudioEnvelopeEditor: React.FC<AudioEnvelopeEditorProps> = ({
       Math.min(2.0, (1 - (e.clientY - rect.top) / rect.height) * 1.25),
     );
     addAudioKeyframe(clip.id, relTime, gain);
+  };
+
+  const handleKeyframePointerDown = (e: React.PointerEvent<HTMLDivElement>, kfId: string, kfTime: number, kfGain: number) => {
+    e.stopPropagation();
+    e.preventDefault();
+    const lane = volumeLaneRef.current;
+    if (!lane) return;
+    const laneRect = lane.getBoundingClientRect();
+    kfDragRef.current = {
+      id: kfId,
+      startX: e.clientX,
+      startY: e.clientY,
+      initialTime: kfTime,
+      initialGain: kfGain,
+      laneHeight: laneRect.height || 16,
+    };
+    e.currentTarget.setPointerCapture(e.pointerId);
+  };
+
+  const handleKeyframePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!kfDragRef.current) return;
+    e.stopPropagation();
+    const drag = kfDragRef.current;
+    const deltaX = e.clientX - drag.startX;
+    const deltaY = e.clientY - drag.startY;
+    const newTime = Math.max(0, Math.min(clip.duration, drag.initialTime + pixelToTime(deltaX, pixelsPerSecond)));
+    const gainDelta = (-deltaY / drag.laneHeight) * 1.25;
+    const newGain = Math.max(0, Math.min(2, drag.initialGain + gainDelta));
+    updateAudioKeyframe(clip.id, drag.id, { time: newTime, gain: newGain });
+  };
+
+  const handleKeyframePointerUp = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!kfDragRef.current) return;
+    e.stopPropagation();
+    if (e.currentTarget.hasPointerCapture(e.pointerId)) {
+      e.currentTarget.releasePointerCapture(e.pointerId);
+    }
+    kfDragRef.current = null;
   };
 
   // ── Render ────────────────────────────────────────────────────────────────
@@ -229,18 +277,23 @@ export const AudioEnvelopeEditor: React.FC<AudioEnvelopeEditorProps> = ({
           return (
             <div
               key={kf.id}
-              className="absolute z-30 h-2.5 w-2.5 rotate-45 cursor-grab border border-white bg-emerald-300 pointer-events-auto shadow-md transition-transform hover:scale-125"
+              className="absolute z-30 h-2.5 w-2.5 rotate-45 cursor-grab border border-white bg-emerald-300 pointer-events-auto shadow-md transition-transform hover:scale-125 active:cursor-grabbing"
               style={{
                 left: `${kfX}px`,
                 top: `${kfYPercent}%`,
                 transform: "translate(-50%, -50%) rotate(45deg)",
+                touchAction: "none",
               }}
+              onPointerDown={(e) => handleKeyframePointerDown(e, kf.id, kf.time, kf.gain)}
+              onPointerMove={handleKeyframePointerMove}
+              onPointerUp={handleKeyframePointerUp}
+              onPointerCancel={handleKeyframePointerUp}
               onContextMenu={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
                 removeAudioKeyframe(clip.id, kf.id);
               }}
-              title={`Keyframe: ${(kf.gain * 100).toFixed(0)}% at ${kf.time.toFixed(2)}s (Right-click to remove)`}
+              title={`Drag: adjust time/volume — Right-click to remove`}
             />
           );
         })}
