@@ -661,6 +661,13 @@ export const TextStyleSection: React.FC<TextStyleSectionProps> = ({ textClip, pr
                     className="w-7 h-7 rounded cursor-pointer border border-border/60 bg-transparent"
                     title="Full color picker"
                   />
+                  <input
+                    type="color"
+                    value={isGradient ? "#ffffff" : (textClip.color || "#ffffff").split(",")[0].trim()}
+                    onChange={(e) => handleCustomStyleUpdate("color", e.target.value)}
+                    className="w-7 h-7 rounded cursor-pointer border border-border/60 bg-transparent"
+                    title="Full color picker"
+                  />
                   {!isGradient && (
                     <input
                       type="text"
