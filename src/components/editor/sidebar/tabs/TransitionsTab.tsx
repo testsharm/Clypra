@@ -1,6 +1,7 @@
 import React from "react";
 import type { TabProps } from "../types";
 import { LOCAL_TRANSITIONS } from "../../../../features/transitions/localTransitions";
+import { EXTRA_TRANSITIONS } from "@/features/content-expansion/extraTransitions";
 
 const getTransitionPreviewClass = (renderer: string): string => {
   const map: Record<string, string> = {
@@ -71,7 +72,7 @@ export const TransitionsTab: React.FC<TabProps> = ({ onAddToTimeline }) => {
         <input type="file" accept=".json" className="hidden" onChange={handleImportJson} />
       </label>
       <div className="grid grid-cols-3 gap-2">
-        {[...LOCAL_TRANSITIONS, ...customTransitions].map((transition) => (
+        {[...LOCAL_TRANSITIONS, ...EXTRA_TRANSITIONS, ...customTransitions].map((transition) => (
           <TransitionCard
             key={transition.id}
             transition={transition}

@@ -1,6 +1,7 @@
 import React from "react";
 import { useUIStore } from "@/store/uiStore";
 import { useTimelineStore } from "@/store/timelineStore";
+import { EXTRA_AUDIO_PRESETS } from "@/features/content-expansion/extraAudioPresets";
 
 const AUDIO_PRESETS = [
   { id: "vocal-boost", name: "Vocal Boost", config: { eq: { high: 3, mid: 2, low: -1 } } },
@@ -28,7 +29,7 @@ export const AudioFXSection: React.FC = () => {
     <div className="space-y-3 p-3 bg-surface-raised/20 border border-border/40 rounded-xl">
       <p className="text-[10px] font-bold text-green-400 uppercase tracking-wider">Audio FX</p>
       <div className="flex flex-wrap gap-2">
-        {AUDIO_PRESETS.map((preset) => (
+        {[...AUDIO_PRESETS, ...EXTRA_AUDIO_PRESETS].map((preset) => (
           <button
             key={preset.id}
             onClick={() => applyPreset(preset.id)}

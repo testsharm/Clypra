@@ -4,6 +4,7 @@ import type { TabProps } from "../types";
 import { useProjectStore } from "@/store/projectStore";
 import type { FilterAsset } from "@/features/filters/types";
 import { LOCAL_FILTER_CATEGORIES, LOCAL_FILTERS } from "@/features/filters/localFilters";
+import { EXTRA_FILTERS } from "@/features/content-expansion/extraFilters";
 import { useFavoritesStore } from "@/store/favoritesStore";
 import { getAssetUrl } from "@/lib/assets";
 
@@ -84,7 +85,8 @@ export const FiltersTab: React.FC<TabProps> = ({ onAddToTimeline }) => {
       setError(null);
 
       try {
-        const data = activeCategory === "all" ? LOCAL_FILTERS : LOCAL_FILTERS.filter((f) => f.category === activeCategory);
+        const allFilters = [...LOCAL_FILTERS, ...EXTRA_FILTERS];
+        const data = activeCategory === "all" ? allFilters : allFilters.filter((f) => f.category === activeCategory);
         setFilters(data);
       } catch (err) {
         console.error(`[FiltersTab] Failed to load category ${activeCategory}:`, err);
