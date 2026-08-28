@@ -368,7 +368,7 @@ export const TransformSection: React.FC<TransformSectionProps> = ({ selectedClip
                   onChange={(e) => {
                     const raw = Number(e.target.value);
                     const nextSpeed = Math.min(10, Math.max(0.1, raw));
-                    const sourceDuration = (selectedClip.trimOut - selectedClip.trimIn) / speedValue;
+                    const sourceDuration = selectedClip.trimOut - selectedClip.trimIn;
                     handleUpdateMultiple({
                       speed: nextSpeed,
                       duration: sourceDuration / nextSpeed,
@@ -388,7 +388,7 @@ export const TransformSection: React.FC<TransformSectionProps> = ({ selectedClip
               suffix="x"
               onChange={(v) => {
                 const nextSpeed = Math.min(10, Math.max(0.1, v));
-                const sourceDuration = (selectedClip.trimOut - selectedClip.trimIn) / speedValue;
+                const sourceDuration = selectedClip.trimOut - selectedClip.trimIn;
                 handleUpdateMultiple({
                   speed: nextSpeed,
                   duration: sourceDuration / nextSpeed,
@@ -400,7 +400,7 @@ export const TransformSection: React.FC<TransformSectionProps> = ({ selectedClip
                 <button
                   key={preset}
                   onClick={() => {
-                    const sourceDuration = (selectedClip.trimOut - selectedClip.trimIn) / speedValue;
+                    const sourceDuration = selectedClip.trimOut - selectedClip.trimIn;
                     handleUpdateMultiple({
                       speed: preset,
                       duration: sourceDuration / preset,
