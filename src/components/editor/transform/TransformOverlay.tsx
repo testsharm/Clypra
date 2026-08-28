@@ -510,6 +510,13 @@ export const TransformOverlay: React.FC<TransformOverlayProps> = ({ canvasWidth,
               { value: 0, type: "canvas-left" },
               { value: canvasWidth / 2, type: "canvas-center" },
               { value: canvasWidth, type: "canvas-right" },
+              // Safe zone / title / action / thirds guides
+              { value: canvasWidth * 0.05, type: "clip" },
+              { value: canvasWidth * 0.95, type: "clip" },
+              { value: canvasWidth * 0.10, type: "clip" },
+              { value: canvasWidth * 0.90, type: "clip" },
+              { value: canvasWidth / 3, type: "clip" },
+              { value: (canvasWidth * 2) / 3, type: "clip" },
             ];
 
             activeClips.forEach((c) => {
@@ -588,6 +595,13 @@ export const TransformOverlay: React.FC<TransformOverlayProps> = ({ canvasWidth,
               { value: 0, type: "canvas-top" },
               { value: canvasHeight / 2, type: "canvas-center" },
               { value: canvasHeight, type: "canvas-bottom" },
+              // Safe zone / title / action / thirds guides
+              { value: canvasHeight * 0.05, type: "clip" },
+              { value: canvasHeight * 0.95, type: "clip" },
+              { value: canvasHeight * 0.10, type: "clip" },
+              { value: canvasHeight * 0.90, type: "clip" },
+              { value: canvasHeight / 3, type: "clip" },
+              { value: (canvasHeight * 2) / 3, type: "clip" },
             ];
 
             activeClips.forEach((c) => {
