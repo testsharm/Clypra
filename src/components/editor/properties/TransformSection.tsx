@@ -1,5 +1,5 @@
 import React, { useCallback } from "react";
-import { Move, Timer, RotateCcw, FlipHorizontal2, FlipVertical2, Lock, Unlock, Crosshair, Gauge } from "lucide-react";
+import { Move, Timer, RotateCcw, FlipHorizontal2, FlipVertical2, Lock, Unlock, Crosshair, Gauge, Plus } from "lucide-react";
 import { getPlaybackClock } from "@/hooks/usePlaybackClock";
 import type { Clip } from "@/types";
 import { type ClipFitModeExtended } from "@/lib/timeline/timelineClip";
@@ -38,6 +38,25 @@ export const TransformSection: React.FC<TransformSectionProps> = ({ selectedClip
   const isFlippedV = selectedClip.height < 0;
   const opacityPercent = getOpacityPercent(selectedClip.opacity);
   const speedValue = Number.isFinite(selectedClip.speed) && selectedClip.speed ? selectedClip.speed : 1;
+  const speedKeyframes = selectedClip.speedKeyframes || [];
+
+  const handleAddSpeedKeyframe = useCallback(() => {
+    const playbackTime = getPlaybackClock().time;
+    const rawLocalTime = playbackTime - selectedClip.startTime;
+    const localTime = Math.max(0, Math.min(selectedClip.duration, rawLocalTime));
+    const nextKfs = [
+      ...speedKeyframes,
+      { id: `spd-${Date.now()}`, time: localTime, speed: speedValue, easing: "linear" },
+    ].sort((a, b) => a.time - b.time);
+    handleUpdate("speedKeyframes", nextKfs);
+  }, [selectedClip.startTime, selectedClip.duration, speedValue, speedKeyframes, handleUpdate]);
+
+  const handleRemoveSpeedKeyframe = useCallback(
+    (id: string) => {
+      handleUpdate("speedKeyframes", speedKeyframes.filter((kf) => kf.id !== id));
+    },
+    [speedKeyframes, handleUpdate],
+  );
 
   const isRotationKeyframed = (selectedClip.visualKeyframes?.rotation?.length || 0) > 0;
   const isOpacityKeyframed = (selectedClip.visualKeyframes?.opacity?.length || 0) > 0;
@@ -412,6 +431,36 @@ export const TransformSection: React.FC<TransformSectionProps> = ({ selectedClip
                 </button>
               ))}
             </div>
+          </div>
+
+          {/* Speed Ramp Points */}
+          <div className="mt-2 border-t border-border/40 pt-2">
+            <div className="flex items-center justify-between mb-1.5">
+              <span className="text-[10px] font-medium text-text-muted select-none">Speed Ramp</span>
+              <button
+                onClick={handleAddSpeedKeyframe}
+                className="flex items-center gap-1 px-2 py-0.5 text-[10px] font-semibold bg-accent/10 border border-accent/20 text-accent rounded hover:bg-accent/15 transition-colors cursor-pointer"
+              >
+                <Plus className="w-3 h-3" />
+                Add Point
+              </button>
+            </div>
+            {speedKeyframes.length > 0 && (
+              <div className="flex flex-wrap gap-1.5">
+                {speedKeyframes.map((kf: any) => (
+                  <span key={kf.id} className="inline-flex items-center gap-1 rounded bg-surface-raised border border-border/50 px-1.5 py-0.5 text-[9px] font-mono text-text-muted">
+                    {kf.time.toFixed(1)}s · {kf.speed.toFixed(1)}x
+                    <button
+                      onClick={() => handleRemoveSpeedKeyframe(kf.id)}
+                      className="text-text-muted hover:text-red-400 cursor-pointer"
+                      title="Remove speed point"
+                    >
+                      ×
+                    </button>
+                  </span>
+                ))}
+              </div>
+            )}
           </div>
 
           {/* Flip buttons */}
