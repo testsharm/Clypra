@@ -80,6 +80,11 @@ export class EffectRenderer {
       // Keying effects
       chroma_key: this.renderChromaKey,
 
+      // Additional effects
+      invert: this.renderInvert,
+      shake: this.renderShake,
+      mirror: this.renderMirror,
+
       // Body effects are handled in the canonical rasterizer where source
       // frame pixels are available for mask generation.
       "body-segmentation-glow": this.renderBodyEffectNoop,
@@ -559,6 +564,39 @@ export class EffectRenderer {
     }
 
     ctx.putImageData(imageData, 0, 0);
+  }
+
+  // ============================================================================
+  // ADDITIONAL EFFECTS
+  // ============================================================================
+
+  private static renderInvert(ctx: CanvasRenderingContext2D, params: EffectParameters, intensity: number, _time: number): void {
+    const imageData = ctx.getImageData(0, 0, ctx.canvas.width, ctx.canvas.height);
+    const data = imageData.data;
+    const factor = intensity;
+    for (let i = 0; i < data.length; i += 4) {
+      data[i] = 255 - data[i] * factor;
+      data[i + 1] = 255 - data[i + 1] * factor;
+      data[i + 2] = 255 - data[i + 2] * factor;
+    }
+    ctx.putImageData(imageData, 0, 0);
+  }
+
+  private static renderShake(ctx: CanvasRenderingContext2D, params: EffectParameters, intensity: number, time: number): void {
+    const magnitude = (params.amplitude ?? 10) * intensity;
+    const dx = Math.sin(time * 60) * magnitude;
+    const dy = Math.cos(time * 50) * magnitude;
+    ctx.translate(dx, dy);
+  }
+
+  private static renderMirror(ctx: CanvasRenderingContext2D, params: EffectParameters, intensity: number, _time: number): void {
+    const width = ctx.canvas.width;
+    const height = ctx.canvas.height;
+    ctx.save();
+    ctx.translate(width, 0);
+    ctx.scale(-1, 1);
+    ctx.drawImage(ctx.canvas, 0, 0);
+    ctx.restore();
   }
 
   // ============================================================================

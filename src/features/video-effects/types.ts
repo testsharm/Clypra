@@ -48,6 +48,11 @@ export type EffectRenderer =
   // Keying effects
   | "chroma_key"
 
+  // Additional effects
+  | "invert"
+  | "shake"
+  | "mirror"
+
   // Time effects
   | "speed_ramp"
   | "freeze_frame"

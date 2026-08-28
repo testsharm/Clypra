@@ -70,6 +70,15 @@ const COLOR_PALETTE = [
   { label: "Sunset", value: "#ff3e00, #ff0077, #aa00ff" },
   { label: "Ocean", value: "#00c8ff, #00ff66" },
   { label: "Rainbow", value: "#ff007f, #aa00ff, #00c8ff, #00ff66" },
+  { label: "Neon Green", value: "#39ff14" },
+  { label: "Deep Purple", value: "#8a2be2" },
+  { label: "Ocean", value: "#00bfff" },
+  { label: "Fire", value: "#ff4500" },
+  { label: "Ice", value: "#e0ffff" },
+  { label: "Gold", value: "#ffd700" },
+  { label: "Pink", value: "#ffb6c1" },
+  { label: "Cyber", value: "#00ff00" },
+  { label: "Elegant", value: "#000000" },
 ];
 
 const FONT_WEIGHTS = [
