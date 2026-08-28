@@ -210,7 +210,7 @@ function EffectCard({ effect, isFavorite, isDownloaded, isDownloading, onFavorit
         {previewUrl ? (
           <video ref={videoRef} src={previewUrl} loop muted playsInline className="w-full h-full object-cover rounded-lg" />
         ) : effect.thumbnail ? (
-          <img src={effect.thumbnail} alt={effect.name} className="w-full h-full object-cover rounded-lg" />
+          <img loading="lazy" decoding="async" src={effect.thumbnail} alt={effect.name} className="w-full h-full object-cover rounded-lg" />
         ) : (
           <div className="flex flex-col items-center justify-center h-full w-full bg-linear-to-br from-accent/10 to-accent/0 text-center rounded-lg p-2">
             <span className="text-4xl filter drop-shadow-[0_4px_8px_rgba(0,0,0,0.3)] group-hover:scale-[1.05] transition-transform duration-300">{getCategoryIcon(effect.category || "aura")}</span>

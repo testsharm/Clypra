@@ -1394,3 +1394,15 @@ body:not(.playing-mode) .card:hover,
 body:not(.playing-mode) [class*="Card"]:hover {
   transition: var(--kc-transition) !important;
 }
+
+/* Extra performance: offload non-critical images and videos during playback */
+body.playing-mode img,
+body.playing-mode video {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 80px;
+}
+
+img {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 80px;
+}
