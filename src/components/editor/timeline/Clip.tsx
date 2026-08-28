@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Sparkles, Snowflake } from "lucide-react";
+import { Sparkles, Snowflake, Gauge } from "lucide-react";
 import { useUIStore } from "@/store/uiStore";
 import { useTimelineStore } from "@/store/timelineStore";
 import {
@@ -824,6 +824,14 @@ const ClipInner: React.FC<ClipProps> = ({
                 <span className="text-[9px] font-semibold text-sky-200">Freeze</span>
               </div>
             )}
+            {(clip.speed !== undefined && clip.speed !== 1) || (clip.speedKeyframes && clip.speedKeyframes.length > 0) ? (
+              <div className="shrink-0 flex items-center gap-1 rounded px-1 py-0.5 bg-amber-400/20 border border-amber-300/30 pointer-events-none">
+                <Gauge className="w-3 h-3 text-amber-300" />
+                <span className="text-[9px] font-semibold text-amber-200">
+                  {clip.speedKeyframes && clip.speedKeyframes.length > 0 ? "Ramp" : `${clip.speed?.toFixed(1)}x`}
+                </span>
+              </div>
+            ) : null}
           </div>
           {mediaAsset &&
           (mediaAsset.type === "video" || mediaAsset.type === "image") ? (
