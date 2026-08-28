@@ -28,6 +28,8 @@ import {
   Snowflake,
   Gauge,
   Eraser,
+  RotateCcw,
+  AudioLines,
 } from "lucide-react";
 import type { ClipCommand, ClipCommandContext } from "./types";
 import { clipboardService } from "@/core/clipboard/clipboardService";
@@ -299,6 +301,78 @@ export const clipCommands: ClipCommand[] = [
         ids.forEach((id) => store.updateClip(id, { visualKeyframes: {} }));
       });
       toast.success(`Cleared visual keyframes on ${ids.length} clip${ids.length > 1 ? "s" : ""}`);
+    },
+  },
+  {
+    id: "clip.resetRotation",
+    label: "Reset Rotation",
+    icon: RotateCcw,
+    group: "organize",
+    isVisible: (ctx) => getTargetClipIds(ctx).length > 0,
+    isEnabled: (ctx) => {
+      const ids = getTargetClipIds(ctx);
+      if (ids.length === 0) return false;
+      return ids.some((id) => {
+        const c = ctx.clips.find((clip) => clip.id === id);
+        return c && c.rotation !== 0 && !ctx.tracks.find((t) => t.id === c.trackId)?.locked;
+      });
+    },
+    disabledReason: () => "No rotation on selected clips or clip locked",
+    execute: (ctx) => {
+      const ids = getTargetClipIds(ctx);
+      const store = useTimelineStore.getState();
+      store.withBatch(() => {
+        ids.forEach((id) => store.updateClip(id, { rotation: 0 }));
+      });
+      toast.success(`Reset rotation on ${ids.length} clip${ids.length > 1 ? "s" : ""}`);
+    },
+  },
+  {
+    id: "clip.resetOpacity",
+    label: "Reset Opacity",
+    icon: SlidersHorizontal,
+    group: "organize",
+    isVisible: (ctx) => getTargetClipIds(ctx).length > 0,
+    isEnabled: (ctx) => {
+      const ids = getTargetClipIds(ctx);
+      if (ids.length === 0) return false;
+      return ids.some((id) => {
+        const c = ctx.clips.find((clip) => clip.id === id);
+        return c && c.opacity !== 1 && !ctx.tracks.find((t) => t.id === c.trackId)?.locked;
+      });
+    },
+    disabledReason: () => "Opacity already 100% or clip locked",
+    execute: (ctx) => {
+      const ids = getTargetClipIds(ctx);
+      const store = useTimelineStore.getState();
+      store.withBatch(() => {
+        ids.forEach((id) => store.updateClip(id, { opacity: 1 }));
+      });
+      toast.success(`Reset opacity on ${ids.length} clip${ids.length > 1 ? "s" : ""}`);
+    },
+  },
+  {
+    id: "clip.resetAudioEnvelope",
+    label: "Reset Audio Envelope",
+    icon: AudioLines,
+    group: "audio",
+    isVisible: (ctx) => getTargetClipIds(ctx).length > 0,
+    isEnabled: (ctx) => {
+      const ids = getTargetClipIds(ctx);
+      if (ids.length === 0) return false;
+      return ids.some((id) => {
+        const c = ctx.clips.find((clip) => clip.id === id);
+        return c && (c.volume !== 1 || c.fadeIn !== 0 || c.fadeOut !== 0 || (c.volumeKeyframes && c.volumeKeyframes.length > 0)) && !ctx.tracks.find((t) => t.id === c.trackId)?.locked;
+      });
+    },
+    disabledReason: () => "Audio envelope already default or clip locked",
+    execute: (ctx) => {
+      const ids = getTargetClipIds(ctx);
+      const store = useTimelineStore.getState();
+      store.withBatch(() => {
+        ids.forEach((id) => store.updateClip(id, { volume: 1, fadeIn: 0, fadeOut: 0, volumeKeyframes: [] }));
+      });
+      toast.success(`Reset audio envelope on ${ids.length} clip${ids.length > 1 ? "s" : ""}`);
     },
   },
   {
