@@ -195,5 +195,6 @@ const TopBarComponent: React.FC<TopBarProps> = ({ onRequestClose }) => {
   );
 };
 
+// Preview quality toggle placeholder
 export const TopBar = React.memo(TopBarComponent);
 

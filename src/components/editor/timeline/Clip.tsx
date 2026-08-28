@@ -906,7 +906,7 @@ const ClipInner: React.FC<ClipProps> = ({
                 return (
                   <div
                     key={`${prop}-${kf.id}`}
-                    className="pointer-events-auto absolute h-2.5 w-2.5 rotate-45 rounded-[1px] border border-white/90 bg-accent shadow-[0_0_4px_rgba(0,0,0,0.4)] cursor-pointer hover:scale-125 transition-transform"
+                    className="pointer-events-auto absolute h-2.5 w-2.5 rotate-45 rounded-[1px] border border-white/90 bg-accent shadow-[0_0_3px_rgba(0,0,0,0.25)] cursor-pointer hover:scale-125 transition-transform"
                     style={{ left: `${xPx - 5}px`, top: "3px" }}
                     title={`${visualKeyframeLabels[prop] || prop}: ${kf.value} — click to seek`}
                     onPointerDown={(e) => e.stopPropagation()}

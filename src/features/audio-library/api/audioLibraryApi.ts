@@ -32,10 +32,6 @@ export interface AudioLibraryItem {
   isPremium?: boolean;
 }
 
-import { getApiHeaders, getApiBaseUrl } from "@/lib/api";
-
-const BASE = getApiBaseUrl();
-
 export const AUDIO_LIBRARY_CATEGORIES: AudioLibraryCategory[] = [
   "music",
   "cinematic",
@@ -47,63 +43,10 @@ export const AUDIO_LIBRARY_CATEGORIES: AudioLibraryCategory[] = [
 ];
 
 export const AudioLibraryApi = {
-  async getAudioByCategory(
-    category: AudioLibraryCategory,
-  ): Promise<AudioLibraryItem[]> {
-    try {
-      const res = await fetch(`${BASE}/audio/${category}`, {
-        headers: getApiHeaders(),
-      });
-
-      if (!res.ok) {
-        const errorText = await res.text().catch(() => res.statusText);
-        console.error(
-          `[AudioLibraryApi] Failed to load audio category ${category}:`,
-          {
-            status: res.status,
-            statusText: res.statusText,
-            error: errorText,
-          },
-        );
-        throw new Error(`HTTP ${res.status}: ${errorText || res.statusText}`);
-      }
-
-      const data = await res.json();
-      return data;
-    } catch (error) {
-      if (error instanceof Error) {
-        throw error;
-      }
-      throw new Error(`Network error: ${String(error)}`);
-    }
+  async getAudioByCategory(_category: AudioLibraryCategory): Promise<AudioLibraryItem[]> {
+    return [];
   },
-
-  async getAudioAsset(category: string, id: string): Promise<AudioLibraryItem> {
-    try {
-      const res = await fetch(`${BASE}/audio/${category}/${id}`, {
-        headers: getApiHeaders(),
-      });
-
-      if (!res.ok) {
-        const errorText = await res.text().catch(() => res.statusText);
-        console.error(`[AudioLibraryApi] Failed to load audio asset ${id}:`, {
-          status: res.status,
-          statusText: res.statusText,
-          error: errorText,
-        });
-        throw new Error(`HTTP ${res.status}: ${errorText || res.statusText}`);
-      }
-
-      return res.json();
-    } catch (error) {
-      console.error(
-        `[AudioLibraryApi] Exception loading audio asset ${id}:`,
-        error,
-      );
-      if (error instanceof Error) {
-        throw error;
-      }
-      throw new Error(`Network error: ${String(error)}`);
-    }
+  async getAudioAsset(_category: string, _id: string): Promise<AudioLibraryItem> {
+    throw new Error("Audio library is local only");
   },
 };
