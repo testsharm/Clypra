@@ -94,6 +94,7 @@ function drawNativeFrameToCanvas(
   if (canvas.width !== frame.width) canvas.width = frame.width;
   if (canvas.height !== frame.height) canvas.height = frame.height;
   const context = canvas.getContext("2d");
+  (window as any).__kandelPreviewCanvas = canvas;
   if (!context) return false;
 
   const image = context.createImageData(frame.width, frame.height);
@@ -137,6 +138,8 @@ export const NativeProgramPreview: React.FC = () => {
   const [qualityMenuOpen, setQualityMenuOpen] = useState(false);
   const [showTelemetry, setShowTelemetry] = useState(false);
   const [showSafeOverlay, setShowSafeOverlay] = useState(false);
+  const [trackingActive, setTrackingActive] = useState(false);
+  const [trackingPoint, setTrackingPoint] = useState<{x:number,y:number}|null>(null);
   const [telemetryStats, setTelemetryStats] = useState<TelemetryStats | null>(null);
   const [nativeSurfaceReady, setNativeSurfaceReady] = useState(false);
   // Audit 4.6 fix: mirror nativeSurfaceReady in a ref so the render loop can read the
@@ -861,6 +864,7 @@ export const NativeProgramPreview: React.FC = () => {
       canvas.width = width;
       canvas.height = height;
       const context = canvas.getContext("2d");
+  (window as any).__kandelPreviewCanvas = canvas;
       if (!context) return [];
       drawCanvasBackground(context, background, width, height, scene.metadata.time);
       const asset: NativeRasterLayerSnapshot & { rgba: number[] } = {
@@ -926,6 +930,7 @@ export const NativeProgramPreview: React.FC = () => {
       canvas.width = rasterWidth;
       canvas.height = rasterHeight;
       const context = canvas.getContext("2d");
+  (window as any).__kandelPreviewCanvas = canvas;
       if (!context) return [];
       context.clearRect(0, 0, rasterWidth, rasterHeight);
       for (const smartClip of smartClips) {
@@ -1093,6 +1098,10 @@ export const NativeProgramPreview: React.FC = () => {
         });
       }
 
+      (window as any).__kandelPreviewScale = previewScaleX;
+      (window as any).__kandelPreviewOffsetX = 0;
+      (window as any).__kandelPreviewOffsetY = 0;
+      (window as any).__kandelPlaybackClock = state.clock;
       const scene = evaluateTimelineSceneCached(frameStartTime, state.clips, state.tracks, state.mediaAssets, state.project, state.epoch, state.transitions, state.sceneVersions);
       const nativeBackground = await rasterizeNativeBackground(scene, frameIndex, safeRenderWidth, safeRenderHeight);
       const nativeTextRasters = await rasterizeNativeTextLayers(scene, previewScaleX, previewScaleY);
@@ -1657,8 +1666,47 @@ export const NativeProgramPreview: React.FC = () => {
   const step = 1 / Math.max(1, frameRate);
 
   return (
-    <div data-preview-space="program" className="flex-1 bg-bg flex flex-col min-h-0 border-l border-t border-white/3">
+    <div data-preview-space="program" className="flex-1 bg-bg flex flex-col min-h-0 border-l border-t border-white/3 relative">
+      {trackingActive && (
+        <div
+          className="absolute inset-0 cursor-crosshair z-50"
+          onClick={(e) => {
+            const rect = (e.target as HTMLElement).getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            if (!trackingPoint) {
+              setTrackingPoint({ x, y });
+              import("@/features/point-tracking/pointTracker").then(({ startTracking }) => startTracking({ x, y }));
+            } else {
+              setTrackingPoint(null);
+              import("@/features/point-tracking/pointTracker").then(({ stopTracking }) => stopTracking());
+            }
+          }}
+        >
+          {trackingPoint && (
+            <div
+              className="absolute w-3 h-3 rounded-full bg-red-500 border-2 border-white pointer-events-none"
+              style={{ left: trackingPoint.x - 6, top: trackingPoint.y - 6 }}
+            />
+          )}
+        </div>
+      )}
       <div className="flex items-center px-4 h-10 shrink-0 gap-2 overflow-hidden">
+        <button
+          onClick={() => {
+            if (trackingActive) {
+              import("@/features/point-tracking/pointTracker").then(({ stopTracking }) => stopTracking());
+              setTrackingActive(false);
+              setTrackingPoint(null);
+            } else {
+              setTrackingActive(true);
+            }
+          }}
+          className={`text-xs px-2 py-1 rounded ${trackingActive ? "bg-accent text-white" : "bg-surface-raised text-text-muted hover:text-text-primary"}`}
+          title="Point tracking (click canvas to set point)"
+        >
+          {trackingActive ? "Stop Track" : "Track"}
+        </button>
         <span className="text-[13px] font-semibold text-text-primary tracking-tight leading-none">
           {isTauriRuntime() ? "Program Preview (Native)" : "Program Preview (Desktop required)"}
         </span>
