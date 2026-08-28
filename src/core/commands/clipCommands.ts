@@ -376,6 +376,78 @@ export const clipCommands: ClipCommand[] = [
     },
   },
   {
+    id: "clip.clearAllEffects",
+    label: "Clear All Effects",
+    icon: Eraser,
+    group: "media",
+    isVisible: (ctx) => getTargetClipIds(ctx).length > 0,
+    isEnabled: (ctx) => {
+      const ids = getTargetClipIds(ctx);
+      if (ids.length === 0) return false;
+      return ids.some((id) => {
+        const c = ctx.clips.find((clip) => clip.id === id);
+        return c && c.effects && c.effects.length > 0 && !ctx.tracks.find((t) => t.id === c.trackId)?.locked;
+      });
+    },
+    disabledReason: () => "No effects on selected clips or clip locked",
+    execute: (ctx) => {
+      const ids = getTargetClipIds(ctx);
+      const store = useTimelineStore.getState();
+      store.withBatch(() => {
+        ids.forEach((id) => store.updateClip(id, { effects: [] }));
+      });
+      toast.success(`Cleared effects on ${ids.length} clip${ids.length > 1 ? "s" : ""}`);
+    },
+  },
+  {
+    id: "clip.clearAllOverlays",
+    label: "Clear All Overlays",
+    icon: Eraser,
+    group: "media",
+    isVisible: (ctx) => getTargetClipIds(ctx).length > 0,
+    isEnabled: (ctx) => {
+      const ids = getTargetClipIds(ctx);
+      if (ids.length === 0) return false;
+      return ids.some((id) => {
+        const c = ctx.clips.find((clip) => clip.id === id);
+        return c && c.overlays && c.overlays.length > 0 && !ctx.tracks.find((t) => t.id === c.trackId)?.locked;
+      });
+    },
+    disabledReason: () => "No overlays on selected clips or clip locked",
+    execute: (ctx) => {
+      const ids = getTargetClipIds(ctx);
+      const store = useTimelineStore.getState();
+      store.withBatch(() => {
+        ids.forEach((id) => store.updateClip(id, { overlays: [] }));
+      });
+      toast.success(`Cleared overlays on ${ids.length} clip${ids.length > 1 ? "s" : ""}`);
+    },
+  },
+  {
+    id: "clip.resetFitMode",
+    label: "Reset Fit Mode to Contain",
+    icon: SlidersHorizontal,
+    group: "media",
+    isVisible: (ctx) => getTargetClipIds(ctx).length > 0,
+    isEnabled: (ctx) => {
+      const ids = getTargetClipIds(ctx);
+      if (ids.length === 0) return false;
+      return ids.some((id) => {
+        const c = ctx.clips.find((clip) => clip.id === id);
+        return c && c.fitMode !== "contain" && !ctx.tracks.find((t) => t.id === c.trackId)?.locked;
+      });
+    },
+    disabledReason: () => "Fit mode already contain or clip locked",
+    execute: (ctx) => {
+      const ids = getTargetClipIds(ctx);
+      const store = useTimelineStore.getState();
+      store.withBatch(() => {
+        ids.forEach((id) => store.updateClip(id, { fitMode: "contain" }));
+      });
+      toast.success(`Reset fit mode on ${ids.length} clip${ids.length > 1 ? "s" : ""}`);
+    },
+  },
+  {
     id: "clip.resetTransform",
     label: "Reset Transform",
     icon: Crosshair,
