@@ -238,6 +238,8 @@ export interface Clip {
   speed?: number;
   /** Local clip time (seconds) to hold for freeze-frame; undefined = no freeze */
   freezeFrameTime?: number;
+  /** Speed ramp keyframes (optional) */
+  speedKeyframes?: SpeedKeyframe[];
   // Transform constraints
   aspectRatioLocked?: boolean; // Default true for video/images
   sourceAspectRatio?: number; // Original aspect ratio (width/height)
@@ -302,6 +304,16 @@ export interface VisualPropertyKeyframe {
 }
 
 export type VisualPropertyKey = "x" | "y" | "width" | "height" | "rotation" | "opacity";
+
+export interface SpeedKeyframe {
+  id: string;
+  /** Relative clip time in seconds */
+  time: number;
+  /** Speed multiplier at this keyframe (1.0 = normal) */
+  speed: number;
+  easing?: string;
+  controlPoints?: [number, number, number, number];
+}
 
 /** Video overlay applied to a clip (actual video file) */
 export interface ClipOverlay {
