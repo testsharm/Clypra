@@ -34,6 +34,17 @@ export const SmartOverlaysTab: React.FC<TabProps> = ({ onAddToTimeline }) => {
     if (onAddToTimeline) onAddToTimeline(newClip, "smart-overlays");
   };
 
+  const overlayIcons: Record<string, string> = {
+    stat: "📊",
+    quote: "💬",
+    comparison: "⚖️",
+    code: "💻",
+    list: "📝",
+    timeline: "📅",
+    social: "📱",
+    "lower-third": "🎬",
+  };
+
   return (
     <div className="flex flex-col h-full bg-background text-text-primary p-4 gap-4 overflow-y-auto">
       <div className="grid grid-cols-2 gap-2">
@@ -43,8 +54,8 @@ export const SmartOverlaysTab: React.FC<TabProps> = ({ onAddToTimeline }) => {
             onClick={() => handleAddPreset(preset.id)}
             className="flex flex-col items-center justify-center gap-1 p-3 rounded-lg border bg-white/5 border-white/10 hover:border-accent hover:bg-white/8 transition-colors cursor-pointer"
           >
-            <Sparkles className="w-4 h-4 text-accent" />
-            <span className="text-xs font-semibold text-text-primary">{preset.name}</span>
+            <span className="text-xl">{overlayIcons[preset.category] ?? "✨"}</span>
+            <span className="text-xs font-semibold text-text-primary text-center">{preset.name}</span>
             <Plus className="w-3 h-3 text-text-muted" />
           </button>
         ))}
