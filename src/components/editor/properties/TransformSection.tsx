@@ -40,6 +40,10 @@ export const TransformSection: React.FC<TransformSectionProps> = ({ selectedClip
 
   const isRotationKeyframed = (selectedClip.visualKeyframes?.rotation?.length || 0) > 0;
   const isOpacityKeyframed = (selectedClip.visualKeyframes?.opacity?.length || 0) > 0;
+  const isXKeyframed = (selectedClip.visualKeyframes?.x?.length || 0) > 0;
+  const isYKeyframed = (selectedClip.visualKeyframes?.y?.length || 0) > 0;
+  const isWidthKeyframed = (selectedClip.visualKeyframes?.width?.length || 0) > 0;
+  const isHeightKeyframed = (selectedClip.visualKeyframes?.height?.length || 0) > 0;
 
   const handleToggleVisualKeyframe = useCallback(
     (prop: "x" | "y" | "width" | "height" | "rotation" | "opacity", value: number) => {
@@ -271,11 +275,17 @@ export const TransformSection: React.FC<TransformSectionProps> = ({ selectedClip
             </div>
             <div className="grid grid-cols-2 gap-2">
               <div>
-                <label className="text-[9px] text-text-muted/60 block mb-0.5 select-none">X</label>
+                <div className="flex items-center justify-between mb-0.5">
+                  <label className="text-[9px] text-text-muted/60 select-none">X</label>
+                  <button onClick={() => handleToggleVisualKeyframe("x", selectedClip.x)} className={`w-4 h-4 rounded-full border ${isXKeyframed ? "bg-accent border-accent" : "border-border/60 hover:border-accent"} cursor-pointer`} title="Toggle X keyframe" />
+                </div>
                 <input type="number" value={Math.round(selectedClip.x)} onChange={(e) => handleUpdate("x", Number(e.target.value))} className="w-full bg-surface-raised border border-border/60 rounded-md px-2 py-1 text-xs text-text-primary outline-none focus:border-accent tabular-nums selectable" />
               </div>
               <div>
-                <label className="text-[9px] text-text-muted/60 block mb-0.5 select-none">Y</label>
+                <div className="flex items-center justify-between mb-0.5">
+                  <label className="text-[9px] text-text-muted/60 select-none">Y</label>
+                  <button onClick={() => handleToggleVisualKeyframe("y", selectedClip.y)} className={`w-4 h-4 rounded-full border ${isYKeyframed ? "bg-accent border-accent" : "border-border/60 hover:border-accent"} cursor-pointer`} title="Toggle Y keyframe" />
+                </div>
                 <input type="number" value={Math.round(selectedClip.y)} onChange={(e) => handleUpdate("y", Number(e.target.value))} className="w-full bg-surface-raised border border-border/60 rounded-md px-2 py-1 text-xs text-text-primary outline-none focus:border-accent tabular-nums selectable" />
               </div>
             </div>
@@ -292,11 +302,17 @@ export const TransformSection: React.FC<TransformSectionProps> = ({ selectedClip
             </div>
             <div className="grid grid-cols-2 gap-2">
               <div>
-                <label className="text-[9px] text-text-muted/60 block mb-0.5 select-none">W</label>
+                <div className="flex items-center justify-between mb-0.5">
+                  <label className="text-[9px] text-text-muted/60 select-none">W</label>
+                  <button onClick={() => handleToggleVisualKeyframe("width", Math.abs(selectedClip.width))} className={`w-4 h-4 rounded-full border ${isWidthKeyframed ? "bg-accent border-accent" : "border-border/60 hover:border-accent"} cursor-pointer`} title="Toggle W keyframe" />
+                </div>
                 <input type="number" value={Math.round(Math.abs(selectedClip.width))} onChange={(e) => handleWidthChange(Number(e.target.value))} className="w-full bg-surface-raised border border-border/60 rounded-md px-2 py-1 text-xs text-text-primary outline-none focus:border-accent tabular-nums selectable" />
               </div>
               <div>
-                <label className="text-[9px] text-text-muted/60 block mb-0.5 select-none">H</label>
+                <div className="flex items-center justify-between mb-0.5">
+                  <label className="text-[9px] text-text-muted/60 select-none">H</label>
+                  <button onClick={() => handleToggleVisualKeyframe("height", Math.abs(selectedClip.height))} className={`w-4 h-4 rounded-full border ${isHeightKeyframed ? "bg-accent border-accent" : "border-border/60 hover:border-accent"} cursor-pointer`} title="Toggle H keyframe" />
+                </div>
                 <input type="number" value={Math.round(Math.abs(selectedClip.height))} onChange={(e) => handleHeightChange(Number(e.target.value))} className="w-full bg-surface-raised border border-border/60 rounded-md px-2 py-1 text-xs text-text-primary outline-none focus:border-accent tabular-nums selectable" />
               </div>
             </div>
