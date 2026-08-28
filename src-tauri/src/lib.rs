@@ -204,6 +204,7 @@ pub fn run() {
             probe_native_surface,
             resize_native_surface,
             hide_native_surface,
+            close_native_preview_surface,
             get_native_surface_status,
             configure_native_playback,
             get_native_playback_state,

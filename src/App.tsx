@@ -527,6 +527,12 @@ const App = () => {
             console.error("[App] Project close handler failed:", err);
           }
           try {
+            const { invoke } = await import("@tauri-apps/api/core");
+            await invoke("close_native_preview_surface").catch(() => undefined);
+          } catch (closeErr) {
+            console.warn("[App] Failed to close native preview surface:", closeErr);
+          }
+          try {
             await win.close();
           } catch (closeErr) {
             console.error("[App] win.close() failed:", closeErr);

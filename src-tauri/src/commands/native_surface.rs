@@ -101,6 +101,15 @@ impl NativeSurfaceRuntime {
         }
         Ok(())
     }
+
+    pub(crate) fn close_surface(&mut self) -> Result<(), String> {
+        if let Some(window) = self.surface_window.take() {
+            window
+                .close()
+                .map_err(|error| format!("Unable to close native preview surface: {error}"))?;
+        }
+        Ok(())
+    }
 }
 
 #[tauri::command]
@@ -341,11 +350,21 @@ pub fn hide_native_surface(app: AppHandle) -> Result<(), String> {
     let runtime = app
         .try_state::<Arc<Mutex<NativeSurfaceRuntime>>>()
         .ok_or_else(|| "Native surface runtime is not initialized".to_string())?;
-    let result = runtime
+    runtime
         .lock()
         .map_err(|_| "Native surface runtime lock is poisoned".to_string())?
-        .hide_surface();
-    result
+        .hide_surface()
+}
+
+#[tauri::command]
+pub fn close_native_preview_surface(app: AppHandle) -> Result<(), String> {
+    let runtime = app
+        .try_state::<Arc<Mutex<NativeSurfaceRuntime>>>()
+        .ok_or_else(|| "Native surface runtime is not initialized".to_string())?;
+    runtime
+        .lock()
+        .map_err(|_| "Native surface runtime lock is poisoned".to_string())?
+        .close_surface()
 }
 
 /// Return the last successfully configured native surface. Keeping this
