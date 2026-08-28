@@ -1016,6 +1016,7 @@ export const NativeProgramPreview: React.FC = () => {
       const timeToRender = state.clock.time;
       const playbackState = state.clock.state;
       const isPlaying = playbackState === "playing";
+      document.body.classList.toggle("playing-mode", isPlaying);
 
       const frameRate = state.project?.frameRate ?? 30;
       const frameIndex = getFrameIndexAtTime(timeToRender, frameRate);

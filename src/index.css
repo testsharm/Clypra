@@ -921,3 +921,62 @@ button:hover, [role="button"]:hover,
   .sidebar, [class*="Sidebar"] { width: 240px !important; }
   .properties-panel, [class*="PropertiesPanel"] { width: 280px !important; }
 }
+
+/* ============================================================
+   ADAPTIVE UI — CapCut polish when idle, zero-cost when playing
+   ============================================================ */
+
+/* Restore CapCut shadows/rounding when NOT playing (overrides earlier flat rules) */
+body:not(.playing-mode) .sidebar,
+body:not(.playing-mode) .properties-panel,
+body:not(.playing-mode) .timeline,
+body:not(.playing-mode) .preview-space,
+body:not(.playing-mode) [data-preview-space="program"] {
+  box-shadow: 0 12px 36px rgba(0,0,0,0.45) !important;
+  border-radius: 16px !important;
+}
+
+body:not(.playing-mode) .clip,
+body:not(.playing-mode) .timeline-clip,
+body:not(.playing-mode) [class*="Clip"] {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.35) !important;
+  border-radius: 10px !important;
+}
+
+body:not(.playing-mode) button,
+body:not(.playing-mode) [role="button"] {
+  transition: background 0.15s, color 0.15s, transform 0.15s !important;
+}
+
+body:not(.playing-mode) button:hover,
+body:not(.playing-mode) [role="button"]:hover {
+  transform: translateY(-1px) !important;
+}
+
+/* Playing mode: strip everything expensive */
+body.playing-mode *,
+body.playing-mode *::before,
+body.playing-mode *::after {
+  box-shadow: none !important;
+  text-shadow: none !important;
+  backdrop-filter: none !important;
+  filter: none !important;
+  animation: none !important;
+  transition: none !important;
+}
+
+body.playing-mode .sidebar-panel,
+body.playing-mode .properties-panel,
+body.playing-mode .timeline-panel {
+  contain: layout style paint;
+}
+
+/* GPU acceleration stays */
+.preview-space,
+[data-preview-space="program"],
+.timeline-clip,
+.clip,
+[class*="Clip"] {
+  transform: translateZ(0);
+  will-change: transform;
+}
