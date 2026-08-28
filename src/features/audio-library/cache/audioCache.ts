@@ -173,51 +173,8 @@ class AudioCacheManager {
       // Use relative path for storage (just CACHE_DIR/filename)
       const relativePath = `${CACHE_DIR}/${fileName}`;
 
-      // Download file with progress tracking (no auth needed for public R2)
-      const response = await fetch(item.audioUrl);
-
-      if (!response.ok) {
-        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-      }
-
-      const contentLength = response.headers.get("content-length");
-      const total = contentLength ? parseInt(contentLength, 10) : 0;
-      let loaded = 0;
-
-      // Read response as stream
-      const reader = response.body?.getReader();
-      if (!reader) {
-        throw new Error("Failed to get response reader");
-      }
-
-      const chunks: Uint8Array[] = [];
-
-      while (true) {
-        const { done, value } = await reader.read();
-
-        if (done) break;
-
-        chunks.push(value);
-        loaded += value.length;
-
-        if (onProgress && total > 0) {
-          onProgress({
-            loaded,
-            total,
-            percentage: Math.round((loaded / total) * 100),
-          });
-        }
-      }
-
-      // Combine chunks
-      const fileData = new Uint8Array(loaded);
-      let offset = 0;
-      for (const chunk of chunks) {
-        fileData.set(chunk, offset);
-        offset += chunk.length;
-      }
-
-      // Write to disk using relative path from AppCache base
+      // Local-only audio library: no remote fetch allowed.
+      throw new Error("Audio library is local only; no remote download available");
       await writeFile(relativePath, fileData, { baseDir: BaseDirectory.AppCache });
 
       // Create cache entry with relative path
