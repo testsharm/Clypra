@@ -27,6 +27,7 @@ import {
   Crosshair,
   Snowflake,
   Gauge,
+  Eraser,
 } from "lucide-react";
 import type { ClipCommand, ClipCommandContext } from "./types";
 import { clipboardService } from "@/core/clipboard/clipboardService";
@@ -250,6 +251,54 @@ export const clipCommands: ClipCommand[] = [
         ids.forEach((id) => store.updateClip(id, { speedKeyframes: [] }));
       });
       toast.success(`Removed speed ramp on ${ids.length} clip${ids.length > 1 ? "s" : ""}`);
+    },
+  },
+  {
+    id: "clip.clearAudioKeyframes",
+    label: "Clear Audio Keyframes",
+    icon: Eraser,
+    group: "audio",
+    isVisible: (ctx) => getTargetClipIds(ctx).length > 0,
+    isEnabled: (ctx) => {
+      const ids = getTargetClipIds(ctx);
+      if (ids.length === 0) return false;
+      return ids.some((id) => {
+        const c = ctx.clips.find((clip) => clip.id === id);
+        return c && c.volumeKeyframes && c.volumeKeyframes.length > 0 && !ctx.tracks.find((t) => t.id === c.trackId)?.locked;
+      });
+    },
+    disabledReason: () => "No audio keyframes on selected clips or clip locked",
+    execute: (ctx) => {
+      const ids = getTargetClipIds(ctx);
+      const store = useTimelineStore.getState();
+      store.withBatch(() => {
+        ids.forEach((id) => store.updateClip(id, { volumeKeyframes: [] }));
+      });
+      toast.success(`Cleared audio keyframes on ${ids.length} clip${ids.length > 1 ? "s" : ""}`);
+    },
+  },
+  {
+    id: "clip.clearVisualKeyframes",
+    label: "Clear Visual Keyframes",
+    icon: Eraser,
+    group: "organize",
+    isVisible: (ctx) => getTargetClipIds(ctx).length > 0,
+    isEnabled: (ctx) => {
+      const ids = getTargetClipIds(ctx);
+      if (ids.length === 0) return false;
+      return ids.some((id) => {
+        const c = ctx.clips.find((clip) => clip.id === id);
+        return c && c.visualKeyframes && Object.keys(c.visualKeyframes).length > 0 && !ctx.tracks.find((t) => t.id === c.trackId)?.locked;
+      });
+    },
+    disabledReason: () => "No visual keyframes on selected clips or clip locked",
+    execute: (ctx) => {
+      const ids = getTargetClipIds(ctx);
+      const store = useTimelineStore.getState();
+      store.withBatch(() => {
+        ids.forEach((id) => store.updateClip(id, { visualKeyframes: {} }));
+      });
+      toast.success(`Cleared visual keyframes on ${ids.length} clip${ids.length > 1 ? "s" : ""}`);
     },
   },
   {

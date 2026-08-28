@@ -823,13 +823,13 @@ const ClipInner: React.FC<ClipProps> = ({
               {formatDuration(clip.duration)}
             </div>
             {clip.freezeFrameTime !== undefined && (
-              <div className="shrink-0 flex items-center gap-1 rounded px-1 py-0.5 bg-sky-400/20 border border-sky-300/30 pointer-events-none">
+              <div title={`Freeze at ${clip.freezeFrameTime?.toFixed(2)}s`} className="shrink-0 flex items-center gap-1 rounded px-1 py-0.5 bg-sky-400/20 border border-sky-300/30 pointer-events-none">
                 <Snowflake className="w-3 h-3 text-sky-300" />
                 <span className="text-[9px] font-semibold text-sky-200">Freeze</span>
               </div>
             )}
             {(clip.speed !== undefined && clip.speed !== 1) || (clip.speedKeyframes && clip.speedKeyframes.length > 0) ? (
-              <div className="shrink-0 flex items-center gap-1 rounded px-1 py-0.5 bg-amber-400/20 border border-amber-300/30 pointer-events-none">
+              <div title={clip.speedKeyframes && clip.speedKeyframes.length > 0 ? "Speed ramp active" : `Speed: ${clip.speed?.toFixed(2)}x`} className="shrink-0 flex items-center gap-1 rounded px-1 py-0.5 bg-amber-400/20 border border-amber-300/30 pointer-events-none">
                 <Gauge className="w-3 h-3 text-amber-300" />
                 <span className="text-[9px] font-semibold text-amber-200">
                   {clip.speedKeyframes && clip.speedKeyframes.length > 0 ? "Ramp" : `${clip.speed?.toFixed(1)}x`}
