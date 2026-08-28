@@ -1065,8 +1065,8 @@ export const NativeProgramPreview: React.FC = () => {
       };
       const renderWidth = Math.max(2, Math.min(state.canvasWidth, Math.floor(renderProfile.maxWidth)));
       const renderHeight = Math.max(2, Math.min(state.canvasHeight, Math.floor(renderProfile.maxHeight)));
-      const safeRenderWidth = renderWidth - (renderWidth % 2);
-      const safeRenderHeight = renderHeight - (renderHeight % 2);
+      const safeRenderWidth = Math.min(renderWidth - (renderWidth % 2), 1280);
+      const safeRenderHeight = Math.min(renderHeight - (renderHeight % 2), 720);
       const previewScaleX = state.canvasWidth > 0 ? safeRenderWidth / state.canvasWidth : 1;
       const previewScaleY = state.canvasHeight > 0 ? safeRenderHeight / state.canvasHeight : 1;
       const fullFrameBytes = state.canvasWidth * state.canvasHeight * 4;

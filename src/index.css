@@ -834,3 +834,34 @@ input, select, textarea {
   padding: 8px !important;
   gap: 8px !important;
 }
+
+/* ============================================================================
+   PERFORMANCE HARDENING — remove expensive GPU/CPU CSS during playback
+   ============================================================================ */
+.editor-shell, .workspace, .editor-layout,
+.sidebar, .properties-panel, .timeline, .preview-space,
+[data-preview-space="program"], .topbar, .titlebar {
+  backdrop-filter: none !important;
+  box-shadow: none !important;
+  transition: none !important;
+  animation: none !important;
+}
+
+/* Keep hover interactions light */
+.card, .effect-card, .filter-card, .sticker-card, .transition-card {
+  transform: none !important;
+  transition: opacity 0.12s ease !important;
+}
+
+.card:hover, .effect-card:hover, .filter-card:hover, .sticker-card:hover, .transition-card:hover {
+  transform: none !important;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.25) !important;
+}
+
+/* Reduce paint load for scrollable grids */
+.grid > *,
+.sidebar-panel > *,
+.properties-panel > * {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 80px;
+}
