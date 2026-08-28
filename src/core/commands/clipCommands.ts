@@ -22,6 +22,8 @@ import {
   ChevronLeft,
   ChevronRight,
   RotateCw,
+  FlipHorizontal2,
+  FlipVertical2,
 } from "lucide-react";
 import type { ClipCommand, ClipCommandContext } from "./types";
 import { clipboardService } from "@/core/clipboard/clipboardService";
@@ -136,6 +138,62 @@ export const clipCommands: ClipCommand[] = [
         });
       });
       toast.success(`Rotated ${ids.length} clip${ids.length > 1 ? "s" : ""}`);
+    },
+  },
+  {
+    id: "clip.flipHorizontal",
+    label: "Flip Horizontal",
+    icon: FlipHorizontal2,
+    group: "organize",
+    isVisible: (ctx) => getTargetClipIds(ctx).length > 0,
+    isEnabled: (ctx) => {
+      const ids = getTargetClipIds(ctx);
+      if (ids.length === 0) return false;
+      return ids.some((id) => {
+        const c = ctx.clips.find((clip) => clip.id === id);
+        return c && !ctx.tracks.find((t) => t.id === c.trackId)?.locked;
+      });
+    },
+    disabledReason: () => "Selected clips are on a locked track",
+    execute: (ctx) => {
+      const ids = getTargetClipIds(ctx);
+      const store = useTimelineStore.getState();
+      store.withBatch(() => {
+        ids.forEach((id) => {
+          const clip = store.clips.find((c) => c.id === id);
+          if (!clip) return;
+          store.updateClip(id, { width: -Math.abs(clip.width) });
+        });
+      });
+      toast.success(`Flipped ${ids.length} clip${ids.length > 1 ? "s" : ""}`);
+    },
+  },
+  {
+    id: "clip.flipVertical",
+    label: "Flip Vertical",
+    icon: FlipVertical2,
+    group: "organize",
+    isVisible: (ctx) => getTargetClipIds(ctx).length > 0,
+    isEnabled: (ctx) => {
+      const ids = getTargetClipIds(ctx);
+      if (ids.length === 0) return false;
+      return ids.some((id) => {
+        const c = ctx.clips.find((clip) => clip.id === id);
+        return c && !ctx.tracks.find((t) => t.id === c.trackId)?.locked;
+      });
+    },
+    disabledReason: () => "Selected clips are on a locked track",
+    execute: (ctx) => {
+      const ids = getTargetClipIds(ctx);
+      const store = useTimelineStore.getState();
+      store.withBatch(() => {
+        ids.forEach((id) => {
+          const clip = store.clips.find((c) => c.id === id);
+          if (!clip) return;
+          store.updateClip(id, { height: -Math.abs(clip.height) });
+        });
+      });
+      toast.success(`Flipped ${ids.length} clip${ids.length > 1 ? "s" : ""}`);
     },
   },
 
