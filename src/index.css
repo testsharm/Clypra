@@ -620,3 +620,45 @@ button, [role="button"] {
 .animate-spin-slow {
   animation: spin-slow 4s linear infinite;
 }
+
+/* Transition preview animations */
+.preview-fade { animation: preview-fade 1.6s ease-in-out infinite; }
+@keyframes preview-fade { 0%,100% { opacity: 1; } 50% { opacity: 0.2; } }
+
+.preview-dissolve { animation: preview-dissolve 1.6s ease-in-out infinite; }
+@keyframes preview-dissolve { 0%,100% { filter: blur(0); } 50% { filter: blur(3px); } }
+
+.preview-slide { animation: preview-slide 1.6s ease-in-out infinite; }
+@keyframes preview-slide { 0%,100% { transform: translateX(0); } 50% { transform: translateX(30%); } }
+
+.preview-wipe { animation: preview-wipe 1.6s ease-in-out infinite; }
+@keyframes preview-wipe { 0%,100% { clip-path: inset(0 0 0 0); } 50% { clip-path: inset(0 50% 0 0); } }
+
+.preview-zoom { animation: preview-zoom 1.6s ease-in-out infinite; }
+@keyframes preview-zoom { 0%,100% { transform: scale(1); } 50% { transform: scale(1.25); } }
+
+.preview-push { animation: preview-push 1.6s ease-in-out infinite; }
+@keyframes preview-push { 0%,100% { transform: translateX(0); } 50% { transform: translateX(-30%); } }
+
+.preview-split { animation: preview-split 1.6s ease-in-out infinite; }
+@keyframes preview-split { 0%,100% { clip-path: inset(0 0 0 0); } 50% { clip-path: inset(0 50% 0 0); } }
+
+.preview-spin { animation: preview-spin 1.6s linear infinite; }
+@keyframes preview-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+.preview-blur { animation: preview-blur 1.6s ease-in-out infinite; }
+@keyframes preview-blur { 0%,100% { filter: blur(0); } 50% { filter: blur(5px); } }
+
+.preview-flash { animation: preview-flash 1.6s ease-in-out infinite; }
+@keyframes preview-flash { 0%,100% { opacity: 1; } 50% { opacity: 0.4; filter: brightness(2); } }
+
+/* General CapCut-like button styling */
+.tab-button {
+  border-radius: 10px;
+  padding: 6px 12px;
+  font-size: 11px;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+.tab-button:hover { background: rgba(255,255,255,0.08); }
+.tab-button.active { background: rgba(255,255,255,0.15); color: var(--color-accent); }
